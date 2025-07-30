@@ -2,7 +2,7 @@
   "name": "vscode-persian-copilot",
   "displayName": "VSCode Persian Copilot",
   "description": "VSCode Persian Copilot - RTL support for Persian/Farsi text in VS Code chat interface",
-  "version": "1.0.1",
+  "version": "1.2.1",
   "publisher": "shahkochaki",
   "repository": {
     "type": "git",
@@ -45,12 +45,17 @@
       },
       {
         "command": "vscode-persian-copilot.toggleAutoApply",
-        "title": "Toggle Auto Apply",
+        "title": "Toggle Auto-Apply",
         "category": "Persian Copilot"
       },
       {
         "command": "vscode-persian-copilot.disableCSS",
         "title": "Remove Persian CSS",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.testCSS",
+        "title": "Test CSS Debug",
         "category": "Persian Copilot"
       }
     ],

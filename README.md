@@ -1,6 +1,6 @@
 # VSCode Persian Copilot
 
-![Version](https://img.shields.io/badge/version-1.0.1-blue)
+![Version](https://img.shields.io/badge/version-1.1.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 VSCode Persian Copilot extension provides **automatic** RTL (Right-to-Left) support for Persian/Farsi text in Visual Studio Code chat interface.
@@ -27,9 +27,9 @@ Extension works automatically after installation! CSS is applied when VS Code st
 
 ### Manual Control Commands
 - **Command Palette** (`Ctrl+Shift+P`):
-  - `اعمال CSS فارسی به چت` - Apply CSS once
-  - `تغییر حالت اعمال خودکار` - Toggle auto-apply
-  - `حذف CSS فارسی` - Remove CSS
+  - `Apply Persian CSS to Chat` - Apply CSS once
+  - `Toggle Auto-Apply` - Toggle auto-apply mode
+  - `Remove Persian CSS` - Remove CSS
 
 ### Settings
 - **Persian Copilot: Auto Apply** - Control automatic CSS application
@@ -106,22 +106,30 @@ This extension contributes the following commands:
 
 ## Release Notes
 
-### 1.0.1 - English Interface
+### 1.1.0 - Better User Experience 🎯
 
-**All interface text converted to English:**
-- ✨ **English Messages**: All popup messages now in English
-- 📋 **English Commands**: Command palette entries in English
-- 🌐 **International Ready**: Better for global marketplace
-- 🔧 **English Settings**: Configuration descriptions in English
+**Fixed Console Errors & Improved UX**:
+- 🔧 **Fixed PowerShell Conflicts**: No more script errors in terminal
+- 📋 **Clear Instructions**: Step-by-step guide for CSS application
+- 🎨 **Setup Guide**: Beautiful HTML guide panel
+- 💡 **Smart Reminders**: Helpful reminders instead of automatic attempts
+- ✨ **Better Error Handling**: No more console errors or conflicts
+
+### 1.0.1 - International Update 🌍
+
+**English Interface**: All messages and commands now in English for international users
+- 📝 **English Commands**: Command Palette in English
+- 🌐 **English Messages**: All notifications in English  
+- 🔧 **Better UX**: More professional international experience
 
 ### 1.0.0 - Major Update! 🎉
 
-**Complete Automation!** No more DevTools needed:
-- ✨ **Auto-Apply CSS**: CSS automatically applied
-- 🔄 **Smart Refresh**: Auto-refreshes every 30 seconds  
-- 💾 **Save Settings**: Settings are preserved
-- 📋 **New Commands**: Full control from Command Palette
-- 🚫 **No More DevTools**: No more copy-paste needed!
+**اتوماتیک شدن کامل!** دیگر نیازی به DevTools نیست:
+- ✨ **Auto-Apply CSS**: CSS خودکار اعمال می‌شود
+- 🔄 **Smart Refresh**: هر 30 ثانیه خودکار تجدید می‌شود  
+- 💾 **Save Settings**: تنظیمات ذخیره می‌شود
+- 📋 **New Commands**: کنترل کامل از Command Palette
+- 🚫 **No More DevTools**: دیگر نیازی به کپی پیست نیست!
 
 ### 0.1.1
 
