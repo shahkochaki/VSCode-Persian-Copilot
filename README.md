@@ -1,16 +1,17 @@
 # VSCode Persian Copilot
 
-![Version](https://img.shields.io/badge/version-0.1.1-blue)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-VSCode Persian Copilot extension provides RTL (Right-to-Left) support for Persian/Farsi text in Visual Studio Code chat interface.
+VSCode Persian Copilot extension provides **automatic** RTL (Right-to-Left) support for Persian/Farsi text in Visual Studio Code chat interface.
 
 ## 🌟 Features
 
-- **🔄 RTL Chat Interface**: Automatically applies RTL direction to chat interface elements
-- **📝 Easy CSS Injection**: Simple CSS injection for markdown elements  
-- **⚡ Manual Control**: Command to manually apply RTL styles when needed
+- **� Automatic RTL Application**: CSS automatically applies when VS Code starts (no manual steps needed!)
+- **� Smart Auto-Refresh**: Reapplies styles every 30 seconds to handle dynamic content
+- **⚡ Manual Control**: Toggle auto-apply on/off anytime
 - **🇮🇷 Persian Support**: Optimized for Persian/Farsi text reading experience
+- **💾 Remembers Settings**: Your preference is saved between VS Code sessions
 
 ## 📦 Installation
 
@@ -21,15 +22,17 @@ VSCode Persian Copilot extension provides RTL (Right-to-Left) support for Persia
 
 ## 🚀 Usage
 
-### Automatic Application
-1. Install the extension
-2. VS Code will show a welcome message
-3. Click "اعمال CSS خودکار" to apply RTL styles
+### ✨ Automatic (Recommended)
+Extension works automatically after installation! CSS is applied when VS Code starts and refreshes automatically.
 
-### Manual Application  
-1. Use Command Palette (`Ctrl+Shift+P`)
-2. Search for "Apply Persian RTL to Chat Interface"
-3. Follow the instructions to inject CSS via DevTools
+### Manual Control Commands
+- **Command Palette** (`Ctrl+Shift+P`):
+  - `اعمال CSS فارسی به چت` - Apply CSS once
+  - `تغییر حالت اعمال خودکار` - Toggle auto-apply
+  - `حذف CSS فارسی` - Remove CSS
+
+### Settings
+- **Persian Copilot: Auto Apply** - Control automatic CSS application
 
 ## CSS Applied
 
@@ -103,6 +106,15 @@ This extension contributes the following commands:
 
 ## Release Notes
 
+### 1.0.0 - Major Update! 🎉
+
+**اتوماتیک شدن کامل!** دیگر نیازی به DevTools نیست:
+- ✨ **Auto-Apply CSS**: CSS خودکار اعمال می‌شود
+- 🔄 **Smart Refresh**: هر 30 ثانیه خودکار تجدید می‌شود  
+- 💾 **Save Settings**: تنظیمات ذخیره می‌شود
+- 📋 **New Commands**: کنترل کامل از Command Palette
+- 🚫 **No More DevTools**: دیگر نیازی به کپی پیست نیست!
+
 ### 0.1.1
 
 Latest release with improved CSS selectors and better RTL support.
@@ -115,7 +127,7 @@ Initial release of VSCode Persian Copilot with RTL support for chat interface.
 
 **Ali Shahkochaki**
 - GitHub: [@shahkochaki](https://github.com/shahkochaki)
-- Email: ali.shahkochaki7@gmail.com
+- Email: shahkochaki@hotmail.com
 
 ## 📄 License
 
