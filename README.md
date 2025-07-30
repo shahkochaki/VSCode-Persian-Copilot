@@ -1,6 +1,6 @@
 # VSCode Persian Copilot
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Version](https://img.shields.io/badge/version-1.0.1-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 VSCode Persian Copilot extension provides **automatic** RTL (Right-to-Left) support for Persian/Farsi text in Visual Studio Code chat interface.
@@ -106,14 +106,22 @@ This extension contributes the following commands:
 
 ## Release Notes
 
+### 1.0.1 - English Interface
+
+**All interface text converted to English:**
+- ✨ **English Messages**: All popup messages now in English
+- 📋 **English Commands**: Command palette entries in English
+- 🌐 **International Ready**: Better for global marketplace
+- 🔧 **English Settings**: Configuration descriptions in English
+
 ### 1.0.0 - Major Update! 🎉
 
-**اتوماتیک شدن کامل!** دیگر نیازی به DevTools نیست:
-- ✨ **Auto-Apply CSS**: CSS خودکار اعمال می‌شود
-- 🔄 **Smart Refresh**: هر 30 ثانیه خودکار تجدید می‌شود  
-- 💾 **Save Settings**: تنظیمات ذخیره می‌شود
-- 📋 **New Commands**: کنترل کامل از Command Palette
-- 🚫 **No More DevTools**: دیگر نیازی به کپی پیست نیست!
+**Complete Automation!** No more DevTools needed:
+- ✨ **Auto-Apply CSS**: CSS automatically applied
+- 🔄 **Smart Refresh**: Auto-refreshes every 30 seconds  
+- 💾 **Save Settings**: Settings are preserved
+- 📋 **New Commands**: Full control from Command Palette
+- 🚫 **No More DevTools**: No more copy-paste needed!
 
 ### 0.1.1
 

@@ -15,25 +15,25 @@ export function activate(context: vscode.ExtensionContext) {
 	if (isAutoApplyEnabled) {
 		startAutoApply();
 		vscode.window.showInformationMessage(
-			'🎉 VSCode Persian Copilot فعال شد! CSS خودکار اعمال می‌شود.',
-			'تنظیمات',
-			'غیرفعال کردن خودکار'
+			'🎉 VSCode Persian Copilot activated! Auto CSS will be applied.',
+			'Settings',
+			'Disable Auto Apply'
 		).then(selection => {
-			if (selection === 'تنظیمات') {
+			if (selection === 'Settings') {
 				vscode.commands.executeCommand('workbench.action.openSettings', 'persian copilot');
-			} else if (selection === 'غیرفعال کردن خودکار') {
+			} else if (selection === 'Disable Auto Apply') {
 				toggleAutoApply(context);
 			}
 		});
 	} else {
 		vscode.window.showInformationMessage(
-			'🎉 VSCode Persian Copilot فعال شد!',
-			'فعال کردن خودکار',
-			'اعمال یکبار'
+			'🎉 VSCode Persian Copilot activated!',
+			'Enable Auto Apply',
+			'Apply Once'
 		).then(selection => {
-			if (selection === 'فعال کردن خودکار') {
+			if (selection === 'Enable Auto Apply') {
 				toggleAutoApply(context);
-			} else if (selection === 'اعمال یکبار') {
+			} else if (selection === 'Apply Once') {
 				applyCSS();
 			}
 		});
@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Register commands
 	const disposableRTL = vscode.commands.registerCommand('vscode-persian-copilot.applyChatRTL', () => {
 		applyCSS();
-		vscode.window.showInformationMessage('✅ CSS فارسی اعمال شد!');
+		vscode.window.showInformationMessage('✅ Persian CSS applied successfully!');
 	});
 
 	const disposableToggle = vscode.commands.registerCommand('vscode-persian-copilot.toggleAutoApply', () => {
@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const disposableDisable = vscode.commands.registerCommand('vscode-persian-copilot.disableCSS', () => {
 		removeCSS();
-		vscode.window.showInformationMessage('❌ CSS فارسی حذف شد!');
+		vscode.window.showInformationMessage('❌ Persian CSS removed!');
 	});
 
 	context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable);
@@ -80,11 +80,11 @@ function toggleAutoApply(context: vscode.ExtensionContext) {
 	
 	if (isAutoApplyEnabled) {
 		startAutoApply();
-		vscode.window.showInformationMessage('✅ اعمال خودکار CSS فعال شد!');
+		vscode.window.showInformationMessage('✅ Auto CSS application enabled!');
 	} else {
 		stopAutoApply();
 		removeCSS();
-		vscode.window.showInformationMessage('❌ اعمال خودکار CSS غیرفعال شد!');
+		vscode.window.showInformationMessage('❌ Auto CSS application disabled!');
 	}
 }
 
