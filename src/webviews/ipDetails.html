@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IP/URL Details Lookup</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 24px; background: #f7f7fa; }
+        h2 { color: #007acc; }
+        .row { margin-bottom: 18px; }
+        input, textarea { width: 100%; padding: 7px; font-size: 1em; margin-bottom: 8px; }
+        button { padding: 8px 22px; background: #007acc; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .result { margin-top: 24px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 18px; }
+        .flag { vertical-align: middle; margin-right: 8px; }
+        .label { color: #555; font-weight: bold; }
+        .value { color: #222; }
+        .error { color: #c00; font-weight: bold; margin-top: 18px; }
+        .section { margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+    <h2>IP/URL Details Lookup</h2>
+    <div class="row">
+        <label>API Token:</label>
+        <input type="password" id="token" placeholder="Paste your API token here">
+    </div>
+    <div class="row">
+        <label>URL or IP:</label>
+        <input type="text" id="url" placeholder="e.g. https://google.com or 8.8.8.8">
+    </div>
+    <button onclick="lookup()">Lookup</button>
+    <div class="error" id="error"></div>
+    <div class="result" id="result"></div>
+    <script>
+        const vscode = acquireVsCodeApi();
+        function lookup() {
+            document.getElementById('error').textContent = '';
+            document.getElementById('result').innerHTML = '';
+            const token = document.getElementById('token').value.trim();
+            const url = document.getElementById('url').value.trim();
+            if (!token || !url) {
+                document.getElementById('error').textContent = 'Token and URL/IP are required.';
+                return;
+            }
+            vscode.postMessage({ command: 'ipDetailsLookup', token, url });
+        }
+        window.addEventListener('message', event => {
+            const msg = event.data;
+            if (msg.command === 'ipDetailsResult') {
+                if (msg.error) {
+                    document.getElementById('error').textContent = msg.error;
+                } else {
+                    document.getElementById('result').innerHTML = renderResult(msg.data);
+                }
+            }
+        });
+        function renderResult(data) {
+            if (!data || !data.body) return '<span class="error">No data found.</span>';
+            const b = data.body;
+            return `
+                <div class="section"><span class="label">Status:</span> <span class="value">${b.status}</span></div>
+                <div class="section"><span class="label">Country:</span> <img class="flag" src="https://console.helpix.app${b.countryLogo}" height="18"> <span class="value">${b.country} (${b.countryCode})</span></div>
+                <div class="section"><span class="label">City:</span> <span class="value">${b.city}</span></div>
+                <div class="section"><span class="label">ISP:</span> <span class="value">${b.isp}</span></div>
+                <div class="section"><span class="label">Org:</span> <span class="value">${b.org}</span></div>
+                <div class="section"><span class="label">IP/Query:</span> <span class="value">${b.query}</span></div>
+                <div class="section"><span class="label">Continent:</span> <span class="value">${b.continent} (${b.continentCode})</span></div>
+                <div class="section"><span class="label">Region:</span> <span class="value">${b.regionName}</span></div>
+                <div class="section"><span class="label">Timezone:</span> <span class="value">${b.timezone}</span></div>
+                <div class="section"><span class="label">Currency:</span> <span class="value">${b.currency}</span></div>
+                <div class="section"><span class="label">Reverse DNS:</span> <span class="value">${b.reverse}</span></div>
+                <div class="section"><span class="label">Mobile:</span> <span class="value">${b.mobile ? 'Yes' : 'No'}</span></div>
+                <div class="section"><span class="label">Proxy:</span> <span class="value">${b.proxy ? 'Yes' : 'No'}</span></div>
+                <div class="section"><span class="label">Hosting:</span> <span class="value">${b.hosting ? 'Yes' : 'No'}</span></div>
+            `;
+        }
+    </script>
+</body>
+</html>

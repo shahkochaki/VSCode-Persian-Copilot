@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persian Tools Hub</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 32px; background: #f7f7fa; }
+        h1 { color: #007acc; margin-bottom: 24px; }
+        .tools-list { display: flex; flex-wrap: wrap; gap: 24px; }
+        .tool-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #0001;
+            padding: 24px 20px;
+            width: 220px;
+            cursor: pointer;
+            transition: box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tool-card:hover { box-shadow: 0 4px 16px #007acc33; }
+        .tool-icon { font-size: 2.5em; margin-bottom: 12px; }
+        .tool-title { font-weight: bold; font-size: 1.1em; margin-bottom: 6px; }
+        .tool-desc { color: #555; font-size: 0.97em; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Persian Tools Hub</h1>
+    <div class="tools-list">
+        <div class="tool-card" onclick="openTool('dateConverter')">
+            <div class="tool-icon">📅</div>
+            <div class="tool-title">Date Converter</div>
+            <div class="tool-desc">Convert Gregorian & Jalali dates</div>
+        </div>
+        <div class="tool-card" onclick="openTool('numberConvert')">
+            <div class="tool-icon">🔢</div>
+            <div class="tool-title">Number Converter</div>
+            <div class="tool-desc">Convert Persian & English numbers</div>
+        </div>
+        <div class="tool-card" onclick="openTool('calendar')">
+            <div class="tool-icon">🗓️</div>
+            <div class="tool-title">Persian Calendar</div>
+            <div class="tool-desc">View & pick Jalali dates</div>
+        </div>
+        <div class="tool-card" onclick="openTool('arabicToPersian')">
+            <div class="tool-icon">🔤</div>
+            <div class="tool-title">Arabic to Persian Text</div>
+            <div class="tool-desc">Fix Arabic letters in Persian text</div>
+        </div>
+        <div class="tool-card" onclick="openTool('lorem')">
+            <div class="tool-icon">✍️</div>
+            <div class="tool-title">Persian Lorem Ipsum</div>
+            <div class="tool-desc">Generate Persian dummy text</div>
+        </div>
+        <div class="tool-card" onclick="openTool('moneyConvert')">
+            <div class="tool-icon">💰</div>
+            <div class="tool-title">Money Converter</div>
+            <div class="tool-desc">Convert Rial & Toman</div>
+        </div>
+        <div class="tool-card" onclick="openTool('numberToWords')">
+            <div class="tool-icon">🔠</div>
+            <div class="tool-title">Number to Words</div>
+            <div class="tool-desc">Convert numbers to Persian words</div>
+        </div>
+    </div>
+    <script>
+        const vscode = acquireVsCodeApi();
+        function openTool(tool) {
+            vscode.postMessage({ command: 'openTool', tool });
+        }
+    </script>
+</body>
+</html>

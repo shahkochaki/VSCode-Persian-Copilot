@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Number Converter</title>
+    <style>body{font-family:Arial,sans-serif;padding:24px;}h2{color:#007acc;}.row{margin-bottom:18px;}input{width:220px;padding:6px;font-size:1em;}button{padding:7px 18px;margin-top:8px;background:#007acc;color:#fff;border:none;border-radius:4px;cursor:pointer;}.result{margin-top:18px;font-weight:bold;color:#333;}</style>
+</head>
+<body>
+    <h2>Number Converter</h2>
+    <div class="row">
+        <label>Persian to English:</label>
+        <input type="text" id="fa2en" placeholder="۱۲۳۴۵۶۷۸۹۰">
+        <button onclick="convertFa2En()">Convert</button>
+    </div>
+    <div class="row">
+        <label>English to Persian:</label>
+        <input type="text" id="en2fa" placeholder="1234567890">
+        <button onclick="convertEn2Fa()">Convert</button>
+    </div>
+    <div class="result" id="result"></div>
+    <script>
+        const vscode = acquireVsCodeApi();
+        function convertFa2En() {
+            const value = document.getElementById('fa2en').value;
+            vscode.postMessage({ command: 'convertFa2En', value });
+        }
+        function convertEn2Fa() {
+            const value = document.getElementById('en2fa').value;
+            vscode.postMessage({ command: 'convertEn2Fa', value });
+        }
+        window.addEventListener('message', event => {
+            const msg = event.data;
+            if(msg.command==='result'){
+                document.getElementById('result').textContent = msg.result;
+            }
+        });
+    </script>
+</body>
+</html>

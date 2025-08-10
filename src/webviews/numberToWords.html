@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>Number to Words</title>
+    <style>body{font-family:Arial,sans-serif;padding:24px;}h2{color:#007acc;}.row{margin-bottom:18px;}input{width:220px;padding:6px;font-size:1em;}button{padding:7px 18px;margin-top:8px;background:#007acc;color:#fff;border:none;border-radius:4px;cursor:pointer;}.result{margin-top:18px;font-weight:bold;color:#333;}</style>
+</head>
+<body>
+    <h2>Number to Words (Persian)</h2>
+    <div class="row">
+        <label>Enter a number:</label>
+        <input type="text" id="num" placeholder="1234">
+        <button onclick="convert()">Convert</button>
+    </div>
+    <div class="result" id="result"></div>
+    <script>
+        const vscode = acquireVsCodeApi();
+        function convert() {
+            const value = document.getElementById('num').value;
+            vscode.postMessage({ command: 'numberToWords', value });
+        }
+        window.addEventListener('message', event => {
+            const msg = event.data;
+            if(msg.command==='result'){
+                document.getElementById('result').textContent = msg.result;
+            }
+        });
+    </script>
+</body>
+</html>

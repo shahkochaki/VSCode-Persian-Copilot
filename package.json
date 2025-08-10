@@ -1,7 +1,7 @@
 {
   "name": "vscode-persian-copilot",
-  "displayName": "VSCode Persian Copilot",
-  "description": "VSCode Persian Copilot - RTL support for Persian/Farsi text in VS Code chat interface",
+  "displayName": "VSCode Persian Copilot — RTL & Persian Tools Hub",
+  "description": "Professional RTL support and a complete Persian Tools Hub for VS Code: date converter, number tools, calendar, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
   "version": "1.3.1",
   "publisher": "shahkochaki",
   "repository": {
@@ -30,7 +30,9 @@
     "vscode": "^1.102.0"
   },
   "categories": [
-    "Other"
+  "Linters",
+  "Programming Languages",
+  "Other"
   ],
   "activationEvents": [
     "onStartupFinished"
@@ -56,6 +58,11 @@
       {
         "command": "vscode-persian-copilot.testCSS",
         "title": "Test CSS Debug",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.dateConverter",
+        "title": "Open Date Converter",
         "category": "Persian Copilot"
       }
     ],
@@ -97,5 +104,5 @@
     "@vscode/test-cli": "^0.0.11",
     "@vscode/test-electron": "^2.5.2"
   },
-  "icon": "logo.png"
+  "icon": "icon.png"
 }

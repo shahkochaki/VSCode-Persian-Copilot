@@ -1,36 +1,36 @@
 # VSCode Persian Copilot
 
-![VSCode Persian Copilot Logo](logo.png)
+![VSCode Persian Copilot Logo](icon.png)
+
+[View on Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot)
 
 ---
 
 ## 🇬🇧 English
 
-**VSCode Persian Copilot is a powerful Visual Studio Code extension designed to bring seamless right-to-left (RTL) support and beautiful Persian/Farsi text rendering to your Copilot Chat and markdown experience.**
+**VSCode Persian Copilot: The ultimate toolkit for Persian/Farsi in VS Code!**
 
-### 🌟 Overview
-Persian developers and Farsi-speaking users often face challenges when working with chat interfaces and markdown content in VS Code, as the default environment lacks proper RTL support and Persian typography. VSCode Persian Copilot solves this by providing a modern, safe, and user-friendly solution for applying RTL direction and optimal text alignment—without any system file patching or risky hacks.
+A professional, open-source extension for seamless right-to-left (RTL) support, beautiful Persian/Farsi text rendering, and a suite of practical tools for developers and content creators. Enjoy a modern experience in Copilot Chat, markdown, and more—no hacks, no system patching, just pure productivity.
 
-Whether you are collaborating in Copilot Chat, writing technical documentation, or simply want your Persian content to look professional, this extension ensures your experience is as smooth and natural as possible.
-
-### ✨ Key Features
-- **Effortless RTL for Copilot Chat:** Instantly apply RTL direction and proper alignment to chat and markdown content for a natural reading experience.
+### 🌟 Features
+- **Effortless RTL for Copilot Chat & Markdown:** Instantly apply RTL direction and proper alignment for a natural Persian reading experience.
+- **Persian Tools Hub:** Access a collection of handy tools (date converter, number converter, calendar, Arabic-to-Persian, lorem generator, money/number-to-words, IP details lookup, and more) from a single, beautiful interface.
 - **One-Click CSS Application:** Copy ready-to-use CSS or JavaScript snippets for DevTools or Custom CSS extensions, with step-by-step guidance.
 - **No System File Patching:** 100% safe—does not modify VS Code core files or require risky hacks. All changes are user-controlled and reversible.
 - **Modern, Minimal, and Open Source:** Lightweight, actively maintained, and designed for the Persian developer community. Contributions and feedback are welcome!
 - **Comprehensive Documentation:** Includes bilingual (English & Persian) instructions, screenshots, and troubleshooting tips.
 
 ### 🚀 How to Use
-1. Open the Command Palette and run `Apply Persian CSS to Chat`.
-2. Choose your preferred method (copy script or copy pure CSS).
-3. Follow the on-screen guide to apply the styles in DevTools or via a Custom CSS extension.
-4. Enjoy a fully RTL-enabled Copilot Chat and markdown environment!
+1. Open the Command Palette and run `Open Persian Tools Hub` or any other command (e.g. `Apply Persian CSS to Chat`).
+2. Explore the Persian Tools Hub for date conversion, number tools, IP lookup, and more.
+3. For RTL support, follow the on-screen guide to apply the styles in DevTools or via a Custom CSS extension.
+4. Enjoy a fully RTL-enabled Copilot Chat, markdown, and Persian developer experience!
 
 > **Note:** Due to VS Code security policies, direct CSS injection is only possible via manual steps. This extension guides you through the safest and most reliable methods, ensuring your environment remains secure and stable.
 
 ### 📝 Why Use This Extension?
-- Enjoy a natural Persian reading experience in Copilot Chat and markdown.
-- No more manual RTL tweaks, font issues, or broken layouts.
+- Natural Persian reading in Copilot Chat, markdown, and everywhere in VS Code.
+- All-in-one Persian developer toolkit: date, number, text, and more.
 - Clean, maintainable, and always up-to-date with the latest VS Code changes.
 - Perfect for teams, educators, and anyone working with Persian content in VS Code.
 
@@ -41,31 +41,29 @@ If you encounter any issues or have suggestions for improvement, please open an 
 
 ## 🇮🇷 فارسی
 
-**افزونه VSCode Persian Copilot یک راهکار قدرتمند و حرفه‌ای برای پشتیبانی کامل راست‌چین (RTL) و نمایش زیبا و استاندارد متون فارسی در چت Copilot و markdown در VS Code است.**
+**افزونه VSCode Persian Copilot: جعبه‌ابزار حرفه‌ای فارسی برای VS Code!**
 
-### 🌟 معرفی
-برنامه‌نویسان و کاربران فارسی‌زبان در محیط VS Code همواره با مشکلاتی مثل نبود راست‌چین واقعی و فونت مناسب در چت و markdown روبرو هستند. این افزونه با رویکردی مدرن و امن، امکان راست‌چین‌سازی و تنظیم حرفه‌ای متن را بدون هیچگونه تغییر در فایل‌های سیستمی یا ریسک امنیتی فراهم می‌کند.
+افزونه‌ای متن‌باز و مدرن برای پشتیبانی کامل راست‌چین (RTL)، نمایش زیبا و استاندارد متون فارسی، و مجموعه‌ای از ابزارهای کاربردی برای برنامه‌نویسان و تولیدکنندگان محتوا. تجربه‌ای روان و حرفه‌ای در چت Copilot، markdown و ابزارهای متنوع—بدون هیچگونه hack یا تغییر سیستمی.
 
-چه در حال گفتگو با Copilot باشید، چه مستندات فنی بنویسید یا صرفاً بخواهید متون فارسی شما حرفه‌ای و خوانا نمایش داده شود، این افزونه تجربه‌ای روان و طبیعی را برایتان تضمین می‌کند.
-
-### ✨ ویژگی‌ها
-- **راست‌چین‌سازی سریع چت Copilot:** فقط با یک کلیک، چت و markdown را راست‌چین و خوانا کنید.
+### 🌟 امکانات
+- **راست‌چین‌سازی سریع چت Copilot و markdown:** فقط با یک کلیک، محیط VS Code را برای فارسی کاملاً راست‌چین و خوانا کنید.
+- **مرکز ابزارهای فارسی (Persian Tools Hub):** مجموعه‌ای از ابزارهای کاربردی (تبدیل تاریخ، اعداد، تقویم، تبدیل عربی به فارسی، لورم فارسی، تبدیل پول و عدد به حروف، جستجوی IP و ...) در یک رابط زیبا و یکپارچه.
 - **کپی آسان CSS یا اسکریپت:** کد آماده برای DevTools یا افزونه Custom CSS فقط با یک کلیک و راهنمای گام‌به‌گام.
 - **بدون تغییر فایل‌های سیستمی:** کاملاً امن و بدون نیاز به هیچ patch یا hack. همه تغییرات توسط کاربر و قابل بازگشت است.
 - **سبک، مدرن و متن‌باز:** توسعه‌یافته برای جامعه برنامه‌نویسان فارسی و همیشه در حال به‌روزرسانی. مشارکت و بازخورد شما ارزشمند است!
 - **مستندسازی جامع:** راهنمای کامل (انگلیسی و فارسی)، اسکرین‌شات و نکات رفع اشکال.
 
 ### 🚀 نحوه استفاده
-1. از Command Palette دستور `Apply Persian CSS to Chat` را اجرا کنید.
-2. یکی از روش‌های پیشنهادی (کپی اسکریپت یا CSS) را انتخاب کنید.
-3. طبق راهنمای افزونه، کد را در DevTools یا افزونه Custom CSS قرار دهید.
-4. از محیط کاملاً راست‌چین و حرفه‌ای در چت Copilot و markdown لذت ببرید!
+1. از Command Palette دستور `Persian Tools Hub` یا سایر دستورات افزونه را اجرا کنید.
+2. ابزارهای متنوع (تبدیل تاریخ، اعداد، تقویم، IP و ...) را در مرکز ابزارها تجربه کنید.
+3. برای راست‌چین‌سازی، طبق راهنمای افزونه، کد را در DevTools یا افزونه Custom CSS قرار دهید.
+4. از محیط کاملاً راست‌چین و حرفه‌ای در چت Copilot، markdown و ابزارهای فارسی لذت ببرید!
 
 > **توجه:** به دلیل سیاست‌های امنیتی VS Code، تزریق مستقیم CSS فقط با راهنمای دستی ممکن است. این افزونه بهترین و امن‌ترین روش‌ها را به شما آموزش می‌دهد تا محیط شما همیشه پایدار و امن بماند.
 
 ### 📝 چرا این افزونه؟
-- تجربه‌ای طبیعی و حرفه‌ای برای خواندن فارسی در چت Copilot و markdown.
-- خداحافظی با مشکلات راست‌چین و فونت و به‌هم‌ریختگی متن.
+- تجربه‌ای طبیعی و حرفه‌ای برای خواندن فارسی در چت Copilot، markdown و ابزارهای VS Code.
+- همه ابزارهای فارسی در یک افزونه: تاریخ، عدد، متن و ...
 - همیشه به‌روز و سازگار با آخرین نسخه‌های VS Code.
 - مناسب تیم‌ها، مدرسین و همه علاقه‌مندان به محتوای فارسی در VS Code.
 
@@ -85,4 +83,4 @@ MIT
 
 ---
 
-**Enjoy Persian text in VS Code with proper RTL support!** 🇮🇷
+**از تجربه فارسی حرفه‌ای در VS Code لذت ببرید!** 🇮🇷

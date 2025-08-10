@@ -97,7 +97,165 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
-	context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable, disposableTest);
+	// Date Converter command
+	const disposableDateConverter = vscode.commands.registerCommand('vscode-persian-copilot.dateConverter', () => {
+		openDateConverterWebview();
+	});
+
+	context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable, disposableTest, disposableDateConverter);
+// --- Date Converter Webview ---
+function openDateConverterWebview() {
+	const panel = vscode.window.createWebviewPanel(
+		'persianDateConverter',
+		'Persian Date Converter',
+		vscode.ViewColumn.One,
+		{ enableScripts: true }
+	);
+
+	// Load HTML from external file
+	const htmlPath = path.join(__dirname, 'webviews', 'dateConverter.html');
+	let html = '';
+	try {
+		html = fs.readFileSync(htmlPath, 'utf8');
+	} catch (e) {
+		html = '<h2>Could not load date converter UI.</h2>';
+	}
+	panel.webview.html = html;
+
+	// Handle messages from the webview
+	panel.webview.onDidReceiveMessage(
+		message => {
+			if (message.command === 'convert') {
+				const { type, value } = message;
+				let result = '';
+				try {
+					if (type === 'toJalali') {
+						result = toJalaliString(value);
+					} else if (type === 'toGregorian') {
+						result = toGregorianString(value);
+					}
+				} catch (e) {
+					result = 'Invalid date!';
+				}
+				panel.webview.postMessage({ command: 'result', result });
+			}
+		},
+		undefined
+	);
+
+
+
+// --- Date conversion logic ---
+// Minimal Jalali/Gregorian conversion (using algorithm from jalaali-js)
+// Source: https://github.com/jalaali/jalaali-js (MIT License)
+function toJalaliString(gregorian: string): string {
+	const [gy, gm, gd] = gregorian.split('-').map(Number);
+	const { jy, jm, jd } = toJalali(gy, gm, gd);
+	return `${jy}-${pad(jm)}-${pad(jd)}`;
+}
+function toGregorianString(jalali: string): string {
+	const [jy, jm, jd] = jalali.split('-').map(Number);
+	const { gy, gm, gd } = toGregorian(jy, jm, jd);
+	return `${gy}-${pad(gm)}-${pad(gd)}`;
+}
+function pad(n: number) { return n < 10 ? '0' + n : n; }
+
+// --- Jalaali conversion core ---
+// (Minimal, inlined for extension)
+function toJalali(gy: number, gm: number, gd: number) {
+	   const g_d_m = [0,31,59,90,120,151,181,212,243,273,304,334];
+	   let jy = (gy <= 1600) ? 0 : 979;
+	   gy -= (gy <= 1600) ? 621 : 1600;
+	   let gy2 = (gm > 2) ? (gy + 1) : gy;
+	   let days = (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
+	   jy += 33 * Math.floor(days / 12053);
+	   days %= 12053;
+	   jy += 4 * Math.floor(days / 1461);
+	   days %= 1461;
+	   if (days > 365) {
+		   jy += Math.floor((days - 1) / 365);
+		   days = (days - 1) % 365;
+	   }
+	   const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+	   const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+	   return { jy: jy + 1, jm, jd };
+	}
+}
+function toGregorian(jy: number, jm: number, jd: number) {
+	jy -= (jy <= 979) ? 0 : 979;
+	let gy = (jy <= 979) ? 621 : 1600;
+	let days = (365 * jy) + Math.floor(jy / 33) * 8 + Math.floor(((jy % 33) + 3) / 4) + jd + ((jm < 7) ? ((jm - 1) * 31) : (((jm - 7) * 30) + 186));
+	gy += 400 * Math.floor(days / 146097);
+	days %= 146097;
+	if (days > 36524) {
+		gy += 100 * Math.floor(--days / 36524);
+		days %= 36524;
+		if (days >= 365) { days++; }
+	}
+	gy += 4 * Math.floor(days / 1461);
+	days %= 1461;
+	   if (days > 365) {
+		   gy += Math.floor((days - 1) / 365);
+		   days = (days - 1) % 365;
+	   }
+	   let gm = 0;
+	   let gd = 0;
+	   const sal_a = [0,31,((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28,31,30,31,30,31,31,30,31,30,31];
+	   for (let i = 1; i <= 12; i++) {
+		   if (days < sal_a[i]) {
+			   gm = i;
+			   gd = days + 1;
+			   break;
+		   } else {
+			   days -= sal_a[i];
+		   }
+	   }
+	   return { gy, gm, gd };
+	}
+
+// --- Persian Tools Hub navigation handler ---
+
+
+// --- IP Details Webview ---
+function openIpDetailsWebview() {
+	const panel = vscode.window.createWebviewPanel(
+		'ipDetails',
+		'IP/URL Details Lookup',
+		vscode.ViewColumn.One,
+		{ enableScripts: true }
+	);
+	const htmlPath = path.join(__dirname, 'webviews', 'ipDetails.html');
+	let html = '';
+	try {
+		html = fs.readFileSync(htmlPath, 'utf8');
+	} catch (e) {
+		html = '<h2>Could not load IP Details UI.</h2>';
+	}
+	panel.webview.html = html;
+
+	panel.webview.onDidReceiveMessage(
+		async message => {
+			if (message.command === 'ipDetailsLookup') {
+				const { token, url } = message;
+				try {
+					const res = await fetch('https://console.helpix.app/api/v1/tools/ip/details', {
+						method: 'POST',
+						headers: {
+							'Authorization': 'Bearer ' + token,
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ url })
+					});
+					const data = await res.json();
+					panel.webview.postMessage({ command: 'ipDetailsResult', data });
+				} catch (e) {
+					panel.webview.postMessage({ command: 'ipDetailsResult', error: 'Request failed!' });
+				}
+			}
+		},
+		undefined
+	);
+}
 }
 
 function startAutoApply() {

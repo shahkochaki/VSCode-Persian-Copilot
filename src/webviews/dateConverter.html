@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Converter</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 24px; }
+        h2 { color: #007acc; }
+        .input-row { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; }
+        input[type="text"] { width: 220px; padding: 6px; font-size: 1em; }
+        button { padding: 7px 18px; margin-top: 8px; background: #007acc; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .result { margin-top: 18px; font-weight: bold; color: #333; }
+        .desc { color: #666; font-size: 0.95em; margin-bottom: 18px; }
+    </style>
+</head>
+<body>
+    <h2>Persian Date Converter</h2>
+    <div class="desc">Convert Gregorian (Miladi) dates to Jalali (Shamsi) and vice versa.<br>تبدیل تاریخ میلادی و شمسی به یکدیگر</div>
+    <div class="input-row">
+        <label for="gregorian">Gregorian (YYYY-MM-DD):</label>
+        <input type="text" id="gregorian" placeholder="2025-08-10">
+        <button onclick="convertToJalali()">To Jalali</button>
+    </div>
+    <div class="input-row">
+        <label for="jalali">Jalali (YYYY-MM-DD):</label>
+        <input type="text" id="jalali" placeholder="1404-05-19">
+        <button onclick="convertToGregorian()">To Gregorian</button>
+    </div>
+    <div class="result" id="result"></div>
+    <script>
+        const vscode = acquireVsCodeApi();
+        function convertToJalali() {
+            const value = document.getElementById('gregorian').value;
+            vscode.postMessage({ command: 'convert', type: 'toJalali', value });
+        }
+        function convertToGregorian() {
+            const value = document.getElementById('jalali').value;
+            vscode.postMessage({ command: 'convert', type: 'toGregorian', value });
+        }
+        window.addEventListener('message', event => {
+            const msg = event.data;
+            if (msg.command === 'result') {
+                document.getElementById('result').textContent = msg.result;
+            }
+        });
+    </script>
+</body>
+</html>
