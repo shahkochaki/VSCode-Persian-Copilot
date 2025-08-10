@@ -2,7 +2,7 @@
   "name": "vscode-persian-copilot",
   "displayName": "VSCode Persian Copilot",
   "description": "VSCode Persian Copilot - RTL support for Persian/Farsi text in VS Code chat interface",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "publisher": "shahkochaki",
   "repository": {
     "type": "git",

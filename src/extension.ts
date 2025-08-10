@@ -1,5 +1,6 @@
-// The module 'vscode' contains the VS Code extensibility API
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 
 let isAutoApplyEnabled = true;
 let cssInjectionInterval: NodeJS.Timeout | undefined;
@@ -100,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function startAutoApply() {
-	// Show initial setup message
+	// Show initial setup message only once
 	setTimeout(() => {
 		vscode.window.showInformationMessage(
 			'🚀 Persian Copilot is ready! Click "Apply CSS" to activate RTL support.',
@@ -114,21 +115,6 @@ function startAutoApply() {
 			}
 		});
 	}, 2000);
-	
-	// Set up interval to remind user every 2 minutes if CSS is not applied
-	cssInjectionInterval = setInterval(() => {
-		vscode.window.showInformationMessage(
-			'💡 Reminder: Apply Persian CSS for RTL support',
-			'Apply Now',
-			'Don\'t remind'
-		).then(selection => {
-			if (selection === 'Apply Now') {
-				applyCSS();
-			} else if (selection === 'Don\'t remind') {
-				stopAutoApply();
-			}
-		});
-	}, 120000); // Every 2 minutes
 }
 
 function showSetupGuide() {
@@ -208,11 +194,51 @@ function toggleAutoApply(context: vscode.ExtensionContext) {
 }
 
 function applyCSS() {
-	// Simply copy the CSS script to clipboard for manual injection
+	// Method 1: Try to copy CSS file to VS Code styles directory
+	const cssMethod = vscode.window.showQuickPick([
+		{ 
+			label: '📋 Copy Script (Current Method)',
+			description: 'Copy JavaScript to clipboard for DevTools',
+			detail: 'Requires manual paste in DevTools Console'
+		},
+		{
+			label: '📁 Copy CSS File',
+			description: 'Copy CSS file to system and show instructions',
+			detail: 'Direct CSS file approach'
+		},
+		{
+			label: '🔧 Advanced Auto-Inject',
+			description: 'Try automatic injection via VS Code API',
+			detail: 'Experimental - may work better'
+		}
+	], {
+		placeHolder: 'Choose CSS application method'
+	});
+
+	cssMethod.then(selection => {
+		if (!selection) {
+			return;
+		}
+
+		switch (selection.label) {
+			case '📋 Copy Script (Current Method)':
+				copyScriptMethod();
+				break;
+			case '📁 Copy CSS File':
+				copyCSSFileMethod();
+				break;
+			case '🔧 Advanced Auto-Inject':
+				advancedInjectMethod();
+				break;
+		}
+	});
+}
+
+function copyScriptMethod() {
+	// Original method
 	const script = getCSSInjectionScript();
 	vscode.env.clipboard.writeText(script);
 	
-	// Show instruction to user
 	vscode.window.showInformationMessage(
 		'CSS script copied to clipboard! Please open DevTools (F12) → Console → Paste & Enter',
 		'Open DevTools'
@@ -221,6 +247,164 @@ function applyCSS() {
 			vscode.commands.executeCommand('workbench.action.toggleDevTools');
 		}
 	});
+}
+
+function copyCSSFileMethod() {
+	try {
+		// Read CSS file from extension
+		const extensionPath = vscode.extensions.getExtension('shahkochaki.vscode-persian-copilot')?.extensionPath;
+		if (!extensionPath) {
+			vscode.window.showErrorMessage('Could not find extension path');
+			return;
+		}
+
+		const cssPath = path.join(extensionPath, 'assets', 'persian-rtl.css');
+		const cssContent = fs.readFileSync(cssPath, 'utf8');
+		
+		// Copy CSS content to clipboard
+		vscode.env.clipboard.writeText(cssContent);
+		
+		vscode.window.showInformationMessage(
+			'✅ Pure CSS copied to clipboard! Create a .css file and paste this content, then inject it manually.',
+			'Show Instructions'
+		).then(selection => {
+			if (selection === 'Show Instructions') {
+				showCSSFileInstructions();
+			}
+		});
+	} catch (error) {
+		vscode.window.showErrorMessage('Error reading CSS file: ' + error);
+	}
+}
+
+function advancedInjectMethod() {
+	// Try using webview to inject CSS
+	const panel = vscode.window.createWebviewPanel(
+		'persianCSSInjector',
+		'Persian CSS Injector',
+		{ viewColumn: vscode.ViewColumn.Beside, preserveFocus: true },
+		{
+			enableScripts: true,
+			retainContextWhenHidden: true
+		}
+	);
+
+	const cssContent = getCSSContent();
+	
+	panel.webview.html = `
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body { font-family: Arial, sans-serif; padding: 20px; }
+		.css-code { background: #2d2d30; color: #cccccc; padding: 15px; border-radius: 8px; white-space: pre-wrap; }
+		button { padding: 10px 20px; margin: 10px 5px; border: none; border-radius: 5px; cursor: pointer; }
+		.inject-btn { background: #007acc; color: white; }
+	</style>
+</head>
+<body>
+	<h2>🇮🇷 Persian RTL CSS Injector</h2>
+	<p>This CSS will be applied to make Persian text RTL in VS Code chat:</p>
+	
+	<div class="css-code">${cssContent.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+	
+	<button class="inject-btn" onclick="injectToParent()">🚀 Try Auto-Inject</button>
+	<button onclick="copyToClipboard()">📋 Copy CSS</button>
+	
+	<script>
+		function injectToParent() {
+			try {
+				// Try to access parent window (VS Code main window)
+				if (window.parent && window.parent !== window) {
+					const style = window.parent.document.createElement('style');
+					style.setAttribute('data-persian-rtl', 'true');
+					style.textContent = \`${cssContent.replace(/`/g, '\\`')}\`;
+					window.parent.document.head.appendChild(style);
+					alert('✅ CSS injected successfully!');
+				} else {
+					alert('❌ Cannot access parent window. Use DevTools method instead.');
+				}
+			} catch(e) {
+				alert('❌ Injection failed: ' + e.message);
+			}
+		}
+		
+		function copyToClipboard() {
+			navigator.clipboard.writeText(\`${cssContent.replace(/`/g, '\\`')}\`).then(() => {
+				alert('✅ CSS copied to clipboard!');
+			});
+		}
+	</script>
+</body>
+</html>`;
+
+	// Auto close after 30 seconds
+	setTimeout(() => {
+		panel.dispose();
+	}, 30000);
+}
+
+function showCSSFileInstructions() {
+	const panel = vscode.window.createWebviewPanel(
+		'cssFileInstructions',
+		'CSS File Instructions',
+		vscode.ViewColumn.One,
+		{ enableScripts: true }
+	);
+	
+	panel.webview.html = `<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body { font-family: Arial, sans-serif; padding: 20px; line-height: 1.6; }
+		.step { margin: 15px 0; padding: 15px; background: #f5f5f5; border-radius: 8px; }
+		.highlight { background: #007acc; color: white; padding: 2px 6px; border-radius: 3px; }
+		code { background: #eee; padding: 2px 5px; border-radius: 3px; }
+	</style>
+</head>
+<body>
+	<h1>📁 CSS File Method Instructions</h1>
+	
+	<div class="step">
+		<h3>Method 1: Browser Extension</h3>
+		<p>1. Install a browser extension like <strong>"User CSS"</strong> or <strong>"Stylish"</strong></p>
+		<p>2. Create a new style for <code>vscode://</code> or VS Code domain</p>
+		<p>3. Paste the CSS content (already copied to clipboard)</p>
+	</div>
+	
+	<div class="step">
+		<h3>Method 2: VS Code Custom CSS Extension</h3>
+		<p>1. Install <strong>"Custom CSS and JS Loader"</strong> extension</p>
+		<p>2. Create a <code>.css</code> file with the copied content</p>
+		<p>3. Configure the extension to load your CSS file</p>
+	</div>
+	
+	<div class="step">
+		<h3>Method 3: Direct File Modification</h3>
+		<p>⚠️ <strong>Advanced users only!</strong></p>
+		<p>1. Navigate to VS Code installation directory</p>
+		<p>2. Find <code>workbench.desktop.main.css</code></p>
+		<p>3. Append the CSS content (backup first!)</p>
+	</div>
+</body>
+</html>`;
+}
+
+function getCSSContent(): string {
+	return `/* Persian Copilot RTL Styles */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
+
+.rendered-markdown {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.rendered-markdown pre,
+.rendered-markdown code {
+    direction: ltr !important;
+    text-align: left !important;
+}`;
 }
 
 function removeCSS() {
@@ -319,22 +503,7 @@ function getCSSInjectionScript(): string {
 		document.head.appendChild(style);
 		console.log('✅ Persian RTL CSS successfully injected!');
 		
-		// Test if CSS is working by checking elements
-		setTimeout(function() {
-			const markdownElements = document.querySelectorAll('.rendered-markdown');
-			console.log('📊 Found', markdownElements.length, 'markdown elements');
-			
-			markdownElements.forEach(function(el, index) {
-				const computedStyle = window.getComputedStyle(el);
-				console.log('Element ' + index + ': direction=' + computedStyle.direction + ', text-align=' + computedStyle.textAlign);
-			});
-			
-			if (markdownElements.length > 0) {
-				console.log('🎉 Persian RTL should now be active!');
-			} else {
-				console.log('⚠️ No markdown elements found. Try opening a chat conversation.');
-			}
-		}, 1000);
+		// No test or repeated code. Only inject CSS once.
 		
 		return true;
 	} catch(error) {

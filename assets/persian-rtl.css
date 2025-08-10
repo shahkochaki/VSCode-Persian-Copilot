@@ -1,0 +1,45 @@
+/* Persian Copilot RTL Styles */
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
+
+/* Main chat container RTL support */
+.interactive-session .interactive-item-container .value .rendered-markdown {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Alternative selectors for different VS Code versions */
+.chat-list-container .rendered-markdown,
+.interactive-list .rendered-markdown,
+.chat-item .rendered-markdown,
+.rendered-markdown {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Keep code blocks and special elements LTR */
+.rendered-markdown pre,
+.rendered-markdown code,
+.rendered-markdown .progress-step,
+.rendered-markdown .interactive-result-editor,
+.rendered-markdown .codicon,
+.rendered-markdown .monaco-editor {
+    direction: ltr !important;
+    text-align: left !important;
+    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;
+}
+
+/* Enhanced chat bubble support */
+.chat-response-container,
+.interactive-response-container {
+    direction: rtl !important;
+}
+
+/* Copilot specific selectors */
+.copilot-chat-response .rendered-markdown,
+.github-copilot-chat .rendered-markdown {
+    direction: rtl !important;
+    text-align: right !important;
+    font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
