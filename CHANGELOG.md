@@ -19,3 +19,15 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 - **Beautiful Typography**: Uses Vazirmatn font for optimal Persian text readability
 - **Easy Application**: Automatic activation and manual command options
 - **Developer-Friendly**: Includes console injection method for power users
+
+## [1.3.1] - 2025-08-10
+
+### Changed
+- حذف فونت فارسی از CSS افزونه (سازگاری بیشتر)
+- افزودن margin fix برای کد بلاک‌ها:
+  ```css
+  .interactive-item-container .value .rendered-markdown ul .interactive-result-code-block {
+      margin-right: -24px !important;
+      margin-left: 0;
+  }
+  ```
