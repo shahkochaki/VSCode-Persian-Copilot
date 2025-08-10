@@ -1,6 +1,6 @@
 # VSCode Persian Copilot
 
-![VSCode Persian Copilot Logo](logo-128.png)
+![VSCode Persian Copilot Logo](logo.png)
 
 ---
 
