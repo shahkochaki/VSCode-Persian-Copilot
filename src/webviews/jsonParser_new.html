@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>پردازش JSON</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 24px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+        }
+
+        h1 {
+            color: var(--vscode-button-background);
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .input-section {
+            margin-bottom: 24px;
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            font-family: 'Vazirmatn', 'Consolas', monospace;
+            font-size: 14px;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 4px;
+            resize: vertical;
+            direction: ltr;
+            text-align: left;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px 16px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .output {
+            margin-top: 20px;
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .status.success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .status.error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        .status.info {
+            background: rgba(0, 122, 204, 0.1);
+            color: var(--vscode-button-background);
+            border: 1px solid rgba(0, 122, 204, 0.2);
+        }
+
+        .external-link {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--vscode-panel-background);
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        .external-link a {
+            color: var(--vscode-button-background);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .external-link a:hover {
+            text-decoration: underline;
+        }
+
+        h3 {
+            margin-bottom: 12px;
+            color: var(--vscode-foreground);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📋 پردازش و تجزیه JSON</h1>
+
+        <div class="input-section">
+            <h3>JSON ورودی</h3>
+            <textarea id="jsonInput" placeholder='{"name": "مثال", "value": 123, "items": ["آیتم ۱", "آیتم ۲"]}'></textarea>
+            
+            <div class="buttons">
+                <button onclick="parseJSON()">🔍 تجزیه</button>
+                <button onclick="formatJSON()" style="background:#28a745;">✨ فرمت</button>
+                <button onclick="minifyJSON()" style="background:#fd7e14;">📦 فشرده</button>
+                <button onclick="validateJSON()" style="background:#6f42c1;">✅ اعتبارسنجی</button>
+                <button onclick="clearAll()" style="background:#dc3545;">🗑️ پاک کردن</button>
+                <button onclick="copyOutput()" style="background:#17a2b8;">📋 کپی خروجی</button>
+            </div>
+
+            <div id="inputStatus"></div>
+        </div>
+
+        <div class="input-section output">
+            <h3>خروجی</h3>
+            <textarea id="jsonOutput" placeholder="نتیجه اینجا نمایش داده می‌شود..." readonly></textarea>
+            <div id="outputStatus"></div>
+        </div>
+
+        <div class="external-link">
+            <p><a href="#" onclick="openExternalTool()">🌐 باز کردن ابزار آنلاین پیشرفته</a></p>
+        </div>
+    </div>
+
+    <script>
+        function showStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+            
+            // Auto hide after 3 seconds for non-error messages
+            if (type !== 'error') {
+                setTimeout(() => {
+                    element.innerHTML = '';
+                }, 3000);
+            }
+        }
+
+        function parseJSON() {
+            const input = document.getElementById('jsonInput').value.trim();
+            const output = document.getElementById('jsonOutput');
+            
+            if (!input) {
+                showStatus('inputStatus', 'لطفاً JSON را وارد کنید', 'error');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                output.value = JSON.stringify(parsed, null, 2);
+                showStatus('outputStatus', '✅ JSON با موفقیت تجزیه شد', 'success');
+            } catch (error) {
+                showStatus('inputStatus', `❌ خطا در تجزیه JSON: ${error.message}`, 'error');
+                output.value = '';
+            }
+        }
+
+        function formatJSON() {
+            const input = document.getElementById('jsonInput').value.trim();
+            const output = document.getElementById('jsonOutput');
+            
+            if (!input) {
+                showStatus('inputStatus', 'لطفاً JSON را وارد کنید', 'error');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                const formatted = JSON.stringify(parsed, null, 2);
+                output.value = formatted;
+                
+                // Also update input with formatted version
+                document.getElementById('jsonInput').value = formatted;
+                
+                showStatus('outputStatus', '✨ JSON فرمت شد', 'success');
+            } catch (error) {
+                showStatus('inputStatus', `❌ خطا در فرمت JSON: ${error.message}`, 'error');
+            }
+        }
+
+        function minifyJSON() {
+            const input = document.getElementById('jsonInput').value.trim();
+            const output = document.getElementById('jsonOutput');
+            
+            if (!input) {
+                showStatus('inputStatus', 'لطفاً JSON را وارد کنید', 'error');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                const minified = JSON.stringify(parsed);
+                output.value = minified;
+                showStatus('outputStatus', '📦 JSON فشرده شد', 'success');
+            } catch (error) {
+                showStatus('inputStatus', `❌ خطا در فشرده‌سازی JSON: ${error.message}`, 'error');
+            }
+        }
+
+        function validateJSON() {
+            const input = document.getElementById('jsonInput').value.trim();
+            
+            if (!input) {
+                showStatus('inputStatus', 'لطفاً JSON را وارد کنید', 'error');
+                return;
+            }
+
+            try {
+                const parsed = JSON.parse(input);
+                const keys = Object.keys(parsed).length;
+                const type = Array.isArray(parsed) ? 'آرایه' : typeof parsed === 'object' ? 'شیء' : typeof parsed;
+                
+                showStatus('inputStatus', `✅ JSON معتبر است | نوع: ${type} | تعداد کلیدها: ${keys}`, 'success');
+                document.getElementById('jsonOutput').value = `JSON معتبر است!\n\nنوع: ${type}\nتعداد کلیدها/آیتم‌ها: ${keys}\n\nJSON فرمت شده:\n${JSON.stringify(parsed, null, 2)}`;
+            } catch (error) {
+                showStatus('inputStatus', `❌ JSON نامعتبر: ${error.message}`, 'error');
+                document.getElementById('jsonOutput').value = '';
+            }
+        }
+
+        function clearAll() {
+            document.getElementById('jsonInput').value = '';
+            document.getElementById('jsonOutput').value = '';
+            document.getElementById('inputStatus').innerHTML = '';
+            document.getElementById('outputStatus').innerHTML = '';
+            showStatus('inputStatus', '🗑️ همه فیلدها پاک شدند', 'info');
+        }
+
+        function copyOutput() {
+            const output = document.getElementById('jsonOutput');
+            if (!output.value) {
+                showStatus('outputStatus', 'خروجی خالی است', 'error');
+                return;
+            }
+
+            navigator.clipboard.writeText(output.value).then(() => {
+                showStatus('outputStatus', '📋 خروجی کپی شد', 'success');
+            }).catch(() => {
+                // Fallback for older browsers
+                output.select();
+                document.execCommand('copy');
+                showStatus('outputStatus', '📋 خروجی کپی شد', 'success');
+            });
+        }
+
+        function openExternalTool() {
+            // Send message to VS Code extension to open external URL
+            if (typeof acquireVsCodeApi !== 'undefined') {
+                const vscode = acquireVsCodeApi();
+                vscode.postMessage({
+                    command: 'openExternal',
+                    url: 'https://helpix.app/json-parser'
+                });
+            } else {
+                // Fallback for testing outside VS Code
+                window.open('https://helpix.app/json-parser', '_blank');
+            }
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'Enter':
+                        e.preventDefault();
+                        parseJSON();
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        formatJSON();
+                        break;
+                    case 'm':
+                        e.preventDefault();
+                        minifyJSON();
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        clearAll();
+                        break;
+                }
+            }
+        });
+
+        // Auto-resize textareas
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 400) + 'px';
+        }
+
+        document.getElementById('jsonInput').addEventListener('input', function() {
+            autoResize(this);
+        });
+
+        // Sample JSON on load
+        window.addEventListener('load', function() {
+            const sampleJSON = {
+                "نام": "مثال فارسی",
+                "شماره": 1403,
+                "فعال": true,
+                "آدرس": {
+                    "شهر": "تهران",
+                    "کشور": "ایران"
+                },
+                "لیست": ["آیتم اول", "آیتم دوم", "آیتم سوم"]
+            };
+            
+            document.getElementById('jsonInput').value = JSON.stringify(sampleJSON, null, 2);
+        });
+    </script>
+</body>
+</html>

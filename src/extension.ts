@@ -21,8 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
 		jsonParser: config.get('enableJsonParser', true),
 	};
 	const showToolsHubIcon = config.get('showToolsHubIcon', true);
-	const autoApply = config.get('autoApply', true);
+	const autoApplyCSS = config.get('autoApplyCSS', true);
 	const showDevToolsGuide = config.get('showDevToolsGuide', true);
+	const cssInjectionMethod = config.get('cssInjectionMethod', 'auto') as string;
 
 	// Persian Tools Hub command
 	if (showToolsHubIcon) {
@@ -159,10 +160,28 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable, disposableTest);
 
 	// --- CSS/RTL/Guide logic based on settings ---
-	isAutoApplyEnabled = autoApply;
-	if (isAutoApplyEnabled && showDevToolsGuide) {
-		startAutoApply();
+	isAutoApplyEnabled = autoApplyCSS;
+	
+	// Handle different CSS injection methods
+	if (cssInjectionMethod === 'auto' && autoApplyCSS) {
+		if (showDevToolsGuide) {
+			startAutoApply();
+		} else {
+			// Just apply CSS once without showing guide
+			setTimeout(() => applyCSS(), 2000);
+		}
+	} else if (cssInjectionMethod === 'manual') {
+		// CSS will only be applied via commands
+		vscode.window.showInformationMessage(
+			'Persian CSS is set to manual mode. Use "Apply Persian CSS" command to activate.',
+			'Apply Now'
+		).then(selection => {
+			if (selection === 'Apply Now') {
+				vscode.commands.executeCommand('vscode-persian-copilot.applyChatRTL');
+			}
+		});
 	}
+	// If disabled, do nothing
 
 	console.log('VSCode Persian Copilot is now active!');
 }

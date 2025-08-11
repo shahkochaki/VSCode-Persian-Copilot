@@ -134,18 +134,7 @@
         "persian-copilot.autoApplyCSS": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically apply Persian CSS when VS Code starts (اعمال خودکار CSS فارسی هنگام شروع VS Code)"
-        },
-        "persian-copilot.showDevToolsGuide": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show Developer Tools guide and auto-inject CSS (نمایش راهنمای Developer Tools و تزریق خودکار CSS)"
-        },
-        "persian-copilot.cssInjectionMethod": {
-          "type": "string",
-          "enum": ["auto", "manual", "disabled"],
-          "default": "auto",
-          "description": "CSS injection method: auto (automatic), manual (command only), disabled (نحوه تزریق CSS)"
+          "description": "Automatically apply Persian CSS (اعمال خودکار CSS فارسی)"
         },
         "persian-copilot.showToolsHubIcon": {
           "type": "boolean",
