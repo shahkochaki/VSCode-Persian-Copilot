@@ -2,7 +2,7 @@
   "name": "vscode-persian-copilot-dev",
   "displayName": "VSCode Persian Copilot [DEV] — RTL & Persian Tools Hub",
   "description": "[DEV] Professional RTL support and a complete Persian Tools Hub for VS Code: date converter, number tools, calendar, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
-  "version": "1.3.3-dev",
+  "version": "1.3.4-dev",
   "publisher": "shahkochaki",
   "repository": {
     "type": "git",
