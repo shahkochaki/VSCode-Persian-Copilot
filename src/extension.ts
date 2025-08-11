@@ -237,11 +237,6 @@ function openSimpleWebview(type: string, title: string, htmlFile: string) {
 				case 'openExternal':
 					vscode.env.openExternal(vscode.Uri.parse(message.url));
 					break;
-				case 'openHub':
-					// Close current panel and open hub
-					panel.dispose();
-					openToolsHubWebview();
-					break;
 			}
 		}
 	);
@@ -336,10 +331,6 @@ function openIpDetailsWebview() {
 				} catch (e) {
 					panel.webview.postMessage({ command: 'ipDetailsResult', error: 'Request failed!' });
 				}
-			} else if (message.command === 'openHub') {
-				// Close current panel and open hub
-				panel.dispose();
-				openToolsHubWebview();
 			}
 		},
 		undefined

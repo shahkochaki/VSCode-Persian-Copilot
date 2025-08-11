@@ -164,13 +164,6 @@
     <div class="container">
         <h2>🗓️ تقویم فارسی و تبدیل تاریخ</h2>
         
-        <!-- Back to Hub Link -->
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button onclick="goToHub()" style="background: transparent; border: 1px solid var(--vscode-button-background); color: var(--vscode-button-background); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Vazirmatn', sans-serif;">
-                🏠 بازگشت به Hub
-            </button>
-        </div>
-        
         <!-- Today's Date -->
         <div class="today" id="todayDate">
             <h3>📅 امروز</h3>
@@ -373,25 +366,10 @@
             
             try {
                 const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
-                
-                // محاسبه اطلاعات روز
-                const gregorianDate = new Date(gy, gm - 1, gd);
-                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                                  'July', 'August', 'September', 'October', 'November', 'December'];
-                
-                const dayName = dayNames[gregorianDate.getDay()];
-                const monthName = monthNames[gregorianDate.getMonth()];
-                const isoDate = `${gy}-${gm.toString().padStart(2, '0')}-${gd.toString().padStart(2, '0')}`;
-                const fullDate = `${dayName} - ${monthName} ${gd}, ${gy}`;
-                
                 document.getElementById('result').innerHTML = `
                     <h4>✅ نتیجه تبدیل:</h4>
                     <div class="date-display">📅 ${jd} ${persianMonths[jm-1]} ${jy}</div>
-                    <div class="date-info" style="direction: ltr; text-align: center; font-family: 'Segoe UI', monospace;">
-                        <div style="margin-bottom: 4px;">🌍 ${isoDate}</div>
-                        <div>${fullDate}</div>
-                    </div>
+                    <div class="date-info">🌍 ${gd} ${gregMonths[gm-1]} ${gy}</div>
                 `;
             } catch (e) {
                 document.getElementById('result').innerHTML = '<span style="color:#dc3545;">❌ خطا در تبدیل تاریخ</span>';
@@ -412,24 +390,10 @@
             
             try {
                 const [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
-                
-                // محاسبه اطلاعات روز
-                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                                  'July', 'August', 'September', 'October', 'November', 'December'];
-                
-                const dayName = dayNames[date.getDay()];
-                const monthName = monthNames[date.getMonth()];
-                const isoDate = `${gy}-${gm.toString().padStart(2, '0')}-${gd.toString().padStart(2, '0')}`;
-                const fullDate = `${dayName} - ${monthName} ${gd}, ${gy}`;
-                
                 document.getElementById('result').innerHTML = `
                     <h4>✅ نتیجه تبدیل:</h4>
-                    <div class="date-info" style="direction: ltr; text-align: center; font-family: 'Segoe UI', monospace;">
-                        <div style="margin-bottom: 4px;">🌍 ${isoDate}</div>
-                        <div>${fullDate}</div>
-                    </div>
-                    <div class="date-display">📅 ${jd} ${persianMonths[jm-1]} ${jy}</div>
+                    <div class="date-display">🌍 ${gd} ${gregMonths[gm-1]} ${gy}</div>
+                    <div class="date-info">📅 ${jd} ${persianMonths[jm-1]} ${jy}</div>
                 `;
             } catch (e) {
                 document.getElementById('result').innerHTML = '<span style="color:#dc3545;">❌ خطا در تبدیل تاریخ</span>';
@@ -465,24 +429,9 @@
             
             const [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
             
-            // نام روزهای هفته به انگلیسی
-            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
-                              'July', 'August', 'September', 'October', 'November', 'December'];
-            
-            const dayName = dayNames[today.getDay()];
-            const monthName = monthNames[today.getMonth()];
-            
-            // فرمت: 2025-08-11 و Monday - August 11, 2025
-            const isoDate = `${gy}-${gm.toString().padStart(2, '0')}-${gd.toString().padStart(2, '0')}`;
-            const fullDate = `${dayName} - ${monthName} ${gd}, ${gy}`;
-            
             document.getElementById('currentDate').innerHTML = `
                 <div class="date-display">${jd} ${persianMonths[jm-1]} ${jy}</div>
-                <div class="date-info" style="direction: ltr; text-align: center; font-family: 'Segoe UI', monospace;">
-                    <div style="margin-bottom: 4px;">${isoDate}</div>
-                    <div>${fullDate}</div>
-                </div>
+                <div class="date-info">${gd} ${gregMonths[gm-1]} ${gy}</div>
             `;
         }
 
@@ -491,21 +440,6 @@
             showTodayDate();
             setToday();
         });
-
-        // Function to go back to hub
-        function goToHub() {
-            // Send message to extension to open hub
-            if (typeof vscode !== 'undefined') {
-                vscode.postMessage({
-                    command: 'openHub'
-                });
-            }
-        }
     </script>
-    
-    <!-- Copyright Footer -->
-    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
-        <p>© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
-    </div>
 </body>
 </html>

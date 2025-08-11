@@ -35,8 +35,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished",
-    "onView:persian-tools-hub"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
