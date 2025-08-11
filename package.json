@@ -39,6 +39,23 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "menus": {
+      "commandPalette": [
+        { "command": "vscode-persian-copilot.openToolsHub", "when": "true", "group": "navigation@1" },
+        { "command": "vscode-persian-copilot.jsonParser", "when": "true", "group": "navigation@2" },
+        { "command": "vscode-persian-copilot.dateConverter", "when": "true", "group": "navigation@3" },
+        { "command": "vscode-persian-copilot.numberConvert", "when": "true", "group": "navigation@4" },
+        { "command": "vscode-persian-copilot.calendar", "when": "true", "group": "navigation@5" },
+        { "command": "vscode-persian-copilot.arabicToPersian", "when": "true", "group": "navigation@6" },
+        { "command": "vscode-persian-copilot.lorem", "when": "true", "group": "navigation@7" },
+        { "command": "vscode-persian-copilot.moneyConvert", "when": "true", "group": "navigation@8" },
+        { "command": "vscode-persian-copilot.numberToWords", "when": "true", "group": "navigation@9" },
+        { "command": "vscode-persian-copilot.ipDetails", "when": "true", "group": "navigation@10" }
+      ],
+      "editor/title": [
+        { "command": "vscode-persian-copilot.openToolsHub", "when": "true", "group": "navigation@1" }
+      ]
+    },
     "commands": [
       {
         "command": "vscode-persian-copilot.applyChatRTL",
