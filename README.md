@@ -4,9 +4,9 @@
 
 > **The Ultimate Persian Developer Toolkit for VS Code**
 
-[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/shahkochaki.vscode-persian-copilot-dev?label=VS%20Code%20Marketplace&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot-dev)
-[![Downloads](https://img.shields.io/visual-studio-marketplace/d/shahkochaki.vscode-persian-copilot-dev)](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot-dev)
-[![Rating](https://img.shields.io/visual-studio-marketplace/r/shahkochaki.vscode-persian-copilot-dev)](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot-dev)
+[![Visual Studio Marketplace](https://img.shields.io/visual-studio-marketplace/v/shahkochaki.vscode-persian-copilot?label=VS%20Code%20Marketplace&logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot)
+[![Downloads](https://img.shields.io/visual-studio-marketplace/d/shahkochaki.vscode-persian-copilot)](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot)
+[![Rating](https://img.shields.io/visual-studio-marketplace/r/shahkochaki.vscode-persian-copilot)](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot)
 
 ---
 
@@ -71,7 +71,7 @@ Transform your VS Code experience with proper Persian text rendering:
 
 ```bash
 # Via VS Code Quick Open (Ctrl+P)
-ext install shahkochaki.vscode-persian-copilot-dev
+ext install shahkochaki.vscode-persian-copilot
 
 # Or search for "VSCode Persian Copilot" in the Extensions view
 ```
@@ -200,7 +200,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ```bash
 # از طریق VS Code Quick Open (Ctrl+P)
-ext install shahkochaki.vscode-persian-copilot-dev
+ext install shahkochaki.vscode-persian-copilot
 
 # یا جستجو برای "VSCode Persian Copilot" در بخش Extensions
 ```
@@ -247,7 +247,7 @@ ext install shahkochaki.vscode-persian-copilot-dev
 
 **ساخته شده با ❤️ برای جامعه توسعه‌دهندگان فارسی**
 
-[⭐ Star on GitHub](https://github.com/shahkochaki/vscode-persian-copilot) • [📦 VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot-dev) • [🐛 Report Issue](https://github.com/shahkochaki/vscode-persian-copilot/issues)
+[⭐ Star on GitHub](https://github.com/shahkochaki/vscode-persian-copilot) • [📦 VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot) • [🐛 Report Issue](https://github.com/shahkochaki/vscode-persian-copilot/issues)
 
 </div>
 - **کپی آسان CSS یا اسکریپت:** کد آماده برای DevTools یا افزونه Custom CSS فقط با یک کلیک و راهنمای گام‌به‌گام.
