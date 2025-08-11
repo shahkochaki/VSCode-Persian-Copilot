@@ -2,28 +2,229 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>Number to Words</title>
-    <style>body{font-family:Arial,sans-serif;padding:24px;}h2{color:#007acc;}.row{margin-bottom:18px;}input{width:220px;padding:6px;font-size:1em;}button{padding:7px 18px;margin-top:8px;background:#007acc;color:#fff;border:none;border-radius:4px;cursor:pointer;}.result{margin-top:18px;font-weight:bold;color:#333;}</style>
+    <title>عدد به حروف</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 24px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+        }
+
+        h2 {
+            color: var(--vscode-button-background);
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .row {
+            margin-bottom: 20px;
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--vscode-foreground);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 18px;
+            font-family: 'Vazirmatn', monospace;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: var(--vscode-foreground);
+        }
+
+        .result-box {
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid var(--vscode-input-border);
+            direction: rtl;
+            text-align: right;
+            font-family: 'Vazirmatn', sans-serif;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Number to Words (Persian)</h2>
+    <h2>🔠 تبدیل عدد به حروف فارسی</h2>
+    
     <div class="row">
-        <label>Enter a number:</label>
+        <label>عدد مورد نظر را وارد کنید:</label>
         <input type="text" id="num" placeholder="1234">
-        <button onclick="convert()">Convert</button>
+        <button onclick="convert()">تبدیل به حروف</button>
+        <button onclick="copyResult()" style="background:#28a745;">کپی</button>
+        <button onclick="clearAll()" style="background:#dc3545;">پاک کردن</button>
     </div>
+    
     <div class="result" id="result"></div>
     <script>
-        const vscode = acquireVsCodeApi();
+        const ones = ["", "یک", "دو", "سه", "چهار", "پنج", "شش", "هفت", "هشت", "نه"];
+        const tens = ["", "", "بیست", "سی", "چهل", "پنجاه", "شصت", "هفتاد", "هشتاد", "نود"];
+        const teens = ["ده", "یازده", "دوازده", "سیزده", "چهارده", "پانزده", "شانزده", "هفده", "هجده", "نوزده"];
+        const hundreds = ["", "یکصد", "دویست", "سیصد", "چهارصد", "پانصد", "ششصد", "هفتصد", "هشتصد", "نهصد"];
+        const scales = ["", "هزار", "میلیون", "میلیارد"];
+        
+        function convertThreeDigits(num) {
+            let result = "";
+            const h = Math.floor(num / 100);
+            const t = Math.floor((num % 100) / 10);
+            const o = num % 10;
+            
+            if (h > 0) {
+                result += hundreds[h];
+            }
+            
+            if (t === 1) {
+                if (result) result += " و ";
+                result += teens[o];
+            } else {
+                if (t > 1) {
+                    if (result) result += " و ";
+                    result += tens[t];
+                }
+                if (o > 0) {
+                    if (result) result += " و ";
+                    result += ones[o];
+                }
+            }
+            
+            return result;
+        }
+        
+        function numberToWords(num) {
+            if (num === 0) return "صفر";
+            if (num < 0) return "منفی " + numberToWords(-num);
+            
+            let result = "";
+            let scaleIndex = 0;
+            
+            while (num > 0) {
+                const chunk = num % 1000;
+                if (chunk !== 0) {
+                    const chunkWords = convertThreeDigits(chunk);
+                    if (scaleIndex > 0) {
+                        result = chunkWords + " " + scales[scaleIndex] + (result ? " و " + result : "");
+                    } else {
+                        result = chunkWords;
+                    }
+                }
+                num = Math.floor(num / 1000);
+                scaleIndex++;
+            }
+            
+            return result;
+        }
+        
         function convert() {
             const value = document.getElementById('num').value;
-            vscode.postMessage({ command: 'numberToWords', value });
-        }
-        window.addEventListener('message', event => {
-            const msg = event.data;
-            if(msg.command==='result'){
-                document.getElementById('result').textContent = msg.result;
+            if (!value || isNaN(value)) {
+                document.getElementById('result').innerHTML = '<span style="color:red;">Please enter a valid number</span>';
+                return;
             }
+            
+            const number = parseInt(value);
+            if (number > 999999999) {
+                document.getElementById('result').innerHTML = '<span style="color:red;">Number too large (max: 999,999,999)</span>';
+                return;
+            }
+            
+            const words = numberToWords(number);
+            document.getElementById('result').innerHTML = `
+                <div class="result-box">
+                    <strong>عدد:</strong> ${number.toLocaleString()}<br><br>
+                    <strong>متن:</strong> ${words}
+                </div>
+            `;
+        }
+        
+        function clearAll() {
+            document.getElementById('num').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+        
+        function copyResult() {
+            const resultDiv = document.getElementById('result');
+            if (resultDiv.textContent) {
+                const text = resultDiv.textContent.split('متن: ')[1];
+                if (text) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert('Text copied to clipboard!');
+                    });
+                }
+            }
+        }
+        
+        // Add keyboard support
+        document.getElementById('num').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') convert();
+        });
+        
+        // Number validation
+        document.getElementById('num').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
         });
     </script>
 </body>

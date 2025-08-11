@@ -1,78 +1,416 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>IP/URL Details Lookup</title>
+    <title>جزئیات IP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; padding: 24px; background: #f7f7fa; }
-        h2 { color: #007acc; }
-        .row { margin-bottom: 18px; }
-        input, textarea { width: 100%; padding: 7px; font-size: 1em; margin-bottom: 8px; }
-        button { padding: 8px 22px; background: #007acc; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
-        .result { margin-top: 24px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 18px; }
-        .flag { vertical-align: middle; margin-right: 8px; }
-        .label { color: #555; font-weight: bold; }
-        .value { color: #222; }
-        .error { color: #c00; font-weight: bold; margin-top: 18px; }
-        .section { margin-bottom: 12px; }
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 24px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+        }
+
+        h2 {
+            color: var(--vscode-button-background);
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .row {
+            margin-bottom: 20px;
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 4px;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+
+        button {
+            padding: 10px 24px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        button.secondary {
+            background: #6c757d;
+        }
+
+        button.success {
+            background: #28a745;
+        }
+
+        .result {
+            margin-top: 24px;
+            background: var(--vscode-panel-background);
+            border-radius: 8px;
+            padding: 18px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        .flag {
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+
+        .label {
+            color: var(--vscode-foreground);
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .value {
+            color: var(--vscode-foreground);
+            font-weight: 500;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 18px;
+            background: rgba(220, 53, 69, 0.1);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 18px;
+            background: rgba(40, 167, 69, 0.1);
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .section {
+            margin-bottom: 12px;
+            padding: 12px;
+            border-right: 3px solid var(--vscode-button-background);
+            background: var(--vscode-panel-background);
+            border-radius: 4px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--vscode-foreground);
+            opacity: 0.7;
+        }
+
+        .demo-section {
+            background: rgba(0, 122, 204, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 122, 204, 0.2);
+        }
+
+        .quick-test {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--vscode-foreground);
+        }
+
+        small {
+            color: var(--vscode-foreground);
+            opacity: 0.7;
+        }
+
+        h3 {
+            margin-bottom: 12px;
+            color: var(--vscode-foreground);
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <h2>IP/URL Details Lookup</h2>
-    <div class="row">
-        <label>API Token:</label>
-        <input type="password" id="token" placeholder="Paste your API token here">
+    <div class="container">
+        <h2>🌐 بررسی جزئیات IP و وب‌سایت</h2>
+        
+        <div class="demo-section">
+            <h3>✨ تست سریع</h3>
+            <div class="quick-test">
+                <button onclick="testMyIP()">🏠 تست IP من</button>
+                <button onclick="testGoogleDNS()">📡 Google DNS (8.8.8.8)</button>
+                <button onclick="testCloudflare()">☁️ Cloudflare (1.1.1.1)</button>
+            </div>
+        </div>
+        
+        <div class="row">
+            <label>آدرس URL یا IP:</label>
+            <input type="text" id="url" placeholder="مثل: google.com یا 8.8.8.8 یا https://example.com">
+        </div>
+        
+        <div class="row">
+            <button onclick="lookup()">🔍 بررسی جزئیات</button>
+            <button onclick="clearAll()" class="secondary">🗑️ پاک کردن</button>
+            <button onclick="copyResults()" class="success">📋 کپی نتایج</button>
+        </div>
+        
+        <div class="error" id="error"></div>
+        <div class="success" id="success"></div>
+        <div class="loading" id="loading" style="display:none;">🔄 در حال بررسی جزئیات...</div>
+        <div class="result" id="result"></div>
     </div>
-    <div class="row">
-        <label>URL or IP:</label>
-        <input type="text" id="url" placeholder="e.g. https://google.com or 8.8.8.8">
-    </div>
-    <button onclick="lookup()">Lookup</button>
-    <div class="error" id="error"></div>
-    <div class="result" id="result"></div>
+
     <script>
-        const vscode = acquireVsCodeApi();
-        function lookup() {
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('error').textContent = message;
+            document.getElementById('success').textContent = '';
+        }
+
+        function showSuccess(message) {
+            document.getElementById('success').textContent = message;
             document.getElementById('error').textContent = '';
+        }
+
+        function clearMessages() {
+            document.getElementById('error').textContent = '';
+            document.getElementById('success').textContent = '';
+        }
+
+        async function lookupBasicIP(ip) {
+            try {
+                const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    return {
+                        success: true,
+                        data: {
+                            ip: data.query,
+                            country: data.country,
+                            countryCode: data.countryCode,
+                            region: data.regionName,
+                            city: data.city,
+                            zip: data.zip,
+                            lat: data.lat,
+                            lon: data.lon,
+                            timezone: data.timezone,
+                            isp: data.isp,
+                            org: data.org,
+                            as: data.as
+                        }
+                    };
+                } else {
+                    return { success: false, error: data.message || 'Failed to lookup IP' };
+                }
+            } catch (error) {
+                return { success: false, error: 'Network error: ' + error.message };
+            }
+        }
+
+        async function getMyIP() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                return data.ip;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        async function lookup() {
+            clearMessages();
             document.getElementById('result').innerHTML = '';
+            
             const token = document.getElementById('token').value.trim();
             const url = document.getElementById('url').value.trim();
-            if (!token || !url) {
-                document.getElementById('error').textContent = 'Token and URL/IP are required.';
+            
+            if (!url) {
+                showError('لطفاً URL یا آدرس IP را وارد کنید.');
                 return;
             }
-            vscode.postMessage({ command: 'ipDetailsLookup', token, url });
-        }
-        window.addEventListener('message', event => {
-            const msg = event.data;
-            if (msg.command === 'ipDetailsResult') {
-                if (msg.error) {
-                    document.getElementById('error').textContent = msg.error;
-                } else {
-                    document.getElementById('result').innerHTML = renderResult(msg.data);
+
+            showLoading(true);
+
+            try {
+                // Extract IP from URL if needed
+                let targetIP = url;
+                if (url.includes('://') || (!url.match(/^\d+\.\d+\.\d+\.\d+$/))) {
+                    // It's a URL or domain, extract domain
+                    targetIP = url.replace(/^https?:\/\//, '').split('/')[0];
                 }
+
+                const result = await lookupBasicIP(targetIP);
+                showLoading(false);
+
+                if (result.success) {
+                    document.getElementById('result').innerHTML = renderBasicResult(result.data);
+                    showSuccess('جزئیات IP با موفقیت دریافت شد!');
+                } else {
+                    showError(result.error);
+                }
+            } catch (error) {
+                showLoading(false);
+                showError('خطایی رخ داد: ' + error.message);
             }
-        });
-        function renderResult(data) {
-            if (!data || !data.body) return '<span class="error">No data found.</span>';
-            const b = data.body;
+        }
+
+        function renderBasicResult(data) {
             return `
-                <div class="section"><span class="label">Status:</span> <span class="value">${b.status}</span></div>
-                <div class="section"><span class="label">Country:</span> <img class="flag" src="https://console.helpix.app${b.countryLogo}" height="18"> <span class="value">${b.country} (${b.countryCode})</span></div>
-                <div class="section"><span class="label">City:</span> <span class="value">${b.city}</span></div>
-                <div class="section"><span class="label">ISP:</span> <span class="value">${b.isp}</span></div>
-                <div class="section"><span class="label">Org:</span> <span class="value">${b.org}</span></div>
-                <div class="section"><span class="label">IP/Query:</span> <span class="value">${b.query}</span></div>
-                <div class="section"><span class="label">Continent:</span> <span class="value">${b.continent} (${b.continentCode})</span></div>
-                <div class="section"><span class="label">Region:</span> <span class="value">${b.regionName}</span></div>
-                <div class="section"><span class="label">Timezone:</span> <span class="value">${b.timezone}</span></div>
-                <div class="section"><span class="label">Currency:</span> <span class="value">${b.currency}</span></div>
-                <div class="section"><span class="label">Reverse DNS:</span> <span class="value">${b.reverse}</span></div>
-                <div class="section"><span class="label">Mobile:</span> <span class="value">${b.mobile ? 'Yes' : 'No'}</span></div>
-                <div class="section"><span class="label">Proxy:</span> <span class="value">${b.proxy ? 'Yes' : 'No'}</span></div>
-                <div class="section"><span class="label">Hosting:</span> <span class="value">${b.hosting ? 'Yes' : 'No'}</span></div>
+                <h3>🌐 جزئیات IP</h3>
+                <div class="section">
+                    <span class="label">آدرس IP:</span> 
+                    <span class="value">${data.ip}</span>
+                </div>
+                <div class="section">
+                    <span class="label">کشور:</span> 
+                    <span class="value">${data.country} (${data.countryCode})</span>
+                </div>
+                <div class="section">
+                    <span class="label">منطقه:</span> 
+                    <span class="value">${data.region}</span>
+                </div>
+                <div class="section">
+                    <span class="label">شهر:</span> 
+                    <span class="value">${data.city}</span>
+                </div>
+                <div class="section">
+                    <span class="label">کد پستی:</span> 
+                    <span class="value">${data.zip || 'موجود نیست'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">مختصات:</span> 
+                    <span class="value">${data.lat}, ${data.lon}</span>
+                </div>
+                <div class="section">
+                    <span class="label">منطقه زمانی:</span> 
+                    <span class="value">${data.timezone}</span>
+                </div>
+                <div class="section">
+                    <span class="label">ارائه‌دهنده اینترنت:</span> 
+                    <span class="value">${data.isp}</span>
+                </div>
+                <div class="section">
+                    <span class="label">سازمان:</span> 
+                    <span class="value">${data.org}</span>
+                </div>
+                <div class="section">
+                    <span class="label">شماره AS:</span> 
+                    <span class="value">${data.as}</span>
+                </div>
             `;
         }
+
+        async function testMyIP() {
+            clearMessages();
+            showLoading(true);
+            
+            try {
+                const myIP = await getMyIP();
+                if (myIP) {
+                    document.getElementById('url').value = myIP;
+                    await lookup();
+                } else {
+                    showLoading(false);
+                    showError('Could not determine your IP address');
+                }
+            } catch (error) {
+                showLoading(false);
+                showError('Error getting your IP: ' + error.message);
+            }
+        }
+
+        function testGoogleDNS() {
+            document.getElementById('url').value = '8.8.8.8';
+            lookup();
+        }
+
+        function testCloudflare() {
+            document.getElementById('url').value = '1.1.1.1';
+            lookup();
+        }
+
+        function clearAll() {
+            document.getElementById('token').value = '';
+            document.getElementById('url').value = '';
+            document.getElementById('result').innerHTML = '';
+            clearMessages();
+        }
+
+        function copyResults() {
+            const resultDiv = document.getElementById('result');
+            if (resultDiv.textContent) {
+                navigator.clipboard.writeText(resultDiv.textContent).then(() => {
+                    showSuccess('Results copied to clipboard!');
+                });
+            } else {
+                showError('No results to copy');
+            }
+        }
+
+        // Add keyboard support
+        document.getElementById('url').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') lookup();
+        });
     </script>
 </body>
 </html>

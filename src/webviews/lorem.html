@@ -2,29 +2,180 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>Persian Lorem Ipsum</title>
-    <style>body{font-family:Arial,sans-serif;padding:24px;}h2{color:#007acc;}.row{margin-bottom:18px;}input,select{padding:6px;font-size:1em;}button{padding:7px 18px;margin-top:8px;background:#007acc;color:#fff;border:none;border-radius:4px;cursor:pointer;}.result{margin-top:18px;font-weight:bold;color:#333;}textarea{width:100%;height:80px;}</style>
+    <title>متن ساختگی فارسی</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 24px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+        }
+
+        h2 {
+            color: var(--vscode-button-background);
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .row {
+            margin-bottom: 20px;
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--vscode-foreground);
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 4px;
+            margin-left: 10px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: var(--vscode-foreground);
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            direction: rtl;
+            text-align: right;
+            padding: 15px;
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 6px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+    </style>
 </head>
 <body>
-    <h2>Persian Lorem Ipsum</h2>
+    <h2>✍️ تولید متن ساختگی فارسی</h2>
+    
     <div class="row">
-        <label>Paragraphs:</label>
+        <label>تعداد پاراگراف:</label>
         <input type="number" id="count" value="1" min="1" max="10">
-        <button onclick="generate()">Generate</button>
+        <button onclick="generate()">تولید متن فارسی</button>
+        <button onclick="copyText()" style="background:#28a745;">کپی متن</button>
+        <button onclick="clearText()" style="background:#dc3545;">پاک کردن</button>
     </div>
+    
     <div class="result" id="result"></div>
     <script>
-        const vscode = acquireVsCodeApi();
+        // Persian Lorem Ipsum sentences
+        const persianLorem = [
+            "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.",
+            "چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.",
+            "کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.",
+            "در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.",
+            "لورم ایپسوم یا طرح‌نما به متنی آزمایشی و بی‌معنی در صنعت چاپ، صفحه‌آرایی و طراحی گرافیک گفته می‌شود.",
+            "طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن صفحه و ارائه اولیه شکل ظاهری و کلی طرح سفارش گرفته شده استفاده می نماید.",
+            "تا از نظر گرافیکی نشانگر چگونگی نوع و اندازه فونت و ظاهر متن باشد. معمولا طراحان گرافیک برای صفحه‌آرایی، نخست از متن‌های آزمایشی و بی‌معنی استفاده می‌کنند.",
+            "تا صفحه طراحی یا صفحه بندی شده را به مشتری نشان دهند. این متن‌های آزمایشی بعدا با متن‌های واقعی جایگزین می‌شوند.",
+            "لورم ایپسوم از یک تکه کلاسیک ادبیات لاتین در سال ۴۵ قبل از میلاد گرفته شده است.",
+            "ریچارد مک کلینتاک، یک استاد ادبیات لاتین در کالج هامپدن-سیدنی در ویرجینیا، یکی از ابهام‌آمیزترین کلمات لاتین را از یک تکه لورم ایپسوم بررسی کرد."
+        ];
+        
         function generate() {
-            const count = document.getElementById('count').value;
-            vscode.postMessage({ command: 'generateLorem', count });
-        }
-        window.addEventListener('message', event => {
-            const msg = event.data;
-            if(msg.command==='result'){
-                document.getElementById('result').innerHTML = `<textarea readonly>${msg.result}</textarea>`;
+            const count = parseInt(document.getElementById('count').value) || 1;
+            let result = [];
+            
+            for (let i = 0; i < count; i++) {
+                // Generate random sentences for each paragraph (2-4 sentences)
+                const sentenceCount = Math.floor(Math.random() * 3) + 2;
+                let paragraph = [];
+                
+                for (let j = 0; j < sentenceCount; j++) {
+                    const randomIndex = Math.floor(Math.random() * persianLorem.length);
+                    paragraph.push(persianLorem[randomIndex]);
+                }
+                
+                result.push(paragraph.join(' '));
             }
-        });
+            
+            const finalText = result.join('\n\n');
+            document.getElementById('result').innerHTML = `<div style="margin-top:10px;"><textarea readonly style="width:100%;height:200px;direction:rtl;text-align:right;padding:10px;">${finalText}</textarea></div>`;
+        }
+        
+        function copyText() {
+            const textarea = document.querySelector('#result textarea');
+            if (textarea) {
+                textarea.select();
+                navigator.clipboard.writeText(textarea.value).then(() => {
+                    alert('Text copied to clipboard!');
+                });
+            }
+        }
+        
+        function clearText() {
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('count').value = '1';
+        }
     </script>
 </body>
 </html>

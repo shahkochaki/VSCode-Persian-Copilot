@@ -1,38 +1,167 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>Number Converter</title>
-    <style>body{font-family:Arial,sans-serif;padding:24px;}h2{color:#007acc;}.row{margin-bottom:18px;}input{width:220px;padding:6px;font-size:1em;}button{padding:7px 18px;margin-top:8px;background:#007acc;color:#fff;border:none;border-radius:4px;cursor:pointer;}.result{margin-top:18px;font-weight:bold;color:#333;}</style>
+    <title>تبدیل اعداد</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 24px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+        }
+
+        h2 {
+            color: var(--vscode-button-background);
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .row {
+            margin-bottom: 20px;
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--vscode-foreground);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-family: 'Vazirmatn', monospace;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--vscode-panel-background);
+            border-radius: 6px;
+            border: 1px solid var(--vscode-input-border);
+            font-family: 'Vazirmatn', monospace;
+            font-size: 16px;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
-    <h2>Number Converter</h2>
+    <h2>🔢 تبدیل اعداد فارسی و انگلیسی</h2>
+    
     <div class="row">
-        <label>Persian to English:</label>
+        <label>فارسی به انگلیسی:</label>
         <input type="text" id="fa2en" placeholder="۱۲۳۴۵۶۷۸۹۰">
-        <button onclick="convertFa2En()">Convert</button>
+        <button onclick="convertFa2En()">تبدیل</button>
     </div>
+    
     <div class="row">
-        <label>English to Persian:</label>
+        <label>انگلیسی به فارسی:</label>
         <input type="text" id="en2fa" placeholder="1234567890">
-        <button onclick="convertEn2Fa()">Convert</button>
+        <button onclick="convertEn2Fa()">تبدیل</button>
     </div>
+    
+    <div class="row">
+        <button onclick="clearAll()" style="background:#dc3545;">پاک کردن</button>
+    </div>
+    
     <div class="result" id="result"></div>
     <script>
-        const vscode = acquireVsCodeApi();
         function convertFa2En() {
             const value = document.getElementById('fa2en').value;
-            vscode.postMessage({ command: 'convertFa2En', value });
+            const persianToEnglish = {
+                '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
+                '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9'
+            };
+            let result = value;
+            Object.keys(persianToEnglish).forEach(key => {
+                result = result.replace(new RegExp(key, 'g'), persianToEnglish[key]);
+            });
+            document.getElementById('result').innerHTML = `Persian to English: <strong>${result}</strong>`;
         }
+        
         function convertEn2Fa() {
             const value = document.getElementById('en2fa').value;
-            vscode.postMessage({ command: 'convertEn2Fa', value });
+            const englishToPersian = {
+                '0': '۰', '1': '۱', '2': '۲', '3': '۳', '4': '۴',
+                '5': '۵', '6': '۶', '7': '۷', '8': '۸', '9': '۹'
+            };
+            let result = value;
+            Object.keys(englishToPersian).forEach(key => {
+                result = result.replace(new RegExp(key, 'g'), englishToPersian[key]);
+            });
+            document.getElementById('result').innerHTML = `English to Persian: <strong>${result}</strong>`;
         }
-        window.addEventListener('message', event => {
-            const msg = event.data;
-            if(msg.command==='result'){
-                document.getElementById('result').textContent = msg.result;
-            }
+        
+        // Clear function
+        function clearAll() {
+            document.getElementById('fa2en').value = '';
+            document.getElementById('en2fa').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+        
+        // Add keyboard support
+        document.getElementById('fa2en').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') convertFa2En();
+        });
+        
+        document.getElementById('en2fa').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') convertEn2Fa();
         });
     </script>
 </body>

@@ -1,75 +1,222 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Persian Tools Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; padding: 32px; background: #f7f7fa; }
-        h1 { color: #007acc; margin-bottom: 24px; }
-        .tools-list { display: flex; flex-wrap: wrap; gap: 24px; }
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+            --vscode-hover-background: var(--vscode-list-hoverBackground, #f0f0f0);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body { 
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif; 
+            padding: 32px; 
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+            line-height: 1.6;
+        }
+
+        h1 { 
+            color: var(--vscode-button-background); 
+            margin-bottom: 32px; 
+            text-align: center;
+            font-weight: 600;
+            font-size: 2.2em;
+        }
+
+        .tools-list { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 24px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .tool-card {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px #0001;
-            padding: 24px 20px;
-            width: 220px;
+            background: var(--vscode-panel-background);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 12px;
+            padding: 24px;
             cursor: pointer;
-            transition: box-shadow 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .tool-card:hover { box-shadow: 0 4px 16px #007acc33; }
-        .tool-icon { font-size: 2.5em; margin-bottom: 12px; }
-        .tool-title { font-weight: bold; font-size: 1.1em; margin-bottom: 6px; }
-        .tool-desc { color: #555; font-size: 0.97em; text-align: center; }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--vscode-button-background);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            background: var(--vscode-hover-background);
+            box-shadow: 0 8px 25px rgba(0, 122, 204, 0.15);
+        }
+
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .tool-icon { 
+            font-size: 3em; 
+            margin-bottom: 16px; 
+            filter: grayscale(0.2);
+            transition: filter 0.3s ease;
+        }
+
+        .tool-card:hover .tool-icon {
+            filter: grayscale(0);
+        }
+
+        .tool-title { 
+            font-weight: 600; 
+            font-size: 1.3em; 
+            margin-bottom: 8px; 
+            color: var(--vscode-foreground);
+        }
+
+        .tool-desc { 
+            color: var(--vscode-foreground); 
+            opacity: 0.7;
+            font-size: 0.95em; 
+            line-height: 1.4;
+        }
+
+        .footer {
+            margin-top: 48px;
+            text-align: center;
+            color: var(--vscode-foreground);
+            opacity: 0.6;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 16px; }
+            .tools-list { grid-template-columns: 1fr; }
+            h1 { font-size: 1.8em; }
+        }
     </style>
 </head>
 <body>
-    <h1>Persian Tools Hub</h1>
+    <h1>🛠️ مجموعه ابزارهای فارسی</h1>
     <div class="tools-list">
-        <div class="tool-card" onclick="openTool('dateConverter')">
-            <div class="tool-icon">📅</div>
-            <div class="tool-title">Date Converter</div>
-            <div class="tool-desc">Convert Gregorian & Jalali dates</div>
+        <div class="tool-card" onclick="openTool('calendar')">
+            <div class="tool-icon">�️</div>
+            <div class="tool-title">تقویم و تبدیل تاریخ</div>
+            <div class="tool-desc">تبدیل تاریخ میلادی و شمسی، مشاهده تقویم فارسی</div>
         </div>
+        
         <div class="tool-card" onclick="openTool('numberConvert')">
             <div class="tool-icon">🔢</div>
-            <div class="tool-title">Number Converter</div>
-            <div class="tool-desc">Convert Persian & English numbers</div>
+            <div class="tool-title">تبدیل اعداد</div>
+            <div class="tool-desc">تبدیل اعداد فارسی و انگلیسی</div>
         </div>
-        <div class="tool-card" onclick="openTool('calendar')">
-            <div class="tool-icon">🗓️</div>
-            <div class="tool-title">Persian Calendar</div>
-            <div class="tool-desc">View & pick Jalali dates</div>
-        </div>
+        
         <div class="tool-card" onclick="openTool('arabicToPersian')">
-            <div class="tool-icon">🔤</div>
-            <div class="tool-title">Arabic to Persian Text</div>
-            <div class="tool-desc">Fix Arabic letters in Persian text</div>
+            <div class="tool-icon">�</div>
+            <div class="tool-title">تبدیل عربی به فارسی</div>
+            <div class="tool-desc">تصحیح حروف عربی در متن فارسی</div>
         </div>
+        
         <div class="tool-card" onclick="openTool('lorem')">
             <div class="tool-icon">✍️</div>
-            <div class="tool-title">Persian Lorem Ipsum</div>
-            <div class="tool-desc">Generate Persian dummy text</div>
+            <div class="tool-title">متن ساختگی فارسی</div>
+            <div class="tool-desc">تولید متن آزمایشی به زبان فارسی</div>
         </div>
+        
         <div class="tool-card" onclick="openTool('moneyConvert')">
             <div class="tool-icon">💰</div>
-            <div class="tool-title">Money Converter</div>
-            <div class="tool-desc">Convert Rial & Toman</div>
+            <div class="tool-title">تبدیل پول</div>
+            <div class="tool-desc">تبدیل ریال و تومان</div>
         </div>
+        
         <div class="tool-card" onclick="openTool('numberToWords')">
             <div class="tool-icon">🔠</div>
-            <div class="tool-title">Number to Words</div>
-            <div class="tool-desc">Convert numbers to Persian words</div>
+            <div class="tool-title">عدد به حروف</div>
+            <div class="tool-desc">تبدیل اعداد به متن فارسی</div>
+        </div>
+        
+        <div class="tool-card" onclick="openTool('jsonParser')">
+            <div class="tool-icon">�</div>
+            <div class="tool-title">پردازش JSON</div>
+            <div class="tool-desc">تجزیه، فرمت و اعتبارسنجی JSON</div>
+        </div>
+        
+        <div class="tool-card" onclick="openTool('ipDetails')">
+            <div class="tool-icon">🌐</div>
+            <div class="tool-title">جزئیات IP</div>
+            <div class="tool-desc">بررسی اطلاعات آدرس IP و وب‌سایت</div>
         </div>
     </div>
+
+    <div class="footer">
+        <p>مجموعه ابزارهای کاربردی فارسی برای توسعه‌دهندگان</p>
+    </div>
+
     <script>
         const vscode = acquireVsCodeApi();
+        
         function openTool(tool) {
             vscode.postMessage({ command: 'openTool', tool });
         }
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const cards = document.querySelectorAll('.tool-card');
+            let currentIndex = -1;
+            
+            // Find currently focused card
+            for (let i = 0; i < cards.length; i++) {
+                if (cards[i] === document.activeElement) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            
+            if (e.key === 'ArrowRight' && currentIndex > 0) {
+                cards[currentIndex - 1].focus();
+                e.preventDefault();
+            } else if (e.key === 'ArrowLeft' && currentIndex < cards.length - 1) {
+                cards[currentIndex + 1].focus();
+                e.preventDefault();
+            } else if (e.key === 'Enter' && currentIndex !== -1) {
+                cards[currentIndex].click();
+                e.preventDefault();
+            }
+        });
+
+        // Make cards focusable
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.setAttribute('tabindex', '0');
+        });
     </script>
 </body>
 </html>

@@ -11,7 +11,6 @@ export function activate(context: vscode.ExtensionContext) {
 	
 	// Tools enable/disable
 	const enableTools = {
-		dateConverter: config.get('enableDateConverter', true),
 		numberConvert: config.get('enableNumberConvert', true),
 		calendar: config.get('enableCalendar', true),
 		arabicToPersian: config.get('enableArabicToPersian', true),
@@ -96,12 +95,6 @@ export function activate(context: vscode.ExtensionContext) {
 			openSimpleWebview('jsonParser', 'JSON Parser', 'jsonParser.html');
 		});
 		context.subscriptions.push(disposableJsonParser);
-	}
-	if (enableTools.dateConverter) {
-		const disposableDateConverter = vscode.commands.registerCommand('vscode-persian-copilot.dateConverter', () => {
-			openDateConverterWebview();
-		});
-		context.subscriptions.push(disposableDateConverter);
 	}
 
 	// Register always-available commands (CSS/RTL)
@@ -264,23 +257,42 @@ function openToolsHubWebview() {
 		html = '<h2>Could not load Persian Tools Hub UI.</h2>';
 	}
 	panel.webview.html = html;
-}
 
-function openDateConverterWebview() {
-	const panel = vscode.window.createWebviewPanel(
-		'dateConverter',
-		'Date Converter',
-		vscode.ViewColumn.One,
-		{ enableScripts: true }
+	// Handle messages from hub webview
+	panel.webview.onDidReceiveMessage(
+		message => {
+			switch (message.command) {
+				case 'openTool':
+					switch (message.tool) {
+						case 'calendar':
+							openSimpleWebview('calendar', 'Persian Calendar', 'calendar.html');
+							break;
+						case 'numberConvert':
+							openSimpleWebview('numberConvert', 'Number Converter', 'numberConvert.html');
+							break;
+						case 'arabicToPersian':
+							openSimpleWebview('arabicToPersian', 'Arabic to Persian', 'arabicToPersian.html');
+							break;
+						case 'lorem':
+							openSimpleWebview('lorem', 'Persian Lorem Ipsum', 'lorem.html');
+							break;
+						case 'moneyConvert':
+							openSimpleWebview('moneyConvert', 'Money Converter', 'moneyConvert.html');
+							break;
+						case 'numberToWords':
+							openSimpleWebview('numberToWords', 'Number to Words', 'numberToWords.html');
+							break;
+						case 'jsonParser':
+							openSimpleWebview('jsonParser', 'JSON Parser', 'jsonParser.html');
+							break;
+						case 'ipDetails':
+							openIpDetailsWebview();
+							break;
+					}
+					break;
+			}
+		}
 	);
-	const htmlPath = path.join(__dirname, 'webviews', 'dateConverter.html');
-	let html = '';
-	try {
-		html = fs.readFileSync(htmlPath, 'utf8');
-	} catch (e) {
-		html = '<h2>Could not load Date Converter.</h2>';
-	}
-	panel.webview.html = html;
 }
 
 // --- IP Details Webview ---

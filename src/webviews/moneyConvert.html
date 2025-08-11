@@ -2,37 +2,192 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>Money Converter</title>
-    <style>body{font-family:Arial,sans-serif;padding:24px;}h2{color:#007acc;}.row{margin-bottom:18px;}input{width:220px;padding:6px;font-size:1em;}button{padding:7px 18px;margin-top:8px;background:#007acc;color:#fff;border:none;border-radius:4px;cursor:pointer;}.result{margin-top:18px;font-weight:bold;color:#333;}</style>
+    <title>تبدیل پول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 24px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+        }
+
+        h2 {
+            color: var(--vscode-button-background);
+            margin-bottom: 24px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .row {
+            margin-bottom: 20px;
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--vscode-foreground);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-family: 'Vazirmatn', monospace;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            color: var(--vscode-foreground);
+        }
+
+        .result-box {
+            background: var(--vscode-panel-background);
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            border: 1px solid var(--vscode-input-border);
+            font-family: 'Vazirmatn', monospace;
+            font-size: 18px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h2>Money Converter</h2>
+    <h2>💰 تبدیل ریال و تومان</h2>
+    
     <div class="row">
-        <label>Rial to Toman:</label>
+        <label>ریال به تومان:</label>
         <input type="text" id="rial" placeholder="10000">
-        <button onclick="rial2toman()">Convert</button>
+        <button onclick="rial2toman()">تبدیل به تومان</button>
     </div>
+    
     <div class="row">
-        <label>Toman to Rial:</label>
+        <label>تومان به ریال:</label>
         <input type="text" id="toman" placeholder="1000">
-        <button onclick="toman2rial()">Convert</button>
+        <button onclick="toman2rial()">تبدیل به ریال</button>
     </div>
+    
+    <div class="row">
+        <button onclick="clearAll()" style="background:#dc3545;">پاک کردن</button>
+    </div>
+    
     <div class="result" id="result"></div>
     <script>
-        const vscode = acquireVsCodeApi();
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
         function rial2toman() {
             const value = document.getElementById('rial').value;
-            vscode.postMessage({ command: 'rial2toman', value });
+            if (!value || isNaN(value)) {
+                document.getElementById('result').innerHTML = '<span style="color:red;">Please enter a valid number</span>';
+                return;
+            }
+            
+            const rial = parseInt(value);
+            const toman = rial / 10;
+            const formatted = formatNumber(toman);
+            
+            document.getElementById('result').innerHTML = `
+                <div class="result-box">
+                    <strong>${formatNumber(rial)} ریال = ${formatted} تومان</strong>
+                </div>
+            `;
         }
+        
         function toman2rial() {
             const value = document.getElementById('toman').value;
-            vscode.postMessage({ command: 'toman2rial', value });
-        }
-        window.addEventListener('message', event => {
-            const msg = event.data;
-            if(msg.command==='result'){
-                document.getElementById('result').textContent = msg.result;
+            if (!value || isNaN(value)) {
+                document.getElementById('result').innerHTML = '<span style="color:red;">Please enter a valid number</span>';
+                return;
             }
+            
+            const toman = parseInt(value);
+            const rial = toman * 10;
+            const formatted = formatNumber(rial);
+            
+            document.getElementById('result').innerHTML = `
+                <div class="result-box">
+                    <strong>${formatNumber(toman)} تومان = ${formatted} ریال</strong>
+                </div>
+            `;
+        }
+        
+        function clearAll() {
+            document.getElementById('rial').value = '';
+            document.getElementById('toman').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+        
+        // Add keyboard support
+        document.getElementById('rial').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') rial2toman();
+        });
+        
+        document.getElementById('toman').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') toman2rial();
+        });
+        
+        // Number validation
+        document.getElementById('rial').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+        
+        document.getElementById('toman').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
         });
     </script>
 </body>
