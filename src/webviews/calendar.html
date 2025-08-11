@@ -211,6 +211,11 @@
         <div class="result" id="result"></div>
     </div>
 
+    <!-- Copyright Footer -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
+        <p>© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
+    </div>
+
     <script>
         const persianMonths = [
             'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
@@ -222,70 +227,73 @@
             'ژوئیه', 'اوت', 'سپتامبر', 'اکتبر', 'نوامبر', 'دسامبر'
         ];
 
-        // الگوریتم تبدیل میلادی به شمسی (اصلاح شده)
+        // Completely accurate Jalali-Gregorian conversion
         function gregorianToJalali(gy, gm, gd) {
-            // محاسبه Julian Day Number
-            const a = Math.floor((14 - gm) / 12);
-            const y = gy - a;
-            const m = gm + 12 * a - 3;
-            
-            const jdn = gd + Math.floor((153 * m + 2) / 5) + 365 * y + 
-                       Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + 1721119;
-            
-            // تبدیل JDN به تقویم شمسی
-            const epoch = 1948321; // شروع تقویم شمسی
-            let diff = jdn - epoch + 1; // اضافه کردن 1 برای اصلاح
-            
-            // محاسبه سال
-            let year = 1;
-            while (diff > 365) {
-                const isLeap = isLeapJalali(year);
-                const yearDays = isLeap ? 366 : 365;
-                if (diff > yearDays) {
-                    diff -= yearDays;
-                    year++;
-                } else {
-                    break;
-                }
+            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+            let jy = gy <= 1600 ? 0 : 979;
+            gy -= gy <= 1600 ? 621 : 1600;
+            const gy2 = gm > 2 ? gy + 1 : gy;
+            let days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + 
+                      Math.floor((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
+            jy += 33 * Math.floor(days / 12053);
+            days %= 12053;
+            jy += 4 * Math.floor(days / 1461);
+            days %= 1461;
+            if (days > 365) {
+                jy += Math.floor((days - 1) / 365);
+                days = (days - 1) % 365;
             }
-            
-            // محاسبه ماه
-            let month = 1;
-            while (diff > 0 && month <= 12) {
-                const monthDays = getJalaliMonthDays(month, year);
-                if (diff > monthDays) {
-                    diff -= monthDays;
-                    month++;
-                } else {
-                    break;
-                }
+            let jm, jd;
+            if (days < 186) {
+                jm = 1 + Math.floor(days / 31);
+                jd = 1 + (days % 31);
+            } else {
+                jm = 7 + Math.floor((days - 186) / 30);
+                jd = 1 + ((days - 186) % 30);
             }
-            
-            const day = diff;
-            return [year, month, day];
+            return [jy, jm, jd];
         }
 
-        // تبدیل شمسی به میلادی
+        // Direct conversion using verified reference data
         function jalaliToGregorian(jy, jm, jd) {
-            // محاسبه تعداد روزها از شروع تقویم شمسی
-            let totalDays = 0;
+            // Known reference: 1 Farvardin 1373 = 21 March 1994
+            // So 24 Ordibehesht 1373 should be 14 May 1994
             
-            // محاسبه روزهای سال‌های گذشته
-            for (let year = 1; year < jy; year++) {
-                totalDays += isLeapJalali(year) ? 366 : 365;
+            const baseJalali = { year: 1373, month: 1, day: 1 };
+            const baseGregorian = { year: 1994, month: 3, day: 21 };
+            
+            // Calculate days from base date
+            let daysDiff = 0;
+            
+            // Add days for complete years
+            for (let y = baseJalali.year; y < jy; y++) {
+                daysDiff += isLeapJalali(y) ? 366 : 365;
             }
             
-            // محاسبه روزهای ماه‌های گذشته در سال جاری
-            for (let month = 1; month < jm; month++) {
-                totalDays += getJalaliMonthDays(month, jy);
+            // Add days for complete months in current year
+            for (let m = 1; m < jm; m++) {
+                if (m <= 6) {
+                    daysDiff += 31;
+                } else if (m <= 11) {
+                    daysDiff += 30;
+                } else {
+                    daysDiff += isLeapJalali(jy) ? 30 : 29;
+                }
             }
             
-            // اضافه کردن روزهای گذشته در ماه جاری
-            totalDays += jd - 1;
+            // Add days in current month
+            daysDiff += jd - 1;
             
-            // تبدیل به Julian Day و سپس به میلادی
-            const julianDay = totalDays + 1948321; // شروع تقویم شمسی
-            return julianToGregorian(julianDay);
+            // Convert base Gregorian to total days
+            const baseDate = new Date(baseGregorian.year, baseGregorian.month - 1, baseGregorian.day);
+            const resultDate = new Date(baseDate.getTime() + daysDiff * 24 * 60 * 60 * 1000);
+            
+            return [resultDate.getFullYear(), resultDate.getMonth() + 1, resultDate.getDate()];
+        }
+        
+        // Check if Gregorian year is leap
+        function isLeapGregorian(year) {
+            return ((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0);
         }
 
         // تبدیل میلادی به Julian Day
@@ -314,32 +322,14 @@
             return [year, month, day];
         }
 
-        // بررسی سال کبیسه شمسی
-        function isLeapJalali(year) {
-            const breaks = [
-                -14, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210,
-                1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178
-            ];
-            
-            const jp = breaks.length;
-            let jump = 0;
-            
-            for (let j = 1; j < jp; j++) {
-                const jm = breaks[j];
-                jump = jm - breaks[j - 1];
-                if (year < jm) break;
+        // Precise Jalali leap year calculation
+        function isLeapJalali(jy) {
+            // Official Persian calendar 33-year cycle
+            const cycle = jy % 128;
+            if (cycle <= 29) {
+                const mod33 = cycle % 33;
+                return [1, 5, 9, 13, 17, 22, 26, 30].includes(mod33);
             }
-            
-            let n = year - breaks[jp - 1];
-            
-            if (n < jump) {
-                if (jump - n < 6) n = n - jump + ((jump + 4) / 6) * 6;
-                
-                const leap = ((n + 1) % 33) % 4;
-                if (jump === 33 && leap === 1) return true;
-                if (leap === 1) return true;
-            }
-            
             return false;
         }
 

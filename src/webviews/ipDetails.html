@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>جزئیات IP</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -91,6 +92,7 @@
 
         button.success {
             background: #28a745;
+            color: #333;
         }
 
         .result {
@@ -132,7 +134,6 @@
             font-weight: bold;
             margin-top: 18px;
             background: rgba(40, 167, 69, 0.1);
-            padding: 12px;
             border-radius: 6px;
             border: 1px solid rgba(40, 167, 69, 0.2);
         }
@@ -201,7 +202,7 @@
         
         <div class="row">
             <label>آدرس URL یا IP:</label>
-            <input type="text" id="url" placeholder="مثل: google.com یا 8.8.8.8 یا https://example.com">
+            <input type="text" id="url" dir="ltr" placeholder="google.com یا 8.8.8.8 یا https://example.com">
         </div>
         
         <div class="row">
@@ -411,5 +412,10 @@
             if (e.key === 'Enter') lookup();
         });
     </script>
+
+    <!-- Copyright Footer -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
+        <p>© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
+    </div>
 </body>
 </html>

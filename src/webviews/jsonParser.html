@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>پردازش JSON</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -37,21 +38,42 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
+        .json-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .json-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
         .input-section {
-            margin-bottom: 24px;
             background: var(--vscode-panel-background);
             padding: 20px;
             border-radius: 8px;
             border: 1px solid var(--vscode-input-border);
+            height: fit-content;
+        }
+
+        .output-section {
+            background: var(--vscode-panel-background);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+            height: fit-content;
         }
 
         textarea {
             width: 100%;
-            height: 200px;
+            height: 300px;
             padding: 15px;
             font-family: 'Vazirmatn', 'Consolas', monospace;
             font-size: 14px;
@@ -62,6 +84,7 @@
             resize: vertical;
             direction: ltr;
             text-align: left;
+            min-height: 250px;
         }
 
         textarea:focus {
@@ -72,9 +95,24 @@
 
         .buttons {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
             margin-top: 15px;
+            justify-content: flex-start;
+        }
+
+        .buttons button {
+            flex: 1;
+            min-width: 120px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .buttons button {
+                min-width: 100px;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
         }
 
         button {
@@ -163,31 +201,50 @@
     <div class="container">
         <h1>📋 پردازش و تجزیه JSON</h1>
 
-        <div class="input-section">
-            <h3>JSON ورودی</h3>
-            <textarea id="jsonInput" placeholder='{"name": "مثال", "value": 123, "items": ["آیتم ۱", "آیتم ۲"]}'></textarea>
-            
-            <div class="buttons">
-                <button onclick="parseJSON()">🔍 تجزیه</button>
-                <button onclick="formatJSON()" style="background:#28a745;">✨ فرمت</button>
-                <button onclick="minifyJSON()" style="background:#fd7e14;">📦 فشرده</button>
-                <button onclick="validateJSON()" style="background:#6f42c1;">✅ اعتبارسنجی</button>
-                <button onclick="clearAll()" style="background:#dc3545;">🗑️ پاک کردن</button>
-                <button onclick="copyOutput()" style="background:#17a2b8;">📋 کپی خروجی</button>
+        <div class="json-wrapper">
+            <!-- Input Section -->
+            <div class="input-section">
+                <h3>JSON ورودی</h3>
+                <textarea id="jsonInput" placeholder='{"name": "مثال", "value": 123, "items": ["آیتم ۱", "آیتم ۲"]}'></textarea>
+                
+                <div class="buttons">
+                    <button onclick="parseJSON()">🔍 تجزیه</button>
+                    <button onclick="formatJSON()" style="background:#28a745;">✨ فرمت</button>
+                    <button onclick="minifyJSON()" style="background:#fd7e14;">📦 فشرده</button>
+                </div>
+                
+                <div class="buttons">
+                    <button onclick="validateJSON()" style="background:#6f42c1;">✅ اعتبارسنجی</button>
+                    <button onclick="clearAll()" style="background:#dc3545;">🗑️ پاک کردن</button>
+                    <button onclick="copyToClipboard('jsonInput')" style="background:#17a2b8;">📋 کپی</button>
+                </div>
+
+                <div id="inputStatus"></div>
             </div>
 
-            <div id="inputStatus"></div>
-        </div>
-
-        <div class="input-section output">
-            <h3>خروجی</h3>
-            <textarea id="jsonOutput" placeholder="نتیجه اینجا نمایش داده می‌شود..." readonly></textarea>
-            <div id="outputStatus"></div>
+            <!-- Output Section -->
+            <div class="output-section">
+                <h3>خروجی</h3>
+                <textarea id="jsonOutput" placeholder="نتیجه اینجا نمایش داده می‌شود..." readonly></textarea>
+                
+                <div class="buttons">
+                    <button onclick="copyToClipboard('jsonOutput')" style="background:#17a2b8;">📋 کپی خروجی</button>
+                    <button onclick="downloadJSON()" style="background:#28a745;">💾 دانلود</button>
+                    <button onclick="clearOutput()" style="background:#6c757d;">🗑️ پاک کردن خروجی</button>
+                </div>
+                
+                <div id="outputStatus"></div>
+            </div>
         </div>
 
         <div class="external-link">
             <p><a href="#" onclick="openExternalTool()">🌐 باز کردن ابزار آنلاین پیشرفته</a></p>
         </div>
+    </div>
+
+    <!-- Copyright Footer -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
+        <p>© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
     </div>
 
     <script>
@@ -293,21 +350,57 @@
             showStatus('inputStatus', '🗑️ همه فیلدها پاک شدند', 'info');
         }
 
-        function copyOutput() {
-            const output = document.getElementById('jsonOutput');
-            if (!output.value) {
-                showStatus('outputStatus', 'خروجی خالی است', 'error');
+        // Copy to clipboard function
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.value;
+            
+            if (!text.trim()) {
+                const statusId = elementId === 'jsonInput' ? 'inputStatus' : 'outputStatus';
+                showStatus(statusId, 'متنی برای کپی وجود ندارد', 'error');
                 return;
             }
-
-            navigator.clipboard.writeText(output.value).then(() => {
-                showStatus('outputStatus', '📋 خروجی کپی شد', 'success');
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const statusId = elementId === 'jsonInput' ? 'inputStatus' : 'outputStatus';
+                showStatus(statusId, '📋 کپی شد!', 'success');
             }).catch(() => {
                 // Fallback for older browsers
-                output.select();
+                element.select();
                 document.execCommand('copy');
-                showStatus('outputStatus', '📋 خروجی کپی شد', 'success');
+                const statusId = elementId === 'jsonInput' ? 'inputStatus' : 'outputStatus';
+                showStatus(statusId, '📋 کپی شد!', 'success');
             });
+        }
+
+        function downloadJSON() {
+            const output = document.getElementById('jsonOutput').value;
+            
+            if (!output.trim()) {
+                showStatus('outputStatus', 'خروجی برای دانلود وجود ندارد', 'error');
+                return;
+            }
+            
+            const blob = new Blob([output], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'formatted.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus('outputStatus', '💾 فایل دانلود شد', 'success');
+        }
+
+        function clearOutput() {
+            document.getElementById('jsonOutput').value = '';
+            document.getElementById('outputStatus').innerHTML = '';
+        }
+
+        function copyOutput() {
+            copyToClipboard('jsonOutput');
         }
 
         function openExternalTool() {
