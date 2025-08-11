@@ -30,59 +30,59 @@ export function activate(context: vscode.ExtensionContext) {
 			openToolsHubWebview();
 		});
 		context.subscriptions.push(disposableToolsHub);
-		
-		// Persian Copilot Activity Bar Icon (View Container)
-		const provider = vscode.window.registerWebviewViewProvider('persian-tools-hub', {
-			resolveWebviewView(webviewView) {
-				const htmlPath = path.join(__dirname, 'webviews', 'hub.html');
-				let html = '';
-				try {
-					html = fs.readFileSync(htmlPath, 'utf8');
-				} catch (e) {
-					html = '<h2>Could not load Persian Tools Hub UI.</h2>';
-				}
-				webviewView.webview.options = { enableScripts: true };
-				webviewView.webview.html = html;
-				
-				// Handle messages from hub webview in Activity Bar
-				webviewView.webview.onDidReceiveMessage(
-					message => {
-						switch (message.command) {
-							case 'openTool':
-								switch (message.tool) {
-									case 'calendar':
-										openSimpleWebview('calendar', 'Persian Calendar', 'calendar.html');
-										break;
-									case 'numberConvert':
-										openSimpleWebview('numberConvert', 'Number Converter', 'numberConvert.html');
-										break;
-									case 'arabicToPersian':
-										openSimpleWebview('arabicToPersian', 'Arabic to Persian', 'arabicToPersian.html');
-										break;
-									case 'lorem':
-										openSimpleWebview('lorem', 'Persian Lorem Ipsum', 'lorem.html');
-										break;
-									case 'moneyConvert':
-										openSimpleWebview('moneyConvert', 'Money Converter', 'moneyConvert.html');
-										break;
-									case 'numberToWords':
-										openSimpleWebview('numberToWords', 'Number to Words', 'numberToWords.html');
-										break;
-									case 'jsonParser':
-										openSimpleWebview('jsonParser', 'JSON Parser', 'jsonParser.html');
-										break;
-									case 'ipDetails':
-										openIpDetailsWebview();
-										break;
-								}
-								break;
-						}
-					}
-				);
-			}
-		});
-		context.subscriptions.push(provider);
 	}
+	
+	// Persian Copilot Activity Bar Icon (View Container) - Always register
+	const provider = vscode.window.registerWebviewViewProvider('persian-tools-hub', {
+		resolveWebviewView(webviewView) {
+			const htmlPath = path.join(__dirname, 'webviews', 'hub.html');
+			let html = '';
+			try {
+				html = fs.readFileSync(htmlPath, 'utf8');
+			} catch (e) {
+				html = '<h2>Could not load Persian Tools Hub UI.</h2>';
+			}
+			webviewView.webview.options = { enableScripts: true };
+			webviewView.webview.html = html;
+			
+			// Handle messages from hub webview in Activity Bar
+			webviewView.webview.onDidReceiveMessage(
+				message => {
+					switch (message.command) {
+						case 'openTool':
+							switch (message.tool) {
+								case 'calendar':
+									openSimpleWebview('calendar', 'Persian Calendar', 'calendar.html');
+									break;
+								case 'jsonParser':
+									openSimpleWebview('jsonParser', 'JSON Parser', 'jsonParser.html');
+									break;
+								case 'ipDetails':
+									openIpDetailsWebview();
+									break;
+								case 'numberConvert':
+									openSimpleWebview('numberConvert', 'Number Converter', 'numberConvert.html');
+									break;
+								case 'arabicToPersian':
+									openSimpleWebview('arabicToPersian', 'Arabic to Persian', 'arabicToPersian.html');
+									break;
+								case 'lorem':
+									openSimpleWebview('lorem', 'Persian Lorem Ipsum', 'lorem.html');
+									break;
+								case 'moneyConvert':
+									openSimpleWebview('moneyConvert', 'Money Converter', 'moneyConvert.html');
+									break;
+								case 'numberToWords':
+									openSimpleWebview('numberToWords', 'Number to Words', 'numberToWords.html');
+									break;
+							}
+							break;
+					}
+				}
+			);
+		}
+	});
+	context.subscriptions.push(provider);
 
 	// Register tools commands
 	if (enableTools.numberConvert) {
