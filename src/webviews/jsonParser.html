@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Parser</title>
+  <style>
+    body { font-family: Vazirmatn, Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
+    #container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 10px; box-shadow: 0 2px 12px #0001; padding: 32px; }
+    h1 { font-size: 2rem; margin-bottom: 1rem; }
+    textarea { width: 100%; min-height: 120px; font-family: monospace; font-size: 1rem; margin-bottom: 1rem; border-radius: 6px; border: 1px solid #ccc; padding: 10px; }
+    button { background: #007acc; color: #fff; border: none; border-radius: 6px; padding: 10px 24px; font-size: 1rem; cursor: pointer; margin-bottom: 1rem; }
+    button:disabled { background: #aaa; }
+    pre { background: #f0f0f0; border-radius: 6px; padding: 16px; overflow-x: auto; }
+    .error { color: #c00; margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>JSON Parser</h1>
+    <textarea id="jsonInput" placeholder="Paste your JSON here..."></textarea>
+    <button id="parseBtn">Parse JSON</button>
+    <div id="error" class="error"></div>
+    <pre id="result"></pre>
+    <p style="margin-top:2rem;font-size:0.95em;color:#888;">Powered by <a href="https://helpix.app/json-parser" target="_blank">helpix.app/json-parser</a></p>
+  </div>
+  <script>
+    const input = document.getElementById('jsonInput');
+    const btn = document.getElementById('parseBtn');
+    const result = document.getElementById('result');
+    const error = document.getElementById('error');
+    btn.onclick = function() {
+      error.textContent = '';
+      result.textContent = '';
+      let val = input.value.trim();
+      if (!val) { error.textContent = 'Please enter JSON.'; return; }
+      try {
+        const obj = JSON.parse(val);
+        result.textContent = JSON.stringify(obj, null, 2);
+      } catch(e) {
+        error.textContent = 'Invalid JSON: ' + e.message;
+      }
+    };
+  </script>
+</body>
+</html>

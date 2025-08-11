@@ -1,4 +1,8 @@
 import * as vscode from 'vscode';
+// --- Persian Copilot Settings ---
+function getPersianCopilotConfig() {
+	return vscode.workspace.getConfiguration('persian-copilot');
+}
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -7,6 +11,176 @@ let cssInjectionInterval: NodeJS.Timeout | undefined;
 
 // This method is called when your extension is activated
 export function activate(context: vscode.ExtensionContext) {
+	// JSON Parser tool
+	if (config.get('enableJsonParser', true)) {
+		const disposableJsonParser = vscode.commands.registerCommand('vscode-persian-copilot.jsonParser', () => {
+			openSimpleWebview('jsonParser', 'JSON Parser', 'jsonParser.html');
+		});
+		context.subscriptions.push(disposableJsonParser);
+	}
+	// --- Read settings ---
+	const config = getPersianCopilotConfig();
+	// Tools enable/disable
+	const enableTools = {
+		dateConverter: config.get('enableDateConverter', true),
+		numberConvert: config.get('enableNumberConvert', true),
+		calendar: config.get('enableCalendar', true),
+		arabicToPersian: config.get('enableArabicToPersian', true),
+		lorem: config.get('enableLorem', true),
+		moneyConvert: config.get('enableMoneyConvert', true),
+		numberToWords: config.get('enableNumberToWords', true),
+		ipDetails: config.get('enableIpDetails', true),
+	};
+	const showToolsHubIcon = config.get('showToolsHubIcon', true);
+	const autoApply = config.get('autoApply', true);
+	const cssImportMethod = config.get('cssImportMethod', 'devtools-script');
+	const showDevToolsGuide = config.get('showDevToolsGuide', true);
+
+	// Persian Tools Hub command
+	if (showToolsHubIcon) {
+		const disposableToolsHub = vscode.commands.registerCommand('vscode-persian-copilot.openToolsHub', () => {
+			openToolsHubWebview();
+		});
+		context.subscriptions.push(disposableToolsHub);
+		// Persian Copilot Activity Bar Icon (View Container)
+		vscode.window.registerWebviewViewProvider?.('persianCopilot.toolsView', {
+			resolveWebviewView(webviewView) {
+				const htmlPath = path.join(__dirname, 'webviews', 'hub.html');
+				let html = '';
+				try {
+					html = fs.readFileSync(htmlPath, 'utf8');
+				} catch (e) {
+					html = '<h2>Could not load Persian Tools Hub UI.</h2>';
+				}
+				webviewView.webview.options = { enableScripts: true };
+				webviewView.webview.html = html;
+			}
+		});
+	}
+	if (enableTools.numberConvert) {
+		const disposableNumberConvert = vscode.commands.registerCommand('vscode-persian-copilot.numberConvert', () => {
+			openSimpleWebview('numberConvert', 'Number Converter', 'numberConvert.html');
+		});
+		context.subscriptions.push(disposableNumberConvert);
+	}
+	if (enableTools.calendar) {
+		const disposableCalendar = vscode.commands.registerCommand('vscode-persian-copilot.calendar', () => {
+			openSimpleWebview('calendar', 'Persian Calendar', 'calendar.html');
+		});
+		context.subscriptions.push(disposableCalendar);
+	}
+	if (enableTools.arabicToPersian) {
+		const disposableArabicToPersian = vscode.commands.registerCommand('vscode-persian-copilot.arabicToPersian', () => {
+			openSimpleWebview('arabicToPersian', 'Arabic to Persian', 'arabicToPersian.html');
+		});
+		context.subscriptions.push(disposableArabicToPersian);
+	}
+	if (enableTools.lorem) {
+		const disposableLorem = vscode.commands.registerCommand('vscode-persian-copilot.lorem', () => {
+			openSimpleWebview('lorem', 'Persian Lorem Ipsum', 'lorem.html');
+		});
+		context.subscriptions.push(disposableLorem);
+	}
+	if (enableTools.moneyConvert) {
+		const disposableMoneyConvert = vscode.commands.registerCommand('vscode-persian-copilot.moneyConvert', () => {
+			openSimpleWebview('moneyConvert', 'Money Converter', 'moneyConvert.html');
+		});
+		context.subscriptions.push(disposableMoneyConvert);
+	}
+	if (enableTools.numberToWords) {
+		const disposableNumberToWords = vscode.commands.registerCommand('vscode-persian-copilot.numberToWords', () => {
+			openSimpleWebview('numberToWords', 'Number to Persian Words', 'numberToWords.html');
+		});
+		context.subscriptions.push(disposableNumberToWords);
+	}
+	if (enableTools.ipDetails) {
+		const disposableIpDetails = vscode.commands.registerCommand('vscode-persian-copilot.ipDetails', () => {
+			openIpDetailsWebview();
+		});
+		context.subscriptions.push(disposableIpDetails);
+	}
+
+	// --- CSS/RTL/Guide logic based on settings ---
+	isAutoApplyEnabled = autoApply;
+	if (isAutoApplyEnabled && showDevToolsGuide) {
+		startAutoApply();
+	}
+
+	// Register always-available commands (CSS/RTL)
+	const disposableRTL = vscode.commands.registerCommand('vscode-persian-copilot.applyChatRTL', () => {
+		applyCSS(cssImportMethod);
+		vscode.window.showInformationMessage('✅ Persian CSS applied successfully!');
+	});
+	const disposableToggle = vscode.commands.registerCommand('vscode-persian-copilot.toggleAutoApply', () => {
+		toggleAutoApply(context);
+	});
+	const disposableDisable = vscode.commands.registerCommand('vscode-persian-copilot.disableCSS', () => {
+		removeCSS();
+		vscode.window.showInformationMessage('❌ Persian CSS removed!');
+	});
+	const disposableTest = vscode.commands.registerCommand('vscode-persian-copilot.testCSS', () => {
+		const testScript = 
+`(function() {
+	try {
+		console.log('🔍 Testing Persian RTL CSS...');
+		// Check if our CSS is loaded
+		const persianCSS = document.querySelector('style[data-persian-rtl]');
+		console.log('🎨 Persian CSS loaded:', !!persianCSS);
+		if (persianCSS) {
+			console.log('CSS content length:', persianCSS.textContent.length, 'characters');
+		}
+		// Find elements
+		const markdownElements = document.querySelectorAll('.rendered-markdown');
+		const interactiveElements = document.querySelectorAll('.interactive-item-container');
+		const chatElements = document.querySelectorAll('.chat-list-container, .copilot-chat-response');
+		console.log('📊 Elements found:');
+		console.log('- .rendered-markdown:', markdownElements.length);
+		console.log('- .interactive-item-container:', interactiveElements.length);
+		console.log('- Chat containers:', chatElements.length);
+		// Show current CSS for first markdown element
+		if (markdownElements.length > 0) {
+			const firstEl = markdownElements[0];
+			const style = window.getComputedStyle(firstEl);
+			console.log('📝 First markdown element CSS:');
+			console.log('- direction:', style.direction);
+			console.log('- text-align:', style.textAlign);
+			console.log('- font-family:', style.fontFamily.substring(0, 50) + '...');
+		} else {
+			console.log('⚠️ No markdown elements found. Try opening GitHub Copilot chat.');
+		}
+		return true;
+	} catch(error) {
+		console.error('❌ Test error:', error);
+		return false;
+	}
+})();`;
+		vscode.env.clipboard.writeText(testScript);
+		vscode.window.showInformationMessage(
+			'🔍 CSS Test script copied! Paste in DevTools Console to debug',
+			'Open DevTools'
+		).then(selection => {
+			if (selection === 'Open DevTools') {
+				vscode.commands.executeCommand('workbench.action.toggleDevTools');
+			}
+		});
+	});
+	if (enableTools.dateConverter) {
+		const disposableDateConverter = vscode.commands.registerCommand('vscode-persian-copilot.dateConverter', () => {
+			openDateConverterWebview();
+		});
+		context.subscriptions.push(disposableDateConverter);
+	}
+	context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable, disposableTest);
+// Persian Tools Hub Webview
+function openToolsHubWebview() {
+	const panel = vscode.window.createWebviewPanel(
+			// --- CSS/RTL/Guide logic based on settings ---
+			isAutoApplyEnabled = autoApply;
+			if (isAutoApplyEnabled && showDevToolsGuide) {
+				startAutoApply();
+			}
+	}
+});
 	console.log('VSCode Persian Copilot is now active!');
 	
 	// Get saved preference
@@ -29,80 +203,71 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}
 
-	// Register commands
-	const disposableRTL = vscode.commands.registerCommand('vscode-persian-copilot.applyChatRTL', () => {
-		applyCSS();
-		vscode.window.showInformationMessage('✅ Persian CSS applied successfully!');
-	});
-
-	const disposableToggle = vscode.commands.registerCommand('vscode-persian-copilot.toggleAutoApply', () => {
-		toggleAutoApply(context);
-	});
-
-	const disposableDisable = vscode.commands.registerCommand('vscode-persian-copilot.disableCSS', () => {
-		removeCSS();
-		vscode.window.showInformationMessage('❌ Persian CSS removed!');
-	});
-
-	const disposableTest = vscode.commands.registerCommand('vscode-persian-copilot.testCSS', () => {
-		const testScript = 
-`(function() {
-	try {
-		console.log('🔍 Testing Persian RTL CSS...');
-		
-		// Check if our CSS is loaded
-		const persianCSS = document.querySelector('style[data-persian-rtl]');
-		console.log('🎨 Persian CSS loaded:', !!persianCSS);
-		if (persianCSS) {
-			console.log('CSS content length:', persianCSS.textContent.length, 'characters');
-		}
-		
-		// Find elements
-		const markdownElements = document.querySelectorAll('.rendered-markdown');
-		const interactiveElements = document.querySelectorAll('.interactive-item-container');
-		const chatElements = document.querySelectorAll('.chat-list-container, .copilot-chat-response');
-		
-		console.log('📊 Elements found:');
-		console.log('- .rendered-markdown:', markdownElements.length);
-		console.log('- .interactive-item-container:', interactiveElements.length);
-		console.log('- Chat containers:', chatElements.length);
-		
-		// Show current CSS for first markdown element
-		if (markdownElements.length > 0) {
-			const firstEl = markdownElements[0];
-			const style = window.getComputedStyle(firstEl);
-			console.log('📝 First markdown element CSS:');
-			console.log('- direction:', style.direction);
-			console.log('- text-align:', style.textAlign);
-			console.log('- font-family:', style.fontFamily.substring(0, 50) + '...');
-		} else {
-			console.log('⚠️ No markdown elements found. Try opening GitHub Copilot chat.');
-		}
-		
-		return true;
-	} catch(error) {
-		console.error('❌ Test error:', error);
-		return false;
-	}
-})();`;
-
-		vscode.env.clipboard.writeText(testScript);
-		vscode.window.showInformationMessage(
-			'🔍 CSS Test script copied! Paste in DevTools Console to debug',
-			'Open DevTools'
-		).then(selection => {
-			if (selection === 'Open DevTools') {
-				vscode.commands.executeCommand('workbench.action.toggleDevTools');
-			}
+		// Register always-available commands (CSS/RTL)
+		const disposableRTL = vscode.commands.registerCommand('vscode-persian-copilot.applyChatRTL', () => {
+			applyCSS(cssImportMethod);
+			vscode.window.showInformationMessage('✅ Persian CSS applied successfully!');
 		});
-	});
-
-	// Date Converter command
-	const disposableDateConverter = vscode.commands.registerCommand('vscode-persian-copilot.dateConverter', () => {
-		openDateConverterWebview();
-	});
-
-	context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable, disposableTest, disposableDateConverter);
+		const disposableToggle = vscode.commands.registerCommand('vscode-persian-copilot.toggleAutoApply', () => {
+			toggleAutoApply(context);
+		});
+		const disposableDisable = vscode.commands.registerCommand('vscode-persian-copilot.disableCSS', () => {
+			removeCSS();
+			vscode.window.showInformationMessage('❌ Persian CSS removed!');
+		});
+		const disposableTest = vscode.commands.registerCommand('vscode-persian-copilot.testCSS', () => {
+			const testScript = 
+	`(function() {
+		try {
+			console.log('🔍 Testing Persian RTL CSS...');
+			// Check if our CSS is loaded
+			const persianCSS = document.querySelector('style[data-persian-rtl]');
+			console.log('🎨 Persian CSS loaded:', !!persianCSS);
+			if (persianCSS) {
+				console.log('CSS content length:', persianCSS.textContent.length, 'characters');
+			}
+			// Find elements
+			const markdownElements = document.querySelectorAll('.rendered-markdown');
+			const interactiveElements = document.querySelectorAll('.interactive-item-container');
+			const chatElements = document.querySelectorAll('.chat-list-container, .copilot-chat-response');
+			console.log('📊 Elements found:');
+			console.log('- .rendered-markdown:', markdownElements.length);
+			console.log('- .interactive-item-container:', interactiveElements.length);
+			console.log('- Chat containers:', chatElements.length);
+			// Show current CSS for first markdown element
+			if (markdownElements.length > 0) {
+				const firstEl = markdownElements[0];
+				const style = window.getComputedStyle(firstEl);
+				console.log('📝 First markdown element CSS:');
+				console.log('- direction:', style.direction);
+				console.log('- text-align:', style.textAlign);
+				console.log('- font-family:', style.fontFamily.substring(0, 50) + '...');
+			} else {
+				console.log('⚠️ No markdown elements found. Try opening GitHub Copilot chat.');
+			}
+			return true;
+		} catch(error) {
+			console.error('❌ Test error:', error);
+			return false;
+		}
+	})();`;
+			vscode.env.clipboard.writeText(testScript);
+			vscode.window.showInformationMessage(
+				'🔍 CSS Test script copied! Paste in DevTools Console to debug',
+				'Open DevTools'
+			).then(selection => {
+				if (selection === 'Open DevTools') {
+					vscode.commands.executeCommand('workbench.action.toggleDevTools');
+				}
+			});
+		});
+		if (enableTools.dateConverter) {
+			const disposableDateConverter = vscode.commands.registerCommand('vscode-persian-copilot.dateConverter', () => {
+				openDateConverterWebview();
+			});
+			context.subscriptions.push(disposableDateConverter);
+		}
+		context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable, disposableTest);
 // --- Date Converter Webview ---
 function openDateConverterWebview() {
 	const panel = vscode.window.createWebviewPanel(
@@ -352,44 +517,24 @@ function toggleAutoApply(context: vscode.ExtensionContext) {
 }
 
 function applyCSS() {
-	// Method 1: Try to copy CSS file to VS Code styles directory
-	const cssMethod = vscode.window.showQuickPick([
-		{ 
-			label: '📋 Copy Script (Current Method)',
-			description: 'Copy JavaScript to clipboard for DevTools',
-			detail: 'Requires manual paste in DevTools Console'
-		},
-		{
-			label: '📁 Copy CSS File',
-			description: 'Copy CSS file to system and show instructions',
-			detail: 'Direct CSS file approach'
-		},
-		{
-			label: '🔧 Advanced Auto-Inject',
-			description: 'Try automatic injection via VS Code API',
-			detail: 'Experimental - may work better'
-		}
-	], {
-		placeHolder: 'Choose CSS application method'
-	});
-
-	cssMethod.then(selection => {
-		if (!selection) {
-			return;
-		}
-
-		switch (selection.label) {
-			case '📋 Copy Script (Current Method)':
+		// Accept method from settings or argument
+		let method = arguments[0] || 'devtools-script';
+		switch (method) {
+			case 'devtools-script':
 				copyScriptMethod();
 				break;
-			case '📁 Copy CSS File':
+			case 'pure-css':
 				copyCSSFileMethod();
 				break;
-			case '🔧 Advanced Auto-Inject':
+			case 'custom-css-extension':
+				showCSSFileInstructions();
+				break;
+			case 'advanced':
 				advancedInjectMethod();
 				break;
+			default:
+				copyScriptMethod();
 		}
-	});
 }
 
 function copyScriptMethod() {

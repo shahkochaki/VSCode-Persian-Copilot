@@ -1,8 +1,8 @@
 {
-  "name": "vscode-persian-copilot",
-  "displayName": "VSCode Persian Copilot — RTL & Persian Tools Hub",
-  "description": "Professional RTL support and a complete Persian Tools Hub for VS Code: date converter, number tools, calendar, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
-  "version": "1.3.2",
+  "name": "vscode-persian-copilot-dev",
+  "displayName": "VSCode Persian Copilot [DEV] — RTL & Persian Tools Hub",
+  "description": "[DEV] Professional RTL support and a complete Persian Tools Hub for VS Code: date converter, number tools, calendar, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
+  "version": "1.3.3-dev",
   "publisher": "shahkochaki",
   "repository": {
     "type": "git",
@@ -64,15 +64,121 @@
         "command": "vscode-persian-copilot.dateConverter",
         "title": "Open Date Converter",
         "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.openToolsHub",
+        "title": "Open Persian Tools Hub",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.numberConvert",
+        "title": "Open Number Converter",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.calendar",
+        "title": "Open Persian Calendar",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.arabicToPersian",
+        "title": "Arabic to Persian Text Converter",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.lorem",
+        "title": "Generate Persian Lorem Ipsum",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.moneyConvert",
+        "title": "Money Converter",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.numberToWords",
+        "title": "Number to Persian Words",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.ipDetails",
+        "title": "IP/URL Details Lookup",
+        "category": "Persian Copilot"
+      },
+      {
+        "command": "vscode-persian-copilot.jsonParser",
+        "title": "Persian Copilot: JSON Parser",
+        "category": "Persian Copilot"
       }
     ],
     "configuration": {
       "title": "Persian Copilot",
       "properties": {
+      "persian-copilot.enableJsonParser": {
+        "type": "boolean",
+        "default": true,
+        "description": "Enable JSON Parser tool (فعال‌سازی ابزار JSON Parser)"
+      },
         "persian-copilot.autoApply": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically apply Persian CSS when VS Code starts"
+          "description": "Automatically apply Persian CSS when VS Code starts (فعال‌سازی خودکار CSS راست‌چین)"
+        },
+        "persian-copilot.cssImportMethod": {
+          "type": "string",
+          "enum": ["devtools-script", "pure-css", "custom-css-extension", "disabled"],
+          "default": "devtools-script",
+          "description": "How to import Persian CSS: devtools-script, pure-css, custom-css-extension, or disabled (روش ایمپورت CSS: اسکریپت DevTools، CSS خالص، افزونه Custom CSS یا غیرفعال)"
+        },
+        "persian-copilot.showDevToolsGuide": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show DevTools guide and test script on startup (نمایش راهنمای DevTools و کد تست در شروع)"
+        },
+        "persian-copilot.showToolsHubIcon": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show Persian Tools Hub icon in Activity Bar (نمایش آیکون Persian Tools Hub در نوار کناری)"
+        },
+        "persian-copilot.enableDateConverter": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Date Converter tool (فعال‌سازی ابزار تبدیل تاریخ)"
+        },
+        "persian-copilot.enableNumberConvert": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Number Converter tool (فعال‌سازی ابزار تبدیل اعداد)"
+        },
+        "persian-copilot.enableCalendar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Persian Calendar tool (فعال‌سازی ابزار تقویم فارسی)"
+        },
+        "persian-copilot.enableArabicToPersian": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Arabic to Persian text converter (فعال‌سازی ابزار تبدیل عربی به فارسی)"
+        },
+        "persian-copilot.enableLorem": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Persian Lorem Ipsum generator (فعال‌سازی ابزار لورم فارسی)"
+        },
+        "persian-copilot.enableMoneyConvert": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Money Converter tool (فعال‌سازی ابزار تبدیل پول)"
+        },
+        "persian-copilot.enableNumberToWords": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Number to Persian Words tool (فعال‌سازی ابزار عدد به حروف)"
+        },
+        "persian-copilot.enableIpDetails": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable IP/URL Details Lookup tool (فعال‌سازی ابزار جستجوی IP/URL)"
         }
       }
     }
