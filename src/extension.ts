@@ -180,6 +180,33 @@ function getPersianCopilotConfig(): vscode.WorkspaceConfiguration {
 	return vscode.workspace.getConfiguration('persianCopilot');
 }
 
+// Persian number conversion utilities
+function convertPersianToEnglish(input: string): string {
+	const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
+	const englishDigits = '0123456789';
+	let result = input;
+	for (let i = 0; i < persianDigits.length; i++) {
+		result = result.replace(new RegExp(persianDigits[i], 'g'), englishDigits[i]);
+	}
+	return result;
+}
+
+function convertEnglishToPersian(input: string): string {
+	const persianDigits = '۰۱۲۳۴۵۶۷۸۹';
+	const englishDigits = '0123456789';
+	let result = input;
+	for (let i = 0; i < englishDigits.length; i++) {
+		result = result.replace(new RegExp(englishDigits[i], 'g'), persianDigits[i]);
+	}
+	return result;
+}
+
+function convertDate(input: string, type: string): string {
+	// Simple date conversion placeholder
+	// You can implement proper Jalali/Gregorian conversion here
+	return `Converted ${type}: ${input}`;
+}
+
 // Open webview for tools
 function openSimpleWebview(type: string, title: string, htmlFile: string) {
 	const panel = vscode.window.createWebviewPanel(
@@ -196,6 +223,26 @@ function openSimpleWebview(type: string, title: string, htmlFile: string) {
 		html = `<h2>Could not load ${title}.</h2>`;
 	}
 	panel.webview.html = html;
+
+	// Handle messages from webview
+	panel.webview.onDidReceiveMessage(
+		message => {
+			switch (message.command) {
+				case 'convertFa2En':
+					const englishNum = convertPersianToEnglish(message.value);
+					panel.webview.postMessage({ command: 'result', result: `English: ${englishNum}` });
+					break;
+				case 'convertEn2Fa':
+					const persianNum = convertEnglishToPersian(message.value);
+					panel.webview.postMessage({ command: 'result', result: `Persian: ${persianNum}` });
+					break;
+				case 'convertDate':
+					const convertedDate = convertDate(message.value, message.type);
+					panel.webview.postMessage({ command: 'result', result: convertedDate });
+					break;
+			}
+		}
+	);
 }
 
 // Tools Hub Webview

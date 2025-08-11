@@ -1,4 +1,6 @@
 const esbuild = require("esbuild");
+const fs = require('fs');
+const path = require('path');
 
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
@@ -24,6 +26,32 @@ const esbuildProblemMatcherPlugin = {
 };
 
 async function main() {
+	// Copy webview files
+	const webviewsSource = 'src/webviews';
+	const webviewsTarget = 'dist/webviews';
+	
+	// Create target directory if it doesn't exist
+	if (!fs.existsSync('dist')) {
+		fs.mkdirSync('dist');
+	}
+	if (!fs.existsSync(webviewsTarget)) {
+		fs.mkdirSync(webviewsTarget);
+	}
+	
+	// Copy all HTML files
+	if (fs.existsSync(webviewsSource)) {
+		const files = fs.readdirSync(webviewsSource);
+		files.forEach(file => {
+			if (file.endsWith('.html')) {
+				fs.copyFileSync(
+					path.join(webviewsSource, file),
+					path.join(webviewsTarget, file)
+				);
+				console.log(`Copied ${file} to dist/webviews/`);
+			}
+		});
+	}
+
 	const ctx = await esbuild.context({
 		entryPoints: [
 			'src/extension.ts'

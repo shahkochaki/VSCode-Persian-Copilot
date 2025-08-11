@@ -84,48 +84,57 @@
       },
       {
         "command": "vscode-persian-copilot.openToolsHub",
-        "title": "Open Persian Tools Hub",
-        "category": "Persian Copilot"
+        "title": "🇮🇷 Persian Tools Hub",
+        "category": "Persian Copilot",
+        "icon": "$(home)"
       },
       {
         "command": "vscode-persian-copilot.numberConvert",
-        "title": "Open Number Converter",
-        "category": "Persian Copilot"
+        "title": "🔢 Number Converter",
+        "category": "Persian Copilot",
+        "icon": "$(symbol-numeric)"
       },
       {
         "command": "vscode-persian-copilot.calendar",
-        "title": "Open Persian Calendar",
-        "category": "Persian Copilot"
+        "title": "📅 Persian Calendar",
+        "category": "Persian Copilot",
+        "icon": "$(calendar)"
       },
       {
         "command": "vscode-persian-copilot.arabicToPersian",
-        "title": "Arabic to Persian Text Converter",
-        "category": "Persian Copilot"
+        "title": "🔤 Arabic to Persian",
+        "category": "Persian Copilot",
+        "icon": "$(symbol-text)"
       },
       {
         "command": "vscode-persian-copilot.lorem",
-        "title": "Generate Persian Lorem Ipsum",
-        "category": "Persian Copilot"
+        "title": "📝 Persian Lorem Ipsum",
+        "category": "Persian Copilot",
+        "icon": "$(note)"
       },
       {
         "command": "vscode-persian-copilot.moneyConvert",
-        "title": "Money Converter",
-        "category": "Persian Copilot"
+        "title": "💰 Money Converter",
+        "category": "Persian Copilot",
+        "icon": "$(symbol-currency)"
       },
       {
         "command": "vscode-persian-copilot.numberToWords",
-        "title": "Number to Persian Words",
-        "category": "Persian Copilot"
+        "title": "🔠 Number to Words",
+        "category": "Persian Copilot",
+        "icon": "$(symbol-string)"
       },
       {
         "command": "vscode-persian-copilot.ipDetails",
-        "title": "IP/URL Details Lookup",
-        "category": "Persian Copilot"
+        "title": "🌐 IP/URL Details",
+        "category": "Persian Copilot",
+        "icon": "$(globe)"
       },
       {
         "command": "vscode-persian-copilot.jsonParser",
-        "title": "Persian Copilot: JSON Parser",
-        "category": "Persian Copilot"
+        "title": "📋 JSON Parser",
+        "category": "Persian Copilot",
+        "icon": "$(json)"
       }
     ],
     "configuration": {
