@@ -51,6 +51,12 @@ async function main() {
 			}
 		});
 	}
+	
+	// Copy favicon.ico to dist
+	if (fs.existsSync('favicon.ico')) {
+		fs.copyFileSync('favicon.ico', 'dist/favicon.ico');
+		console.log('Copied favicon.ico to dist/');
+	}
 
 	const ctx = await esbuild.context({
 		entryPoints: [

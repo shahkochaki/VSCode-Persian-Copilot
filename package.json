@@ -44,7 +44,7 @@
         {
           "id": "persian-tools",
           "title": "Persian Tools",
-          "icon": "$(tools)"
+          "icon": "./icon.png"
         }
       ]
     },
