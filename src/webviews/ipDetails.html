@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
@@ -189,6 +189,12 @@
 <body>
     <div class="container">
         <h2>🌐 بررسی جزئیات IP و وب‌سایت</h2>
+    <!-- Back to Hub Link -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button onclick="goToHub()" style="background: transparent; border: 1px solid var(--vscode-button-background); color: var(--vscode-button-background); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Vazirmatn', sans-serif;">
+            ðŸ  Ø¨Ø§Ø²Ú¯Ø´Øª Ø¨Ù‡ Hub
+        </button>
+    </div>
         
         <div class="demo-section">
             <h3>✨ تست سریع</h3>
@@ -410,6 +416,21 @@
         document.getElementById('url').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') lookup();
         });
-    </script>
+        // Function to go back to hub
+        function goToHub() {
+            if (typeof vscode !== 'undefined') {
+                vscode.postMessage({
+                    command: 'openHub'
+                });
+            }
+        }
+
+    </script>    
+    <!-- Copyright Footer -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
+        <p>Â© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
+    </div>
+
 </body>
 </html>
+

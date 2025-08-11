@@ -2,37 +2,185 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <title>Persian Calendar & Date Converter</title>
+    <title>تقویم فارسی و تبدیل تاریخ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Tahoma, Arial, sans-serif; padding: 24px; direction: rtl; }
-        h2 { color: #007acc; text-align: center; }
-        .container { max-width: 600px; margin: 0 auto; }
-        .row { margin-bottom: 18px; }
-        input, select { padding: 8px; font-size: 14px; margin: 5px; }
-        button { padding: 8px 16px; background: #007acc; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
-        button:hover { background: #005a9e; }
-        .result { margin-top: 18px; padding: 15px; background: #f5f5f5; border-radius: 5px; }
-        .today { text-align: center; padding: 20px; background: #e8f5e8; border-radius: 10px; margin-bottom: 20px; }
-        .converter { background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-top: 10px; }
-        .day { padding: 8px; text-align: center; border: 1px solid #ddd; background: #f9f9f9; }
-        .day-header { background: #007acc; color: white; font-weight: bold; }
-        .today-mark { background: #ff6b6b; color: white; border-radius: 50%; }
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #333);
+            --vscode-background: var(--vscode-editor-background, #ffffff);
+            --vscode-button-background: var(--vscode-button-background, #007acc);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #ffffff);
+            --vscode-input-border: var(--vscode-input-border, #ccc);
+            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 24px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+        }
+
+        h2 {
+            color: var(--vscode-button-background);
+            text-align: center;
+            margin-bottom: 24px;
+            font-weight: 600;
+        }
+
+        h3 {
+            margin-bottom: 12px;
+            color: var(--vscode-foreground);
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .today {
+            text-align: center;
+            padding: 24px;
+            background: var(--vscode-panel-background);
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border: 1px solid var(--vscode-input-border);
+        }
+
+        .converter {
+            background: var(--vscode-panel-background);
+            padding: 24px;
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .row {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        label {
+            min-width: 120px;
+            font-weight: 500;
+            color: var(--vscode-foreground);
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Vazirmatn', sans-serif;
+            background: var(--vscode-input-background);
+            color: var(--vscode-foreground);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 6px;
+            margin: 2px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+        }
+
+        button {
+            padding: 10px 20px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 2px;
+            font-family: 'Vazirmatn', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--vscode-panel-background);
+            border-radius: 8px;
+            border: 1px solid var(--vscode-input-border);
+            font-family: 'Vazirmatn', sans-serif;
+            line-height: 1.8;
+        }
+
+        .date-display {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--vscode-button-background);
+        }
+
+        .date-info {
+            color: var(--vscode-foreground);
+            opacity: 0.8;
+            font-size: 16px;
+        }
+
+        .clear-btn {
+            background: #dc3545;
+        }
+
+        .clear-btn:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            label {
+                min-width: auto;
+            }
+            
+            input, select, button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>تقویم فارسی و تبدیل تاریخ</h2>
+        <h2>🗓️ تقویم فارسی و تبدیل تاریخ</h2>
+        
+        <!-- Back to Hub Link -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button onclick="goToHub()" style="background: transparent; border: 1px solid var(--vscode-button-background); color: var(--vscode-button-background); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Vazirmatn', sans-serif;">
+                🏠 بازگشت به Hub
+            </button>
+        </div>
         
         <!-- Today's Date -->
         <div class="today" id="todayDate">
-            <h3>امروز</h3>
+            <h3>📅 امروز</h3>
             <div id="currentDate"></div>
         </div>
 
         <!-- Date Converter -->
         <div class="converter">
-            <h3>تبدیل تاریخ</h3>
+            <h3>🔄 تبدیل تاریخ</h3>
+            
             <div class="row">
                 <label>تاریخ شمسی:</label>
                 <input type="number" id="jYear" placeholder="1403" min="1300" max="1500">
@@ -59,6 +207,11 @@
                 <input type="date" id="gDate">
                 <button onclick="convertToPersian()">تبدیل به شمسی</button>
             </div>
+            
+            <div class="row">
+                <button onclick="clearAll()" class="clear-btn">🗑️ پاک کردن</button>
+                <button onclick="setToday()" style="background:#28a745;">📍 تنظیم به امروز</button>
+            </div>
         </div>
 
         <div class="result" id="result"></div>
@@ -71,65 +224,136 @@
         ];
         
         const gregMonths = [
-            'January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'
+            'ژانویه', 'فوریه', 'مارس', 'آوریل', 'مه', 'ژوئن',
+            'ژوئیه', 'اوت', 'سپتامبر', 'اکتبر', 'نوامبر', 'دسامبر'
         ];
 
-        // Persian to Gregorian conversion
-        function persianToGregorian(jy, jm, jd) {
-            const epBase = jy - 979;
-            const epYear = epBase >= 0 ? epBase : epBase - 33;
-            let aux = Math.floor(epYear / 33) * 12053;
-            aux += Math.floor((epYear % 33 + 3) / 4) * 365;
-            if ((epYear % 33) % 4 !== 0 && (epYear % 33 + 1) !== Math.floor((epYear % 33 + 1) / 4) * 4) {
-                aux += Math.floor((epYear % 33 + 1) / 4);
+        // الگوریتم تبدیل میلادی به شمسی (اصلاح شده)
+        function gregorianToJalali(gy, gm, gd) {
+            // محاسبه Julian Day Number
+            const a = Math.floor((14 - gm) / 12);
+            const y = gy - a;
+            const m = gm + 12 * a - 3;
+            
+            const jdn = gd + Math.floor((153 * m + 2) / 5) + 365 * y + 
+                       Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + 1721119;
+            
+            // تبدیل JDN به تقویم شمسی
+            const epoch = 1948321; // شروع تقویم شمسی
+            let diff = jdn - epoch + 1; // اضافه کردن 1 برای اصلاح
+            
+            // محاسبه سال
+            let year = 1;
+            while (diff > 365) {
+                const isLeap = isLeapJalali(year);
+                const yearDays = isLeap ? 366 : 365;
+                if (diff > yearDays) {
+                    diff -= yearDays;
+                    year++;
+                } else {
+                    break;
+                }
             }
             
-            for (let i = 0; i < jm; i++) {
-                aux += i < 6 ? 31 : 30;
-            }
-            aux += jd;
-            
-            const gy = Math.floor((aux + 621049) / 365.2425) + 1;
-            let gd = aux + 621049 - Math.floor((gy - 1) * 365.2425);
-            const leap = (gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0);
-            const sal_a = leap ? [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31] : [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-            
-            let gm = 0;
-            for (let i = 0; i < 12; i++) {
-                const v = sal_a[i];
-                if (gd <= v) break;
-                gd -= v;
-                gm++;
+            // محاسبه ماه
+            let month = 1;
+            while (diff > 0 && month <= 12) {
+                const monthDays = getJalaliMonthDays(month, year);
+                if (diff > monthDays) {
+                    diff -= monthDays;
+                    month++;
+                } else {
+                    break;
+                }
             }
             
-            return [gy, gm + 1, gd];
+            const day = diff;
+            return [year, month, day];
         }
 
-        // Gregorian to Persian conversion
-        function gregorianToPersian(gy, gm, gd) {
-            const g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
-            let gy2 = (gm > 2) ? (gy + 1) : gy;
-            let days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + g_d_m[gm - 1];
-            let jy = -1029 + 33 * Math.floor(days / 12053);
-            days %= 12053;
-            jy += 4 * Math.floor(days / 1461);
-            days %= 1461;
-            if (days >= 366) {
-                jy += Math.floor((days - 1) / 365);
-                days = (days - 1) % 365;
+        // تبدیل شمسی به میلادی
+        function jalaliToGregorian(jy, jm, jd) {
+            // محاسبه تعداد روزها از شروع تقویم شمسی
+            let totalDays = 0;
+            
+            // محاسبه روزهای سال‌های گذشته
+            for (let year = 1; year < jy; year++) {
+                totalDays += isLeapJalali(year) ? 366 : 365;
             }
             
-            let jm, jd;
-            if (days < 186) {
-                jm = 1 + Math.floor(days / 31);
-                jd = 1 + (days % 31);
-            } else {
-                jm = 7 + Math.floor((days - 186) / 30);
-                jd = 1 + ((days - 186) % 30);
+            // محاسبه روزهای ماه‌های گذشته در سال جاری
+            for (let month = 1; month < jm; month++) {
+                totalDays += getJalaliMonthDays(month, jy);
             }
             
-            return [jy, jm, jd];
+            // اضافه کردن روزهای گذشته در ماه جاری
+            totalDays += jd - 1;
+            
+            // تبدیل به Julian Day و سپس به میلادی
+            const julianDay = totalDays + 1948321; // شروع تقویم شمسی
+            return julianToGregorian(julianDay);
+        }
+
+        // تبدیل میلادی به Julian Day
+        function gregorianToJulian(year, month, day) {
+            const a = Math.floor((14 - month) / 12);
+            const y = year - a;
+            const m = month + 12 * a - 3;
+            
+            return day + Math.floor((153 * m + 2) / 5) + 365 * y + 
+                   Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) + 1721119;
+        }
+
+        // تبدیل Julian Day به میلادی
+        function julianToGregorian(julianDay) {
+            const a = julianDay + 32044;
+            const b = Math.floor((4 * a + 3) / 146097);
+            const c = a - Math.floor((146097 * b) / 4);
+            const d = Math.floor((4 * c + 3) / 1461);
+            const e = c - Math.floor((1461 * d) / 4);
+            const m = Math.floor((5 * e + 2) / 153);
+            
+            const day = e - Math.floor((153 * m + 2) / 5) + 1;
+            const month = m + 3 - 12 * Math.floor(m / 10);
+            const year = 100 * b + d - 4800 + Math.floor(m / 10);
+            
+            return [year, month, day];
+        }
+
+        // بررسی سال کبیسه شمسی
+        function isLeapJalali(year) {
+            const breaks = [
+                -14, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210,
+                1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178
+            ];
+            
+            const jp = breaks.length;
+            let jump = 0;
+            
+            for (let j = 1; j < jp; j++) {
+                const jm = breaks[j];
+                jump = jm - breaks[j - 1];
+                if (year < jm) break;
+            }
+            
+            let n = year - breaks[jp - 1];
+            
+            if (n < jump) {
+                if (jump - n < 6) n = n - jump + ((jump + 4) / 6) * 6;
+                
+                const leap = ((n + 1) % 33) % 4;
+                if (jump === 33 && leap === 1) return true;
+                if (leap === 1) return true;
+            }
+            
+            return false;
+        }
+
+        // تعداد روزهای هر ماه شمسی
+        function getJalaliMonthDays(month, year) {
+            if (month <= 6) return 31;
+            if (month <= 11) return 30;
+            return isLeapJalali(year) ? 30 : 29;
         }
 
         function convertToGregorian() {
@@ -138,26 +362,46 @@
             const jd = parseInt(document.getElementById('jDay').value);
             
             if (!jy || !jm || !jd) {
-                document.getElementById('result').innerHTML = '<span style="color:red;">لطفاً تمام فیلدها را پر کنید</span>';
+                document.getElementById('result').innerHTML = '<span style="color:#dc3545;">❌ لطفاً تمام فیلدها را پر کنید</span>';
+                return;
+            }
+            
+            if (jd > getJalaliMonthDays(jm, jy)) {
+                document.getElementById('result').innerHTML = '<span style="color:#dc3545;">❌ روز وارد شده برای این ماه صحیح نیست</span>';
                 return;
             }
             
             try {
-                const [gy, gm, gd] = persianToGregorian(jy, jm, jd);
+                const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
+                
+                // محاسبه اطلاعات روز
+                const gregorianDate = new Date(gy, gm - 1, gd);
+                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                  'July', 'August', 'September', 'October', 'November', 'December'];
+                
+                const dayName = dayNames[gregorianDate.getDay()];
+                const monthName = monthNames[gregorianDate.getMonth()];
+                const isoDate = `${gy}-${gm.toString().padStart(2, '0')}-${gd.toString().padStart(2, '0')}`;
+                const fullDate = `${dayName} - ${monthName} ${gd}, ${gy}`;
+                
                 document.getElementById('result').innerHTML = `
-                    <h4>نتیجه تبدیل:</h4>
-                    <p><strong>تاریخ شمسی:</strong> ${jy}/${jm}/${jd} - ${jd} ${persianMonths[jm-1]} ${jy}</p>
-                    <p><strong>تاریخ میلادی:</strong> ${gy}/${gm}/${gd} - ${gd} ${gregMonths[gm-1]} ${gy}</p>
+                    <h4>✅ نتیجه تبدیل:</h4>
+                    <div class="date-display">📅 ${jd} ${persianMonths[jm-1]} ${jy}</div>
+                    <div class="date-info" style="direction: ltr; text-align: center; font-family: 'Segoe UI', monospace;">
+                        <div style="margin-bottom: 4px;">🌍 ${isoDate}</div>
+                        <div>${fullDate}</div>
+                    </div>
                 `;
             } catch (e) {
-                document.getElementById('result').innerHTML = '<span style="color:red;">خطا در تبدیل تاریخ</span>';
+                document.getElementById('result').innerHTML = '<span style="color:#dc3545;">❌ خطا در تبدیل تاریخ</span>';
             }
         }
 
         function convertToPersian() {
             const gDate = document.getElementById('gDate').value;
             if (!gDate) {
-                document.getElementById('result').innerHTML = '<span style="color:red;">لطفاً تاریخ میلادی را انتخاب کنید</span>';
+                document.getElementById('result').innerHTML = '<span style="color:#dc3545;">❌ لطفاً تاریخ میلادی را انتخاب کنید</span>';
                 return;
             }
             
@@ -167,45 +411,101 @@
             const gd = date.getDate();
             
             try {
-                const [jy, jm, jd] = gregorianToPersian(gy, gm, gd);
+                const [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
+                
+                // محاسبه اطلاعات روز
+                const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                                  'July', 'August', 'September', 'October', 'November', 'December'];
+                
+                const dayName = dayNames[date.getDay()];
+                const monthName = monthNames[date.getMonth()];
+                const isoDate = `${gy}-${gm.toString().padStart(2, '0')}-${gd.toString().padStart(2, '0')}`;
+                const fullDate = `${dayName} - ${monthName} ${gd}, ${gy}`;
+                
                 document.getElementById('result').innerHTML = `
-                    <h4>نتیجه تبدیل:</h4>
-                    <p><strong>تاریخ میلادی:</strong> ${gy}/${gm}/${gd} - ${gd} ${gregMonths[gm-1]} ${gy}</p>
-                    <p><strong>تاریخ شمسی:</strong> ${jy}/${jm}/${jd} - ${jd} ${persianMonths[jm-1]} ${jy}</p>
+                    <h4>✅ نتیجه تبدیل:</h4>
+                    <div class="date-info" style="direction: ltr; text-align: center; font-family: 'Segoe UI', monospace;">
+                        <div style="margin-bottom: 4px;">🌍 ${isoDate}</div>
+                        <div>${fullDate}</div>
+                    </div>
+                    <div class="date-display">📅 ${jd} ${persianMonths[jm-1]} ${jy}</div>
                 `;
             } catch (e) {
-                document.getElementById('result').innerHTML = '<span style="color:red;">خطا در تبدیل تاریخ</span>';
+                document.getElementById('result').innerHTML = '<span style="color:#dc3545;">❌ خطا در تبدیل تاریخ</span>';
             }
         }
 
-        // Show today's date
+        function clearAll() {
+            document.getElementById('jYear').value = '';
+            document.getElementById('jMonth').value = '1';
+            document.getElementById('jDay').value = '';
+            document.getElementById('gDate').value = '';
+            document.getElementById('result').innerHTML = '';
+        }
+
+        function setToday() {
+            const today = new Date();
+            const [jy, jm, jd] = gregorianToJalali(today.getFullYear(), today.getMonth() + 1, today.getDate());
+            
+            document.getElementById('jYear').value = jy;
+            document.getElementById('jMonth').value = jm;
+            document.getElementById('jDay').value = jd;
+            
+            const todayStr = today.toISOString().split('T')[0];
+            document.getElementById('gDate').value = todayStr;
+        }
+
+        // نمایش تاریخ امروز
         function showTodayDate() {
             const today = new Date();
             const gy = today.getFullYear();
             const gm = today.getMonth() + 1;
             const gd = today.getDate();
             
-            const [jy, jm, jd] = gregorianToPersian(gy, gm, gd);
+            const [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
+            
+            // نام روزهای هفته به انگلیسی
+            const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            const dayName = dayNames[today.getDay()];
+            const monthName = monthNames[today.getMonth()];
+            
+            // فرمت: 2025-08-11 و Monday - August 11, 2025
+            const isoDate = `${gy}-${gm.toString().padStart(2, '0')}-${gd.toString().padStart(2, '0')}`;
+            const fullDate = `${dayName} - ${monthName} ${gd}, ${gy}`;
             
             document.getElementById('currentDate').innerHTML = `
-                <div style="font-size: 18px; margin-bottom: 10px;">
-                    <strong>${jd} ${persianMonths[jm-1]} ${jy}</strong>
-                </div>
-                <div style="color: #666;">
-                    ${gd} ${gregMonths[gm-1]} ${gy}
+                <div class="date-display">${jd} ${persianMonths[jm-1]} ${jy}</div>
+                <div class="date-info" style="direction: ltr; text-align: center; font-family: 'Segoe UI', monospace;">
+                    <div style="margin-bottom: 4px;">${isoDate}</div>
+                    <div>${fullDate}</div>
                 </div>
             `;
         }
 
-        // Initialize
-        showTodayDate();
-        
-        // Set current Persian date in inputs
-        const today = new Date();
-        const [currentJy, currentJm, currentJd] = gregorianToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
-        document.getElementById('jYear').value = currentJy;
-        document.getElementById('jMonth').value = currentJm;
-        document.getElementById('jDay').value = currentJd;
+        // اجرا در هنگام بارگذاری صفحه
+        window.addEventListener('load', function() {
+            showTodayDate();
+            setToday();
+        });
+
+        // Function to go back to hub
+        function goToHub() {
+            // Send message to extension to open hub
+            if (typeof vscode !== 'undefined') {
+                vscode.postMessage({
+                    command: 'openHub'
+                });
+            }
+        }
     </script>
+    
+    <!-- Copyright Footer -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
+        <p>© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
+    </div>
 </body>
 </html>

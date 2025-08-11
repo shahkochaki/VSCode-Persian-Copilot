@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
@@ -107,6 +107,12 @@
 </head>
 <body>
     <h2>💰 تبدیل ریال و تومان</h2>
+    <!-- Back to Hub Link -->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <button onclick="goToHub()" style="background: transparent; border: 1px solid var(--vscode-button-background); color: var(--vscode-button-background); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: 'Vazirmatn', sans-serif;">
+            ðŸ  Ø¨Ø§Ø²Ú¯Ø´Øª Ø¨Ù‡ Hub
+        </button>
+    </div>
     
     <div class="row">
         <label>ریال به تومان:</label>
@@ -189,6 +195,21 @@
         document.getElementById('toman').addEventListener('input', function(e) {
             this.value = this.value.replace(/[^0-9]/g, '');
         });
-    </script>
+        // Function to go back to hub
+        function goToHub() {
+            if (typeof vscode !== 'undefined') {
+                vscode.postMessage({
+                    command: 'openHub'
+                });
+            }
+        }
+
+    </script>    
+    <!-- Copyright Footer -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
+        <p>Â© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
+    </div>
+
 </body>
 </html>
+

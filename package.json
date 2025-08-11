@@ -35,10 +35,30 @@
     "Other"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onView:persian-tools-hub"
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "persian-tools",
+          "title": "Persian Tools",
+          "icon": "$(tools)"
+        }
+      ]
+    },
+    "views": {
+      "persian-tools": [
+        {
+          "id": "persian-tools-hub",
+          "name": "Persian Tools Hub",
+          "when": "true",
+          "type": "webview"
+        }
+      ]
+    },
     "menus": {
       "commandPalette": [
         { "command": "vscode-persian-copilot.openToolsHub", "when": "true", "group": "navigation@1" },
@@ -50,6 +70,53 @@
         { "command": "vscode-persian-copilot.moneyConvert", "when": "true", "group": "navigation@7" },
         { "command": "vscode-persian-copilot.numberToWords", "when": "true", "group": "navigation@8" },
         { "command": "vscode-persian-copilot.ipDetails", "when": "true", "group": "navigation@9" }
+      ],
+      "view/title": [
+        {
+          "command": "vscode-persian-copilot.openToolsHub",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@1"
+        },
+        {
+          "command": "vscode-persian-copilot.numberConvert",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@2"
+        },
+        {
+          "command": "vscode-persian-copilot.calendar",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@3"
+        },
+        {
+          "command": "vscode-persian-copilot.arabicToPersian",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@4"
+        },
+        {
+          "command": "vscode-persian-copilot.lorem",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@5"
+        },
+        {
+          "command": "vscode-persian-copilot.moneyConvert",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@6"
+        },
+        {
+          "command": "vscode-persian-copilot.numberToWords",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@7"
+        },
+        {
+          "command": "vscode-persian-copilot.ipDetails",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@8"
+        },
+        {
+          "command": "vscode-persian-copilot.jsonParser",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@9"
+        }
       ]
     },
     "commands": [
@@ -134,18 +201,7 @@
         "persian-copilot.autoApplyCSS": {
           "type": "boolean",
           "default": true,
-          "description": "Automatically apply Persian CSS when VS Code starts (اعمال خودکار CSS فارسی هنگام شروع VS Code)"
-        },
-        "persian-copilot.showDevToolsGuide": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show Developer Tools guide and auto-inject CSS (نمایش راهنمای Developer Tools و تزریق خودکار CSS)"
-        },
-        "persian-copilot.cssInjectionMethod": {
-          "type": "string",
-          "enum": ["auto", "manual", "disabled"],
-          "default": "auto",
-          "description": "CSS injection method: auto (automatic), manual (command only), disabled (نحوه تزریق CSS)"
+          "description": "Automatically apply Persian CSS (اعمال خودکار CSS فارسی)"
         },
         "persian-copilot.showToolsHubIcon": {
           "type": "boolean",

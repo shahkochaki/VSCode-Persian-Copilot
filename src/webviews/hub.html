@@ -133,6 +133,18 @@
             <div class="tool-title">تقویم و تبدیل تاریخ</div>
             <div class="tool-desc">تبدیل تاریخ میلادی و شمسی، مشاهده تقویم فارسی</div>
         </div>
+
+        <div class="tool-card" onclick="openTool('jsonParser')">
+            <div class="tool-icon">�</div>
+            <div class="tool-title">پردازش JSON</div>
+            <div class="tool-desc">تجزیه، فرمت و اعتبارسنجی JSON</div>
+        </div>
+        
+        <div class="tool-card" onclick="openTool('ipDetails')">
+            <div class="tool-icon">🌐</div>
+            <div class="tool-title">جزئیات IP</div>
+            <div class="tool-desc">بررسی اطلاعات آدرس IP و وب‌سایت</div>
+        </div>
         
         <div class="tool-card" onclick="openTool('numberConvert')">
             <div class="tool-icon">🔢</div>
@@ -162,18 +174,6 @@
             <div class="tool-icon">🔠</div>
             <div class="tool-title">عدد به حروف</div>
             <div class="tool-desc">تبدیل اعداد به متن فارسی</div>
-        </div>
-        
-        <div class="tool-card" onclick="openTool('jsonParser')">
-            <div class="tool-icon">�</div>
-            <div class="tool-title">پردازش JSON</div>
-            <div class="tool-desc">تجزیه، فرمت و اعتبارسنجی JSON</div>
-        </div>
-        
-        <div class="tool-card" onclick="openTool('ipDetails')">
-            <div class="tool-icon">🌐</div>
-            <div class="tool-title">جزئیات IP</div>
-            <div class="tool-desc">بررسی اطلاعات آدرس IP و وب‌سایت</div>
         </div>
     </div>
 
@@ -218,5 +218,10 @@
             card.setAttribute('tabindex', '0');
         });
     </script>
+    
+    <!-- Copyright Footer -->
+    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
+        <p>© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
+    </div>
 </body>
 </html>

@@ -21,9 +21,8 @@ export function activate(context: vscode.ExtensionContext) {
 		jsonParser: config.get('enableJsonParser', true),
 	};
 	const showToolsHubIcon = config.get('showToolsHubIcon', true);
-	const autoApplyCSS = config.get('autoApplyCSS', true);
+	const autoApply = config.get('autoApply', true);
 	const showDevToolsGuide = config.get('showDevToolsGuide', true);
-	const cssInjectionMethod = config.get('cssInjectionMethod', 'auto') as string;
 
 	// Persian Tools Hub command
 	if (showToolsHubIcon) {
@@ -33,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(disposableToolsHub);
 		
 		// Persian Copilot Activity Bar Icon (View Container)
-		vscode.window.registerWebviewViewProvider?.('persianCopilot.toolsView', {
+		const provider = vscode.window.registerWebviewViewProvider('persian-tools-hub', {
 			resolveWebviewView(webviewView) {
 				const htmlPath = path.join(__dirname, 'webviews', 'hub.html');
 				let html = '';
@@ -46,6 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
 				webviewView.webview.html = html;
 			}
 		});
+		context.subscriptions.push(provider);
 	}
 
 	// Register tools commands
@@ -160,28 +160,10 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposableRTL, disposableToggle, disposableDisable, disposableTest);
 
 	// --- CSS/RTL/Guide logic based on settings ---
-	isAutoApplyEnabled = autoApplyCSS;
-	
-	// Handle different CSS injection methods
-	if (cssInjectionMethod === 'auto' && autoApplyCSS) {
-		if (showDevToolsGuide) {
-			startAutoApply();
-		} else {
-			// Just apply CSS once without showing guide
-			setTimeout(() => applyCSS(), 2000);
-		}
-	} else if (cssInjectionMethod === 'manual') {
-		// CSS will only be applied via commands
-		vscode.window.showInformationMessage(
-			'Persian CSS is set to manual mode. Use "Apply Persian CSS" command to activate.',
-			'Apply Now'
-		).then(selection => {
-			if (selection === 'Apply Now') {
-				vscode.commands.executeCommand('vscode-persian-copilot.applyChatRTL');
-			}
-		});
+	isAutoApplyEnabled = autoApply;
+	if (isAutoApplyEnabled && showDevToolsGuide) {
+		startAutoApply();
 	}
-	// If disabled, do nothing
 
 	console.log('VSCode Persian Copilot is now active!');
 }
@@ -254,6 +236,11 @@ function openSimpleWebview(type: string, title: string, htmlFile: string) {
 					break;
 				case 'openExternal':
 					vscode.env.openExternal(vscode.Uri.parse(message.url));
+					break;
+				case 'openHub':
+					// Close current panel and open hub
+					panel.dispose();
+					openToolsHubWebview();
 					break;
 			}
 		}
@@ -349,6 +336,10 @@ function openIpDetailsWebview() {
 				} catch (e) {
 					panel.webview.postMessage({ command: 'ipDetailsResult', error: 'Request failed!' });
 				}
+			} else if (message.command === 'openHub') {
+				// Close current panel and open hub
+				panel.dispose();
+				openToolsHubWebview();
 			}
 		},
 		undefined
