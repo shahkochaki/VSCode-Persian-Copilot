@@ -5,24 +5,214 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JSON Parser</title>
   <style>
-    body { margin: 0; padding: 0; overflow: hidden; }
-    iframe { width: 100%; height: 100vh; border: none; }
-    .loading { 
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background: #f5f5f5; 
+    }
+    .container { 
+      max-width: 800px; 
+      margin: 0 auto; 
+      background: white; 
+      border-radius: 8px; 
+      padding: 30px; 
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+    }
+    h1 { 
+      color: #333; 
+      margin-bottom: 20px; 
+      text-align: center; 
+    }
+    .input-section { 
+      margin-bottom: 20px; 
+    }
+    textarea { 
+      width: 100%; 
+      height: 200px; 
+      font-family: 'Courier New', monospace; 
+      font-size: 14px; 
+      border: 2px solid #ddd; 
+      border-radius: 6px; 
+      padding: 15px; 
+      box-sizing: border-box; 
+      resize: vertical; 
+    }
+    .buttons { 
       display: flex; 
-      justify-content: center; 
-      align-items: center; 
-      height: 100vh; 
-      font-family: Arial, sans-serif; 
+      gap: 10px; 
+      margin-bottom: 20px; 
+    }
+    button { 
+      background: #007acc; 
+      color: white; 
+      border: none; 
+      padding: 12px 24px; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-size: 14px; 
+      transition: background 0.2s; 
+    }
+    button:hover { 
+      background: #005a9e; 
+    }
+    button:disabled { 
+      background: #ccc; 
+      cursor: not-allowed; 
+    }
+    .clear-btn { 
+      background: #dc3545; 
+    }
+    .clear-btn:hover { 
+      background: #c82333; 
+    }
+    .output { 
+      background: #f8f9fa; 
+      border: 2px solid #ddd; 
+      border-radius: 6px; 
+      padding: 15px; 
+      min-height: 200px; 
+      font-family: 'Courier New', monospace; 
+      font-size: 14px; 
+      white-space: pre-wrap; 
+      overflow-x: auto; 
+    }
+    .error { 
+      color: #dc3545; 
+      background: #f8d7da; 
+      border: 1px solid #f5c6cb; 
+      border-radius: 4px; 
+      padding: 10px; 
+      margin-bottom: 10px; 
+    }
+    .success { 
+      color: #155724; 
+      background: #d4edda; 
+      border: 1px solid #c3e6cb; 
+      border-radius: 4px; 
+      padding: 10px; 
+      margin-bottom: 10px; 
+    }
+    .footer { 
+      text-align: center; 
+      margin-top: 20px; 
       color: #666; 
+      font-size: 12px; 
+    }
+    .footer a { 
+      color: #007acc; 
+      text-decoration: none; 
     }
   </style>
 </head>
 <body>
-  <div class="loading" id="loading">Loading JSON Parser...</div>
-  <iframe 
-    src="https://helpix.app/json-parser" 
-    onload="document.getElementById('loading').style.display='none'"
-    title="JSON Parser">
-  </iframe>
+  <div class="container">
+    <h1>🔧 JSON Parser & Formatter</h1>
+    
+    <div class="input-section">
+      <textarea id="jsonInput" placeholder="Paste your JSON here...&#10;&#10;Example:&#10;{&#10;  &quot;name&quot;: &quot;John&quot;,&#10;  &quot;age&quot;: 30,&#10;  &quot;city&quot;: &quot;New York&quot;&#10;}"></textarea>
+    </div>
+    
+    <div class="buttons">
+      <button id="parseBtn">🔍 Parse & Format</button>
+      <button id="minifyBtn">📦 Minify</button>
+      <button id="validateBtn">✅ Validate Only</button>
+      <button id="clearBtn" class="clear-btn">🗑️ Clear</button>
+    </div>
+    
+    <div id="message"></div>
+    <div class="output" id="output">Output will appear here...</div>
+    
+    <div class="footer">
+      <p>💡 Tip: You can also validate and format JSON here. For more tools visit <a href="#" onclick="openExternal('https://helpix.app/json-parser')">helpix.app/json-parser</a></p>
+    </div>
+  </div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    const input = document.getElementById('jsonInput');
+    const output = document.getElementById('output');
+    const message = document.getElementById('message');
+    const parseBtn = document.getElementById('parseBtn');
+    const minifyBtn = document.getElementById('minifyBtn');
+    const validateBtn = document.getElementById('validateBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function showMessage(text, type = 'error') {
+      message.innerHTML = `<div class="${type}">${text}</div>`;
+      setTimeout(() => message.innerHTML = '', 5000);
+    }
+
+    function openExternal(url) {
+      vscode.postMessage({
+        command: 'openExternal',
+        url: url
+      });
+    }
+
+    parseBtn.onclick = function() {
+      const text = input.value.trim();
+      if (!text) {
+        showMessage('Please enter some JSON text to parse.');
+        return;
+      }
+      
+      try {
+        const obj = JSON.parse(text);
+        output.textContent = JSON.stringify(obj, null, 2);
+        showMessage('✅ JSON parsed and formatted successfully!', 'success');
+      } catch (e) {
+        showMessage(`❌ Invalid JSON: ${e.message}`);
+        output.textContent = `Error: ${e.message}`;
+      }
+    };
+
+    minifyBtn.onclick = function() {
+      const text = input.value.trim();
+      if (!text) {
+        showMessage('Please enter some JSON text to minify.');
+        return;
+      }
+      
+      try {
+        const obj = JSON.parse(text);
+        output.textContent = JSON.stringify(obj);
+        showMessage('✅ JSON minified successfully!', 'success');
+      } catch (e) {
+        showMessage(`❌ Invalid JSON: ${e.message}`);
+        output.textContent = `Error: ${e.message}`;
+      }
+    };
+
+    validateBtn.onclick = function() {
+      const text = input.value.trim();
+      if (!text) {
+        showMessage('Please enter some JSON text to validate.');
+        return;
+      }
+      
+      try {
+        JSON.parse(text);
+        showMessage('✅ Valid JSON!', 'success');
+        output.textContent = 'Valid JSON ✓';
+      } catch (e) {
+        showMessage(`❌ Invalid JSON: ${e.message}`);
+        output.textContent = `Invalid JSON: ${e.message}`;
+      }
+    };
+
+    clearBtn.onclick = function() {
+      input.value = '';
+      output.textContent = 'Output will appear here...';
+      message.innerHTML = '';
+    };
+
+    // Auto-parse on Enter (Ctrl+Enter)
+    input.addEventListener('keydown', function(e) {
+      if (e.ctrlKey && e.key === 'Enter') {
+        parseBtn.click();
+      }
+    });
+  </script>
 </body>
 </html>

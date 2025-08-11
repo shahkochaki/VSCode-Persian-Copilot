@@ -240,6 +240,9 @@ function openSimpleWebview(type: string, title: string, htmlFile: string) {
 					const convertedDate = convertDate(message.value, message.type);
 					panel.webview.postMessage({ command: 'result', result: convertedDate });
 					break;
+				case 'openExternal':
+					vscode.env.openExternal(vscode.Uri.parse(message.url));
+					break;
 			}
 		}
 	);
