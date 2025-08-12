@@ -34,7 +34,7 @@
             padding: 16px;
             background: var(--vscode-background);
             color: var(--vscode-foreground);
-            direction: rtl;
+            direction: ltr;
             overflow-x: hidden;
         }
 
@@ -101,6 +101,7 @@
             align-items: center;
             justify-content: space-between;
             min-height: 56px;
+            border-radius: 10px 10px 0 0;
         }
 
         .card-title {
@@ -240,7 +241,7 @@
             border: none;
             color: #d4d4d4;
             cursor: pointer;
-            margin-right: 4px;
+            margin-left: 4px;
             font-size: 12px;
             width: 16px;
             text-align: center;
@@ -258,6 +259,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: 0 0 10px 10px;
         }
 
         .status-valid {
@@ -375,16 +377,16 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><span class="material-icons" style="vertical-align: middle; margin-left: 8px;">code</span>پردازش JSON پیشرفته</h1>
+            <h1><span class="material-icons" style="vertical-align: middle; margin-right: 8px;">code</span>پردازش JSON پیشرفته</h1>
             <div class="header-subtitle">تحلیل، فرمت و ویرایش داده‌های JSON با امکانات پیشرفته</div>
         </div>
 
         <div class="json-grid">
-            <!-- Input Panel -->
+            <!-- Input Panel (moved to right) -->
             <div class="json-card">
                 <div class="card-header">
                     <div class="card-title">
-                        <span class="material-icons" style="vertical-align: middle; margin-left: 8px; font-size: 18px;">edit</span>
+                        <span class="material-icons" style="vertical-align: middle; margin-right: 8px; font-size: 18px;">edit</span>
                         ویرایشگر JSON
                     </div>
                     <div class="toolbar">
@@ -416,12 +418,12 @@
                     <span id="inputLength" class="status-info">0 کاراکتر</span>
                 </div>
             </div>
-
-            <!-- Output Panel -->
+            
+            <!-- Output Panel (moved to left) -->
             <div class="json-card">
                 <div class="card-header">
                     <div class="card-title">
-                        <span class="material-icons" style="vertical-align: middle; margin-left: 8px; font-size: 18px;">visibility</span>
+                        <span class="material-icons" style="vertical-align: middle; margin-right: 8px; font-size: 18px;">visibility</span>
                         نمایشگر JSON
                     </div>
                     <div class="toolbar">
@@ -542,12 +544,12 @@
                 
                 let html = '<span class="json-punctuation">[</span>\n';
                 for (let i = 0; i < obj.length; i++) {
-                    html += '<div class="json-node" style="margin-right: ' + ((level + 1) * 20) + 'px;">';
+                    html += '<div class="json-node" style="margin-left: ' + ((level + 1) * 20) + 'px;">';
                     html += renderJsonTree(obj[i], search, level + 1);
                     if (i < obj.length - 1) html += '<span class="json-punctuation">,</span>';
                     html += '</div>';
                 }
-                html += '<div style="margin-right: ' + (level * 20) + 'px;"><span class="json-punctuation">]</span></div>';
+                html += '<div style="margin-left: ' + (level * 20) + 'px;"><span class="json-punctuation">]</span></div>';
                 return html;
             }
             
@@ -569,7 +571,7 @@
                 
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
-                    html += '<div class="json-node" style="margin-right: ' + ((level + 1) * 20) + 'px;">';
+                    html += '<div class="json-node" style="margin-left: ' + ((level + 1) * 20) + 'px;">';
                     
                     let keyContent = `"${key}"`;
                     if (search && key.toLowerCase().includes(search.toLowerCase())) {
@@ -584,7 +586,7 @@
                 }
                 
                 html += '</div>';
-                html += '<div style="margin-right: ' + (level * 20) + 'px;"><span class="json-punctuation">}</span></div>';
+                html += '<div style="margin-left: ' + (level * 20) + 'px;"><span class="json-punctuation">}</span></div>';
                 return html;
             }
             

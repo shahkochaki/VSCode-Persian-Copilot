@@ -2,6 +2,30 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.4.0] - 2025-08-12
+
+### Enhanced
+- 🔥 **JSON Parser Complete Redesign**: Next.js-style modern interface with two-column layout
+- 🌳 **Tree View Default**: Professional JSON tree visualization as default view mode
+- 🔍 **Advanced Search**: Real-time search with highlighting across JSON structure
+- 📁 **File Operations**: Import JSON files and export formatted results
+- 🎨 **Better Tooltips**: Fixed positioning and improved visual design
+- ⚡ **Real-time Processing**: Instant JSON validation and formatting
+- 📊 **Smart Analytics**: Key count, file size, and detailed status reporting
+- 🎭 **Modern Animations**: Smooth transitions and professional card effects
+
+### Fixed
+- ✅ **Calendar Months**: Gregorian months now display in English (January, February, etc.)
+- ✅ **Hub Animations**: Enhanced icon effects with float, pulse, rotate, bounce, swing, glow
+- ✅ **Tooltip Overflow**: Fixed tooltip positioning to appear above elements properly
+- ✅ **Tree View Navigation**: Collapsible JSON objects for better large data handling
+
+### Technical Improvements
+- Material Icons integration for consistent UI
+- Enhanced CSS with better color schemes and gradients
+- Improved responsive design for mobile and desktop
+- Better accessibility and keyboard navigation support
+
 ## [0.0.1] - 2024-12-28
 
 ### Added
