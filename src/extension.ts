@@ -77,6 +77,9 @@ export function activate(context: vscode.ExtensionContext) {
 									break;
 							}
 							break;
+						case 'openExternal':
+							vscode.env.openExternal(vscode.Uri.parse(message.url));
+							break;
 					}
 				}
 			);
