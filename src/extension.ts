@@ -5,7 +5,31 @@ import * as fs from 'fs';
 let isAutoApplyEnabled = true;
 let cssInjectionInterval: NodeJS.Timeout | undefined;
 
+// User management globals
+interface UserData {
+	token: string;
+	user: {
+		uuid: number;
+		role: string;
+		group: string;
+		financial: {
+			credit: number;
+		};
+		data: {
+			firstName: string;
+			lastName: string;
+			email: string;
+			mobile: string;
+		};
+	};
+}
+
+let currentUser: UserData | null = null;
+
 export function activate(context: vscode.ExtensionContext) {
+	// --- Initialize user data ---
+	loadUserData(context);
+	
 	// --- Read settings ---
 	const config = getPersianCopilotConfig();
 	
@@ -31,6 +55,12 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 		context.subscriptions.push(disposableToolsHub);
 	}
+
+	// Login command
+	const disposableLogin = vscode.commands.registerCommand('vscode-persian-copilot.login', () => {
+		openLoginWebview(context);
+	});
+	context.subscriptions.push(disposableLogin);
 	
 	// Persian Copilot Activity Bar Icon (View Container) - Always register
 	const provider = vscode.window.registerWebviewViewProvider('persian-tools-hub', {
@@ -75,10 +105,19 @@ export function activate(context: vscode.ExtensionContext) {
 								case 'numberToWords':
 									openSimpleWebview('numberToWords', 'Number to Words', 'numberToWords.html');
 									break;
+								case 'login':
+									openLoginWebview(context);
+									break;
 							}
 							break;
 						case 'openExternal':
 							vscode.env.openExternal(vscode.Uri.parse(message.url));
+							break;
+						case 'getUserData':
+							webviewView.webview.postMessage({
+								command: 'setUserData',
+								data: currentUser
+							});
 							break;
 					}
 				}
@@ -328,7 +367,16 @@ function openToolsHubWebview() {
 						case 'ipDetails':
 							openIpDetailsWebview();
 							break;
+						case 'login':
+							openLoginWebview();
+							break;
 					}
+					break;
+				case 'getUserData':
+					panel.webview.postMessage({
+						command: 'setUserData',
+						data: currentUser
+					});
 					break;
 			}
 		}
@@ -354,7 +402,7 @@ function openIpDetailsWebview() {
 
 	panel.webview.onDidReceiveMessage(
 		async message => {
-			if (message.command === 'ipDetailsLookup') {
+			if (message.command === 'ipDetailsLookup') { 
 				const { token, url } = message;
 				try {
 					const res = await fetch('https://console.helpix.app/api/v1/tools/ip/details', {
@@ -370,6 +418,12 @@ function openIpDetailsWebview() {
 				} catch (e) {
 					panel.webview.postMessage({ command: 'ipDetailsResult', error: 'Request failed!' });
 				}
+			} else if (message.command === 'getUserData') {
+				// Send current user data to webview
+				panel.webview.postMessage({
+					command: 'setUserData',
+					data: currentUser
+				});
 			}
 		},
 		undefined
@@ -587,6 +641,104 @@ function getCSSInjectionScript(): string {
 })();`;
 
 	return injectionScript;
+}
+
+// --- User Management Functions ---
+
+function loadUserData(context: vscode.ExtensionContext) {
+	try {
+		const userData = context.globalState.get<UserData>('helpix_user_data');
+		if (userData && userData.token) {
+			currentUser = userData;
+			console.log('Loaded user data for:', userData.user.data.firstName);
+		}
+	} catch (error) {
+		console.error('Error loading user data:', error);
+	}
+}
+
+function saveUserData(context: vscode.ExtensionContext, userData: UserData) {
+	try {
+		currentUser = userData;
+		context.globalState.update('helpix_user_data', userData);
+		console.log('Saved user data for:', userData.user.data.firstName);
+	} catch (error) {
+		console.error('Error saving user data:', error);
+	}
+}
+
+function clearUserData(context: vscode.ExtensionContext) {
+	try {
+		currentUser = null;
+		context.globalState.update('helpix_user_data', undefined);
+		console.log('Cleared user data');
+	} catch (error) {
+		console.error('Error clearing user data:', error);
+	}
+}
+
+function openLoginWebview(context?: vscode.ExtensionContext) {
+	const panel = vscode.window.createWebviewPanel(
+		'persianLogin',
+		'ورود به حساب کاربری',
+		vscode.ViewColumn.One,
+		{ enableScripts: true }
+	);
+	
+	const htmlPath = path.join(__dirname, 'webviews', 'login.html');
+	let html = '';
+	try {
+		html = fs.readFileSync(htmlPath, 'utf8');
+	} catch (e) {
+		html = '<h2>Could not load Login UI.</h2>';
+	}
+	panel.webview.html = html;
+
+	// Send current user data if available
+	if (currentUser) {
+		setTimeout(() => {
+			panel.webview.postMessage({
+				command: 'setUserData',
+				data: currentUser
+			});
+		}, 500);
+	}
+
+	// Handle messages from login webview
+	panel.webview.onDidReceiveMessage(
+		message => {
+			if (!context) {
+				return;
+			}
+
+			switch (message.command) {
+				case 'loginSuccess':
+					saveUserData(context, message.data);
+					vscode.window.showInformationMessage(`خوش آمدید ${message.data.user.data.firstName}!`);
+					break;
+				case 'logout':
+					clearUserData(context);
+					vscode.window.showInformationMessage('با موفقیت خارج شدید');
+					break;
+				case 'saveUserData':
+					saveUserData(context, message.data);
+					break;
+				case 'clearUserData':
+					clearUserData(context);
+					break;
+			}
+		}
+	);
+}
+
+// Helper function to get current user
+function getCurrentUser(): UserData | null {
+	return currentUser;
+}
+
+// Helper function to check if user is logged in
+function isUserLoggedIn(): boolean {
+	return currentUser !== null && currentUser.token !== undefined;
 }
 
 // This method is called when your extension is deactivated

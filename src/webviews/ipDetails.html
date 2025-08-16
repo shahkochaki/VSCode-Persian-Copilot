@@ -38,8 +38,40 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .input-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .output-section {
+            min-height: 300px;
+            background: var(--vscode-panel-background);
+            border: 1px solid var(--vscode-input-border);
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .result {
+            background: transparent;
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
         }
 
         .row {
@@ -69,7 +101,7 @@
         }
 
         button {
-            padding: 10px 24px;
+            padding: 10px 15px;
             background: var(--vscode-button-background);
             color: var(--vscode-button-foreground);
             border: none;
@@ -163,7 +195,7 @@
 
         .quick-test {
             display: flex;
-            gap: 10px;
+            gap: 5px;
             margin-bottom: 15px;
             flex-wrap: wrap;
         }
@@ -188,36 +220,232 @@
     </style>
 </head>
 <body>
+    <h2>🌐 بررسی جزئیات IP و وب‌سایت</h2>
+    
     <div class="container">
-        <h2>🌐 بررسی جزئیات IP و وب‌سایت</h2>
-        
-        <div class="demo-section">
-            <h3>✨ تست سریع</h3>
-            <div class="quick-test">
-                <button onclick="testMyIP()">🏠 تست IP من</button>
-                <button onclick="testGoogleDNS()">📡 Google DNS (8.8.8.8)</button>
-                <button onclick="testCloudflare()">☁️ Cloudflare (1.1.1.1)</button>
+        <!-- Input Section -->
+        <div class="input-section">
+            <!-- User Status Section -->
+            <div id="loginStatus"></div>
+            
+            <div class="demo-section">
+                <h3>✨ تست سریع</h3>
+                <div class="quick-test">
+                    <button onclick="testMyIP()">🏠 تست IP من</button>
+                    <button onclick="testGoogleDNS()">📡 Google DNS (8.8.8.8)</button>
+                    <button onclick="testCloudflare()">☁️ Cloudflare (1.1.1.1)</button>
+                </div>
+            </div>
+            
+            <div class="row">
+                <label>آدرس URL یا IP:</label>
+                <input type="text" id="url" dir="ltr" placeholder="google.com یا 8.8.8.8 یا https://example.com">
+            </div>
+            
+            <div class="row">
+                <button onclick="lookup()">🔍 بررسی جزئیات</button>
+                <button onclick="clearAll()" class="secondary">🗑️ پاک کردن</button>
+                <button onclick="copyResults()" class="success">📋 کپی نتایج</button>
             </div>
         </div>
         
-        <div class="row">
-            <label>آدرس URL یا IP:</label>
-            <input type="text" id="url" dir="ltr" placeholder="google.com یا 8.8.8.8 یا https://example.com">
+        <!-- Output Section -->
+        <div class="output-section">
+            <div class="result" id="result">
+                <div style="text-align: center; padding: 40px; opacity: 0.6;">
+                    <h3>📊 نتایج جزئیات IP</h3>
+                    <p>اطلاعات IP یا وب‌سایت مورد نظر را وارد کنید تا جزئیات نمایش داده شود</p>
+                    <div style="margin-top: 20px; font-size: 0.9em; opacity: 0.7;">
+                        <p>🔹 کاربران عضو: API پیشرفته با تحلیل امنیت</p>
+                        <p>🔹 کاربران مهمان: API پایه رایگان</p>
+                    </div>
+                </div>
+            </div>
+            <div class="error" id="error"></div>
+            <div class="success" id="success"></div>
+            <div class="loading" id="loading" style="display:none;">🔄 در حال بررسی جزئیات...</div>
         </div>
-        
-        <div class="row">
-            <button onclick="lookup()">🔍 بررسی جزئیات</button>
-            <button onclick="clearAll()" class="secondary">🗑️ پاک کردن</button>
-            <button onclick="copyResults()" class="success">📋 کپی نتایج</button>
-        </div>
-        
-        <div class="error" id="error"></div>
-        <div class="success" id="success"></div>
-        <div class="loading" id="loading" style="display:none;">🔄 در حال بررسی جزئیات...</div>
-        <div class="result" id="result"></div>
     </div>
 
     <script>
+        const vscode = acquireVsCodeApi();
+        let currentUser = null;
+        let advancedAPIEnabled = false;
+
+        // Initialize page
+        window.addEventListener('load', () => {
+            requestUserData();
+        });
+
+        function requestUserData() {
+            vscode.postMessage({
+                command: 'getUserData'
+            });
+        }
+
+        function updateUserInterface(userData) {
+            currentUser = userData;
+            advancedAPIEnabled = userData && userData.token;
+            
+            // Update UI based on login status
+            const tokenSection = document.querySelector('.row:first-child');
+            const statusDiv = document.getElementById('loginStatus');
+            
+            if (advancedAPIEnabled) {
+                tokenSection.style.display = 'none';
+                if (statusDiv) {
+                    statusDiv.innerHTML = `
+                        <div style="background: rgba(40, 167, 69, 0.1); border: 1px solid #28a745; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                            <h4 style="color: #28a745; margin-bottom: 8px;">✅ کاربر احراز هویت شده</h4>
+                            <p>خوش آمدید ${userData.user.data.firstName} ${userData.user.data.lastName}</p>
+                            <p>شما می‌توانید از API پیشرفته استفاده کنید</p>
+                        </div>
+                    `;
+                }
+            } else {
+                tokenSection.style.display = 'block';
+                if (statusDiv) {
+                    statusDiv.innerHTML = `
+                        <div style="background: rgba(255, 193, 7, 0.1); border: 1px solid #ffc107; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                            <h4 style="color: #856404; margin-bottom: 8px;">⚠️ عضو نیستید</h4>
+                            <p>برای استفاده از API پیشرفته، ابتدا وارد شوید</p>
+                            <button onclick="openLogin()" style="background: var(--vscode-button-background); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-top: 8px;">ورود به حساب</button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function openLogin() {
+            // Request extension to open login page
+            vscode.postMessage({
+                command: 'openTool',
+                tool: 'login'
+            });
+        }
+
+        // Handle messages from extension
+        window.addEventListener('message', event => {
+            const message = event.data;
+            
+            switch (message.command) {
+                case 'setUserData':
+                    updateUserInterface(message.data);
+                    break;
+                case 'ipDetailsResult':
+                    handleAdvancedResult(message.data, message.error);
+                    break;
+            }
+        });
+
+        function handleAdvancedResult(data, error) {
+            showLoading(false);
+            
+            console.log('Advanced API Response:', { data, error });
+            
+            if (error) {
+                showError('خطا در API پیشرفته: ' + error);
+                return;
+            }
+            
+            // Check for the correct API response structure
+            if (data && data.status === true && data.body) {
+                document.getElementById('result').innerHTML = renderAdvancedResult(data.body);
+                showSuccess('جزئیات IP با API پیشرفته دریافت شد!');
+            } else if (data && data.success && data.data) {
+                // Fallback for old structure
+                document.getElementById('result').innerHTML = renderAdvancedResult(data.data);
+                showSuccess('جزئیات IP با API پیشرفته دریافت شد!');
+            } else {
+                console.log('API Response Details:', data);
+                const errorMsg = data?.message || data?.error || data?.body?.message || data?.body || 'پاسخ نامعتبر از سرور';
+                showError('خطا در دریافت اطلاعات پیشرفته: ' + errorMsg);
+            }
+        }
+
+        function renderAdvancedResult(data) {
+            return `
+                <h3>🌐 جزئیات پیشرفته IP</h3>
+                <div class="section">
+                    <span class="label">آدرس IP:</span> 
+                    <span class="value">${data.query || data.ip || 'نامشخص'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">کشور:</span> 
+                    <span class="value">${data.country || 'نامشخص'} ${data.countryCode ? '(' + data.countryCode + ')' : ''}</span>
+                </div>
+                <div class="section">
+                    <span class="label">قاره:</span> 
+                    <span class="value">${data.continent || 'نامشخص'} ${data.continentCode ? '(' + data.continentCode + ')' : ''}</span>
+                </div>
+                <div class="section">
+                    <span class="label">منطقه:</span> 
+                    <span class="value">${data.regionName || data.region || 'نامشخص'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">شهر:</span> 
+                    <span class="value">${data.city || 'نامشخص'}</span>
+                </div>
+                ${data.district ? `
+                <div class="section">
+                    <span class="label">ناحیه:</span> 
+                    <span class="value">${data.district}</span>
+                </div>
+                ` : ''}
+                <div class="section">
+                    <span class="label">مختصات:</span> 
+                    <span class="value">${data.lat && data.lon ? data.lat + ', ' + data.lon : 'نامشخص'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">منطقه زمانی:</span> 
+                    <span class="value">${data.timezone || 'نامشخص'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">واحد پول:</span> 
+                    <span class="value">${data.currency || 'نامشخص'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">ارائه‌دهنده اینترنت:</span> 
+                    <span class="value">${data.isp || 'نامشخص'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">سازمان:</span> 
+                    <span class="value">${data.org || data.organization || 'نامشخص'}</span>
+                </div>
+                <div class="section">
+                    <span class="label">شماره AS:</span> 
+                    <span class="value">${data.as || 'نامشخص'}</span>
+                </div>
+                ${data.asname ? `
+                <div class="section">
+                    <span class="label">نام AS:</span> 
+                    <span class="value">${data.asname}</span>
+                </div>
+                ` : ''}
+                ${data.reverse ? `
+                <div class="section">
+                    <span class="label">Reverse DNS:</span> 
+                    <span class="value">${data.reverse}</span>
+                </div>
+                ` : ''}
+                <div class="section">
+                    <span class="label">نوع اتصال:</span> 
+                    <span class="value">
+                        ${data.mobile ? '📱 موبایل ' : ''}
+                        ${data.proxy ? '🔒 پروکسی ' : ''}
+                        ${data.hosting ? '🖥️ هاستینگ ' : ''}
+                        ${!data.mobile && !data.proxy && !data.hosting ? 'معمولی' : ''}
+                    </span>
+                </div>
+                ${data.company ? `
+                <div class="section">
+                    <span class="label">اطلاعات شرکت:</span> 
+                    <span class="value">${data.company.title || 'نامشخص'} - ${data.company.country || ''}</span>
+                </div>
+                ` : ''}
+            `;
+        }
+
         function showLoading(show) {
             document.getElementById('loading').style.display = show ? 'block' : 'none';
         }
@@ -291,6 +519,18 @@
 
             showLoading(true);
 
+            // Use advanced API if user is logged in
+            if (advancedAPIEnabled && currentUser && currentUser.token) {
+                // Use extension's advanced API
+                vscode.postMessage({
+                    command: 'ipDetailsLookup',
+                    token: currentUser.token,
+                    url: url
+                });
+                return;
+            }
+
+            // Fallback to basic API
             try {
                 // Extract IP from URL if needed
                 let targetIP = url;
@@ -304,7 +544,7 @@
 
                 if (result.success) {
                     document.getElementById('result').innerHTML = renderBasicResult(result.data);
-                    showSuccess('جزئیات IP با موفقیت دریافت شد!');
+                    showSuccess('جزئیات IP با موفقیت دریافت شد! (API رایگان)');
                 } else {
                     showError(result.error);
                 }
@@ -390,9 +630,17 @@
         }
 
         function clearAll() {
-            document.getElementById('token').value = '';
             document.getElementById('url').value = '';
-            document.getElementById('result').innerHTML = '';
+            document.getElementById('result').innerHTML = `
+                <div style="text-align: center; padding: 40px; opacity: 0.6;">
+                    <h3>📊 نتایج جزئیات IP</h3>
+                    <p>اطلاعات IP یا وب‌سایت مورد نظر را وارد کنید تا جزئیات نمایش داده شود</p>
+                    <div style="margin-top: 20px; font-size: 0.9em; opacity: 0.7;">
+                        <p>🔹 کاربران عضو: API پیشرفته با تحلیل امنیت</p>
+                        <p>🔹 کاربران مهمان: API پایه رایگان</p>
+                    </div>
+                </div>
+            `;
             clearMessages();
         }
 

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>ورود به حساب کاربری</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --vscode-foreground: var(--vscode-editor-foreground, #e1e4e8);
+            --vscode-background: var(--vscode-editor-background, #1e1e1e);
+            --vscode-button-background: var(--vscode-button-background, #0078d4);
+            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+            --vscode-input-background: var(--vscode-input-background, #2d2d30);
+            --vscode-input-border: var(--vscode-input-border, #464647);
+            --vscode-panel-background: var(--vscode-panel-background, #252526);
+            --card-header-bg: #1f1f23;
+            --border-color: #464647;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
+            padding: 20px;
+            background: var(--vscode-background);
+            color: var(--vscode-foreground);
+            direction: rtl;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            background: linear-gradient(135deg, var(--vscode-panel-background), var(--card-header-bg));
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-header h1 {
+            color: var(--vscode-button-background);
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .login-header p {
+            color: var(--vscode-foreground);
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--vscode-foreground);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--vscode-input-background);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--vscode-foreground);
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--vscode-button-background);
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+        }
+
+        .form-input.error {
+            border-color: var(--error-color);
+        }
+
+        .otp-input {
+            text-align: center;
+            letter-spacing: 4px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--vscode-foreground);
+            margin-top: 12px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .message.error {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .message.info {
+            background: rgba(0, 120, 212, 0.1);
+            border: 1px solid var(--vscode-button-background);
+            color: var(--vscode-button-background);
+        }
+
+        .countdown {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--vscode-foreground);
+            opacity: 0.7;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .user-info {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success-color);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .user-info h3 {
+            color: var(--success-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .user-info p {
+            color: var(--vscode-foreground);
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .logout-btn {
+            background: var(--error-color);
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>
+                <span class="material-icons">account_circle</span>
+                ورود به حساب کاربری
+            </h1>
+            <p>برای استفاده از امکانات پیشرفته وارد شوید</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <!-- Step 1: Mobile Input -->
+        <div id="step1" class="step active">
+            <div class="form-group">
+                <label for="mobile">شماره موبایل</label>
+                <div class="input-wrapper">
+                    <input type="tel" id="mobile" class="form-input" placeholder="09123456789" maxlength="11">
+                </div>
+            </div>
+            <button id="sendOtpBtn" class="btn" onclick="sendOtp()">
+                <span class="material-icons">send</span>
+                ارسال کد تایید
+            </button>
+        </div>
+
+        <!-- Step 2: OTP Verification -->
+        <div id="step2" class="step">
+            <div class="form-group">
+                <label for="otp">کد تایید</label>
+                <div class="input-wrapper">
+                    <input type="text" id="otp" class="form-input otp-input" placeholder="******" maxlength="6">
+                </div>
+            </div>
+            <button id="verifyOtpBtn" class="btn" onclick="verifyOtp()">
+                <span class="material-icons">verified_user</span>
+                تایید کد
+            </button>
+            <button class="btn btn-secondary" onclick="goBackToMobile()">
+                <span class="material-icons">arrow_back</span>
+                بازگشت
+            </button>
+            <div id="countdown" class="countdown"></div>
+        </div>
+
+        <!-- Step 3: Logged In -->
+        <div id="step3" class="step">
+            <div id="userInfo" class="user-info">
+                <h3>
+                    <span class="material-icons">check_circle</span>
+                    خوش آمدید!
+                </h3>
+                <p id="userFullName"></p>
+                <p id="userMobile"></p>
+                <p id="userCredit"></p>
+            </div>
+            <button class="btn logout-btn" onclick="logout()">
+                <span class="material-icons">logout</span>
+                خروج از حساب
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://console.helpix.app/api/v1';
+        let currentMobile = '';
+        let countdownTimer = null;
+
+        // VSCode API for communication
+        const vscode = acquireVsCodeApi();
+
+        // Check if user is already logged in
+        window.addEventListener('load', () => {
+            checkAuthStatus();
+        });
+
+        function checkAuthStatus() {
+            const userData = getUserData();
+            if (userData && userData.token) {
+                showLoggedInState(userData);
+            }
+        }
+
+        function showMessage(text, type = 'info') {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        function showStep(stepNumber) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+        }
+
+        function validateMobile(mobile) {
+            const mobileRegex = /^09\d{9}$/;
+            return mobileRegex.test(mobile);
+        }
+
+        async function sendOtp() {
+            const mobile = document.getElementById('mobile').value.trim();
+            const sendBtn = document.getElementById('sendOtpBtn');
+            
+            if (!validateMobile(mobile)) {
+                showMessage('شماره موبایل وارد شده صحیح نمی‌باشد', 'error');
+                document.getElementById('mobile').classList.add('error');
+                return;
+            }
+
+            document.getElementById('mobile').classList.remove('error');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<div class="spinner"></div> در حال ارسال...';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/otp`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        mobile: mobile
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status) {
+                    currentMobile = mobile;
+                    showMessage('کد تایید با موفقیت ارسال شد', 'success');
+                    showStep(2);
+                    startCountdown(120); // 2 minutes countdown
+                } else {
+                    showMessage(data.message || 'خطا در ارسال کد تایید', 'error');
+                }
+            } catch (error) {
+                console.error('Error sending OTP:', error);
+                showMessage('خطا در برقراری ارتباط با سرور', 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = '<span class="material-icons">send</span> ارسال کد تایید';
+            }
+        }
+
+        async function verifyOtp() {
+            const otp = document.getElementById('otp').value.trim();
+            const verifyBtn = document.getElementById('verifyOtpBtn');
+
+            if (!otp || otp.length !== 6) {
+                showMessage('کد تایید باید 6 رقم باشد', 'error');
+                document.getElementById('otp').classList.add('error');
+                return;
+            }
+
+            document.getElementById('otp').classList.remove('error');
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = '<div class="spinner"></div> در حال تایید...';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/join`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        otp: otp,
+                        mobile: currentMobile
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status && data.data && data.data.user && data.data.token) {
+                    // Save user data - restructure the response
+                    const userData = {
+                        token: data.data.token,
+                        user: data.data.user
+                    };
+                    
+                    saveUserData(userData);
+                    
+                    showMessage('ورود با موفقیت انجام شد', 'success');
+                    
+                    // Notify VSCode extension
+                    vscode.postMessage({
+                        command: 'loginSuccess',
+                        data: userData
+                    });
+
+                    setTimeout(() => {
+                        showLoggedInState(userData);
+                    }, 1500);
+                } else {
+                    showMessage('کد تایید نادرست است', 'error');
+                }
+            } catch (error) {
+                console.error('Error verifying OTP:', error);
+                showMessage('خطا در برقراری ارتباط با سرور', 'error');
+            } finally {
+                verifyBtn.disabled = false;
+                verifyBtn.innerHTML = '<span class="material-icons">verified_user</span> تایید کد';
+            }
+        }
+
+        function startCountdown(seconds) {
+            const countdownEl = document.getElementById('countdown');
+            let remaining = seconds;
+
+            countdownTimer = setInterval(() => {
+                const minutes = Math.floor(remaining / 60);
+                const seconds = remaining % 60;
+                countdownEl.textContent = `ارسال مجدد کد در ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                remaining--;
+                
+                if (remaining < 0) {
+                    clearInterval(countdownTimer);
+                    countdownEl.innerHTML = '<button class="btn btn-secondary" onclick="sendOtp()">ارسال مجدد کد</button>';
+                }
+            }, 1000);
+        }
+
+        function goBackToMobile() {
+            clearInterval(countdownTimer);
+            showStep(1);
+            document.getElementById('otp').value = '';
+        }
+
+        function showLoggedInState(userData) {
+            showStep(3);
+            
+            const fullName = `${userData.user.data.firstName} ${userData.user.data.lastName}`;
+            const credit = userData.user.financial ? userData.user.financial.credit : 0;
+            
+            document.getElementById('userFullName').textContent = `نام: ${fullName}`;
+            document.getElementById('userMobile').textContent = `موبایل: ${userData.user.data.mobile}`;
+            document.getElementById('userCredit').textContent = `اعتبار: ${credit.toLocaleString('fa-IR')} تومان`;
+        }
+
+        function logout() {
+            // Clear user data
+            clearUserData();
+            
+            // Notify VSCode extension
+            vscode.postMessage({
+                command: 'logout'
+            });
+
+            // Reset form
+            showStep(1);
+            document.getElementById('mobile').value = '';
+            document.getElementById('otp').value = '';
+            currentMobile = '';
+            
+            showMessage('با موفقیت خارج شدید', 'info');
+        }
+
+        // Local storage functions
+        function saveUserData(userData) {
+            try {
+                localStorage.setItem('helpix_user_data', JSON.stringify(userData));
+                
+                // Also send to extension for global storage
+                vscode.postMessage({
+                    command: 'saveUserData',
+                    data: userData
+                });
+            } catch (error) {
+                console.error('Error saving user data:', error);
+            }
+        }
+
+        function getUserData() {
+            try {
+                const data = localStorage.getItem('helpix_user_data');
+                return data ? JSON.parse(data) : null;
+            } catch (error) {
+                console.error('Error getting user data:', error);
+                return null;
+            }
+        }
+
+        function clearUserData() {
+            try {
+                localStorage.removeItem('helpix_user_data');
+                
+                // Also clear from extension
+                vscode.postMessage({
+                    command: 'clearUserData'
+                });
+            } catch (error) {
+                console.error('Error clearing user data:', error);
+            }
+        }
+
+        // Handle messages from extension
+        window.addEventListener('message', event => {
+            const message = event.data;
+            
+            switch (message.command) {
+                case 'setUserData':
+                    if (message.data) {
+                        showLoggedInState(message.data);
+                    }
+                    break;
+            }
+        });
+
+        // Auto-focus and enter key handling
+        document.getElementById('mobile').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendOtp();
+            }
+        });
+
+        document.getElementById('otp').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                verifyOtp();
+            }
+        });
+
+        // Auto-focus on OTP input when step 2 is shown
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.target.id === 'step2' && mutation.target.classList.contains('active')) {
+                    setTimeout(() => {
+                        document.getElementById('otp').focus();
+                    }, 100);
+                }
+            });
+        });
+
+        observer.observe(document.getElementById('step2'), {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+    </script>
+</body>
+</html>

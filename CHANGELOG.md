@@ -2,6 +2,38 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.5.0] - 2025-08-16
+
+### 🔐 New Authentication System
+- **User Login Integration**: Complete OAuth login system with mobile OTP verification
+- **Helpix.app API Integration**: Advanced IP lookup features for authenticated users
+- **Secure Token Management**: User data stored securely in extension global state
+- **Hub User Interface**: Login status display with user profile in Persian Tools Hub
+
+### 🚀 Enhanced Features
+- **Advanced IP Details**: Premium API access for authenticated users with threat analysis
+- **User Profile Management**: Display user name, mobile, credit balance, and status
+- **Smart API Switching**: Automatic fallback to free API for non-authenticated users
+- **Login Webview**: Beautiful Persian login interface with OTP verification flow
+
+### 🎨 UI/UX Improvements
+- **User Card Interface**: Professional user profile display in hub
+- **Login Prompt**: Elegant call-to-action for non-authenticated users
+- **Status Indicators**: Clear visual feedback for authentication status
+- **Responsive Design**: Mobile-friendly login and user interface
+
+### 🔧 Technical Enhancements
+- **VSCode API Integration**: Seamless communication between webviews and extension
+- **Global State Management**: Persistent user data across VS Code sessions
+- **Message Handling**: Robust webview-to-extension communication system
+- **Context Management**: User context passed to all relevant tools
+
+### 🛡️ Security Features
+- **Token-based Authentication**: Secure JWT token management
+- **Session Persistence**: Automatic login state restoration
+- **Secure Storage**: Extension global state for sensitive user data
+- **API Integration**: RESTful API communication with error handling
+
 ## [1.4.0] - 2025-08-12
 
 ### Enhanced
