@@ -438,22 +438,45 @@
 
     <script>
         // Global variables for calendar
-        let currentCalendarYear = 1403;
-        let currentCalendarMonth = 1;
+        let currentCalendarYear = 1404;
+        let currentCalendarMonth = 5; // مرداد
         let selectedDay = null;
         let selectedMonth = null;
         let selectedYear = null;
 
         // Simplified Persian to Gregorian conversion
         function jalaliToGregorian(jy, jm, jd) {
-            // Hard-coded for current year 1403
+            // Hard-coded for current year 1404 (2025)
+            if (jy === 1404) {
+                const monthOffsets = [
+                    0,      // فروردین starts at March 21, 2025
+                    31,     // اردیبهشت starts at April 21, 2025  
+                    62,     // خرداد starts at May 22, 2025
+                    93,     // تیر starts at June 22, 2025
+                    124,    // مرداد starts at July 23, 2025 (Wednesday)
+                    155,    // شهریور starts at August 23, 2025
+                    186,    // مهر starts at September 23, 2025
+                    216,    // آبان starts at October 23, 2025
+                    246,    // آذر starts at November 22, 2025
+                    276,    // دی starts at December 22, 2025
+                    306,    // بهمن starts at January 21, 2026
+                    336     // اسفند starts at February 20, 2026
+                ];
+                
+                const baseDate = new Date(2025, 2, 21); // March 21, 2025 = 1 Farvardin 1404
+                const dayOffset = monthOffsets[jm - 1] + jd - 1;
+                const resultDate = new Date(baseDate.getTime() + dayOffset * 24 * 60 * 60 * 1000);
+                return [resultDate.getFullYear(), resultDate.getMonth() + 1, resultDate.getDate()];
+            }
+            
+            // Hard-coded for year 1403 (2024)
             if (jy === 1403) {
                 const monthOffsets = [
                     0,      // فروردین starts at March 20, 2024
                     31,     // اردیبهشت starts at April 20, 2024  
                     62,     // خرداد starts at May 21, 2024
                     93,     // تیر starts at June 21, 2024
-                    126,    // مرداد starts at July 24, 2024 (corrected)
+                    126,    // مرداد starts at July 24, 2024 (Wednesday)
                     157,    // شهریور starts at August 24, 2024
                     188,    // مهر starts at September 24, 2024
                     218,    // آبان starts at October 24, 2024
@@ -470,8 +493,8 @@
             }
             
             // Fallback to approximate calculation for other years
-            const baseYear = 1403;
-            const baseDate = new Date(2024, 2, 20);
+            const baseYear = 1404;
+            const baseDate = new Date(2025, 2, 21);
             const yearDiff = jy - baseYear;
             const approxDate = new Date(baseDate.getFullYear() + yearDiff, baseDate.getMonth(), baseDate.getDate());
             return [approxDate.getFullYear(), approxDate.getMonth() + 1, approxDate.getDate()];
