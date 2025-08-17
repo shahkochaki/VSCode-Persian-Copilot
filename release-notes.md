@@ -1,3 +1,24 @@
+# v1.5.2: Hub Interface & Calendar Accuracy Fixes
+
+## 🔧 Hub Interface Improvements
+- **Fixed User Display**: Resolved userAvatar, userName, userMobile display issues in hub
+- **Enhanced Error Handling**: Added proper JavaScript error checking and debugging
+- **Restored User Card**: Fixed user card functionality that was previously commented out
+- **Better State Management**: Improved user interface state handling and updates
+
+## 📅 Persian Calendar Enhancements  
+- **Accurate Date Alignment**: Fixed calendar day alignment for Persian year 1404 (2025)
+- **Correct Date Mapping**: Ensured 1 Mordad 1404 displays properly as Wednesday July 23, 2025
+- **Multi-Year Support**: Enhanced date conversion algorithm for years 1403 and 1404
+- **Grid Positioning**: Improved calendar grid layout with proper weekday positioning
+
+## 🚀 Technical Updates
+- **Improved Code Reliability**: Better error handling throughout the application
+- **Enhanced Debugging**: Added console logging for troubleshooting user interface issues
+- **Code Quality**: Improved JavaScript code structure and element validation
+
+---
+
 # v1.5.1: Enhanced Persian Calendar Widget
 
 ## ✨ New Features
