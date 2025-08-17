@@ -25,6 +25,7 @@ interface UserData {
 }
 
 let currentUser: UserData | null = null;
+let hubWebviewProvider: vscode.WebviewViewProvider | null = null;
 
 export function activate(context: vscode.ExtensionContext) {
 	// --- Initialize user data ---
@@ -65,6 +66,12 @@ export function activate(context: vscode.ExtensionContext) {
 	// Persian Copilot Activity Bar Icon (View Container) - Always register
 	const provider = vscode.window.registerWebviewViewProvider('persian-tools-hub', {
 		resolveWebviewView(webviewView) {
+			// Store reference to webview for updates
+			hubWebviewProvider = {
+				resolveWebviewView: () => {},
+				webview: webviewView.webview
+			} as any;
+
 			const htmlPath = path.join(__dirname, 'webviews', 'hub.html');
 			let html = '';
 			try {
@@ -74,6 +81,11 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			webviewView.webview.options = { enableScripts: true };
 			webviewView.webview.html = html;
+			
+			// Send user data when webview loads
+			setTimeout(() => {
+				updateHubWebview();
+			}, 500);
 			
 			// Handle messages from hub webview in Activity Bar
 			webviewView.webview.onDidReceiveMessage(
@@ -651,6 +663,7 @@ function loadUserData(context: vscode.ExtensionContext) {
 		if (userData && userData.token) {
 			currentUser = userData;
 			console.log('Loaded user data for:', userData.user.data.firstName);
+			updateHubWebview(); // Update hub after loading data
 		}
 	} catch (error) {
 		console.error('Error loading user data:', error);
@@ -662,6 +675,7 @@ function saveUserData(context: vscode.ExtensionContext, userData: UserData) {
 		currentUser = userData;
 		context.globalState.update('helpix_user_data', userData);
 		console.log('Saved user data for:', userData.user.data.firstName);
+		updateHubWebview(); // Update hub after saving data
 	} catch (error) {
 		console.error('Error saving user data:', error);
 	}
@@ -672,8 +686,23 @@ function clearUserData(context: vscode.ExtensionContext) {
 		currentUser = null;
 		context.globalState.update('helpix_user_data', undefined);
 		console.log('Cleared user data');
+		updateHubWebview(); // Update hub after clearing data
 	} catch (error) {
 		console.error('Error clearing user data:', error);
+	}
+}
+
+function updateHubWebview() {
+	try {
+		if (hubWebviewProvider && (hubWebviewProvider as any).webview) {
+			(hubWebviewProvider as any).webview.postMessage({
+				command: 'setUserData',
+				data: currentUser
+			});
+			console.log('Updated hub webview with user data');
+		}
+	} catch (error) {
+		console.error('Error updating hub webview:', error);
 	}
 }
 

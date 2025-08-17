@@ -2,6 +2,20 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.5.2] - 2025-08-17
+
+### 🔧 Bug Fixes
+- **Calendar Day Alignment**: Fixed Persian calendar grid alignment - days now start on correct weekdays 
+- **Hub User Info Updates**: Fixed automatic user data refresh in hub interface
+- **Month Start Position**: Corrected calculation for first day of month display in calendar widget
+
+### 🎯 Technical Improvements  
+- Improved calendar date conversion algorithm accuracy
+- Enhanced webview data synchronization for real-time user info updates
+- Optimized Persian calendar rendering for better visual alignment
+
+---
+
 ## [1.5.1] - 2025-08-17 ✨
 
 ### 🗓️ Enhanced Persian Calendar Widget
