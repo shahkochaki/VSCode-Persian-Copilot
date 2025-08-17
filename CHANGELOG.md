@@ -2,6 +2,34 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.6.0] - Coming Soon 🚀
+
+### 📝 Persian ToDo Manager (Upcoming)
+- **Smart Task Organization**: Create, manage, and organize Persian tasks with priority levels
+- **Persian Calendar Integration**: Set deadlines using Persian dates with smart reminders
+- **Tag System**: Organize tasks with Persian labels and categories
+- **Visual Dashboard**: Beautiful progress tracking with charts and analytics
+- **Time Tracking**: Built-in timer for tasks with productivity reports
+- **Cross-Device Sync**: Access your tasks across multiple VS Code instances
+- **Notification System**: Smart reminders based on Persian calendar
+
+### 📚 Developer Cheat Sheets Hub (Upcoming)
+- **Quick Reference Cards**: Instant access to syntax and commands in Persian
+- **CSS RTL Properties**: Comprehensive guide for right-to-left styling
+- **Web Development**: HTML, CSS, JavaScript references in Persian
+- **Python Cheat Sheets**: Complete Python reference with Persian explanations
+- **React & Frontend**: Modern framework guides and best practices
+- **Database Queries**: SQL and NoSQL reference cards
+- **Terminal Commands**: Linux, Windows, and Git command references
+- **Algorithm Templates**: Common algorithms and data structures with Persian comments
+
+### 🎯 Enhanced Integration
+- **Smart Search**: Find cheat sheets and todos with Persian keyword search
+- **Context-Aware Suggestions**: Relevant cheat sheets based on current file type
+- **Export Functions**: Export todos and cheat sheets for offline use
+
+---
+
 ## [1.5.0] - 2025-08-16
 
 ### 🔐 New Authentication System

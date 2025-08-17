@@ -10,6 +10,36 @@
 
 ---
 
+## 🚀 **COMING SOON - Exciting New Features!**
+
+### 📝 **Persian ToDo Manager** 
+> 🔜 **Coming in v1.6.0**
+
+Get ready for the most comprehensive Persian task management system directly in VS Code:
+- **📋 Smart Task Organization** - Create, manage, and organize your Persian tasks
+- **⏰ Time Tracking & Deadlines** - Set Persian dates and track progress
+- **🏷️ Persian Tags & Categories** - Organize with Persian labels
+- **📊 Visual Progress Dashboard** - Beautiful charts and analytics
+- **🔔 Smart Notifications** - Persian calendar-based reminders
+- **📱 Cross-Device Sync** - Access your tasks everywhere
+
+### 📚 **Developer Cheat Sheets Hub**
+> 🔜 **Coming in v1.6.0**
+
+The ultimate collection of Persian developer reference materials:
+- **⚡ Quick Reference Cards** - Instant access to syntax and commands
+- **🎨 CSS Persian Properties** - RTL-specific styling guides
+- **🌐 Web Development** - HTML, CSS, JavaScript in Persian
+- **🐍 Python Cheat Sheets** - Complete Python reference in Persian
+- **⚛️ React & Frontend** - Modern framework guides
+- **🗄️ Database Queries** - SQL and NoSQL references
+- **🔧 Terminal Commands** - Linux, Windows, and Git commands
+- **📐 Algorithm Templates** - Common algorithms and data structures
+
+**💡 Stay tuned!** These features are in active development and will revolutionize your Persian development workflow.
+
+---
+
 ## 🇬🇧 English
 
 **VSCode Persian Copilot** is a comprehensive, professional extension that brings the Persian/Farsi developer experience to Visual Studio Code. It provides seamless right-to-left (RTL) support, a complete Persian Tools Hub, and modern typography for an enhanced coding experience.
@@ -142,6 +172,36 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🇮🇷 فارسی
 
 **افزونه VSCode Persian Copilot** یک مجموعه کامل و حرفه‌ای برای توسعه‌دهندگان فارسی‌زبان است که تجربه برنامه‌نویسی با VS Code را متحول می‌کند.
+
+## 🚀 **به زودی - امکانات هیجان‌انگیز جدید!**
+
+### 📝 **مدیریت کارهای فارسی (Persian ToDo Manager)** 
+> 🔜 **در نسخه 1.6.0 عرضه می‌شود**
+
+آماده باشید برای کامل‌ترین سیستم مدیریت کارها به زبان فارسی مستقیماً در VS Code:
+- **📋 سازماندهی هوشمند کارها** - ایجاد، مدیریت و سازماندهی کارهای فارسی
+- **⏰ ردیابی زمان و مهلت‌ها** - تنظیم تاریخ شمسی و پیگیری پیشرفت
+- **🏷️ برچسب‌ها و دسته‌بندی فارسی** - سازماندهی با برچسب‌های فارسی
+- **📊 داشبورد تصویری پیشرفت** - نمودارها و آنالیزهای زیبا
+- **🔔 اعلان‌های هوشمند** - یادآوری‌ها بر اساس تقویم شمسی
+- **📱 همگام‌سازی چندپلتفرمه** - دسترسی به کارهایتان در همه جا
+
+### 📚 **مرکز برگه‌های تقلب توسعه‌دهنده - Cheat Sheet**
+> 🔜 **در نسخه 1.6.0 عرضه می‌شود**
+
+کامل‌ترین مجموعه منابع مرجع فارسی برای توسعه‌دهندگان:
+- **⚡ کارت‌های مرجع سریع** - دسترسی فوری به نحو و دستورات
+- **🎨 ویژگی‌های فارسی CSS** - راهنمای استایل‌دهی RTL
+- **🌐 توسعه وب** - HTML، CSS، JavaScript به فارسی
+- **🐍 برگه‌های تقلب Python** - مرجع کامل Python به فارسی
+- **⚛️ React و فرانت‌اند** - راهنمای فریمورک‌های مدرن
+- **🗄️ کوئری‌های پایگاه داده** - مرجع SQL و NoSQL
+- **🔧 دستورات ترمینال** - دستورات Linux، Windows و Git
+- **📐 قالب‌های الگوریتم** - الگوریتم‌ها و ساختارهای داده رایج
+
+**💡 منتظر بمانید!** این امکانات در حال توسعه فعال هستند و گردش کار توسعه فارسی شما را متحول خواهند کرد.
+
+---
 
 ### 🌟 امکانات کلیدی
 
