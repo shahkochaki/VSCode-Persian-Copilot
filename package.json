@@ -210,7 +210,7 @@
         "command": "vscode-persian-copilot.moneyConvert",
         "title": "💰 Money Converter",
         "category": "Persian Copilot",
-        "icon": "$(currency)"
+        "icon": "$(credit-card)"
       },
       {
         "command": "vscode-persian-copilot.numberToWords",
