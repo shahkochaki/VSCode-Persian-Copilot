@@ -231,7 +231,7 @@
             background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
             color: white;
             font-weight: 700;
-            border: 2px solid #ff4757;
+            /* border: 2px solid #ff4757; */
             box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
             transform: scale(1.1);
             position: relative;
@@ -250,7 +250,7 @@
             background: linear-gradient(135deg, #28a745, #34ce57);
             color: white;
             font-weight: 600;
-            border: 2px solid #20c997;
+            /* border: 2px solid #20c997; */
             box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
             transform: scale(1.05);
         }
@@ -262,7 +262,7 @@
             right: -3px;
             font-size: 10px;
             color: white;
-            background: #20c997;
+            background: #004b0a;
             border-radius: 50%;
             width: 14px;
             height: 14px;
@@ -615,8 +615,15 @@
                     const today = new persianDate();
                     const gregorianToday = today.toCalendar('gregorian');
                     
+                    // Get Persian date parts
                     const persianDateStr = today.format('D MMMM YYYY');
-                    const gregDateStr = gregorianToday.format('D MMMM YYYY');
+                    
+                    // Get Gregorian date in English
+                    const gregYear = gregorianToday.year();
+                    const gregMonth = gregorianToday.month();
+                    const gregDay = gregorianToday.date();
+                    const gregMonthsEng = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    const gregDateStr = gregDay + ' ' + gregMonthsEng[gregMonth - 1] + ' ' + gregYear;
                     
                     document.getElementById('currentDate').innerHTML = 
                         '<div class="today-emoji">🌟</div>' +
@@ -711,47 +718,59 @@
                     const persianDateObj = new persianDate([jy, jm, jd]);
                     const gregorianDateObj = persianDateObj.toCalendar('gregorian');
                     
-                    const isoDate = `${gregorianDateObj.year()}-${String(gregorianDateObj.month()).padStart(2, '0')}-${String(gregorianDateObj.date()).padStart(2, '0')}`;
+                    const isoDate = gregorianDateObj.year() + '-' + String(gregorianDateObj.month()).padStart(2, '0') + '-' + String(gregorianDateObj.date()).padStart(2, '0');
                     document.getElementById('gDate').value = isoDate;
                     
-                    document.getElementById('result').innerHTML = `
-                        <h4>✅ نتیجه تبدیل:</h4>
-                        <div class="result-grid">
-                            <div class="date-column">
-                                <h5>تاریخ خورشیدی</h5>
-                                <div class="date-number">${jy}/${String(jm).padStart(2, '0')}/${String(jd).padStart(2, '0')}</div>
-                                <div class="date-full">${persianDateObj.format('dddd')} - ${persianDateObj.format('D MMMM YYYY')}</div>
-                            </div>
-                            <div class="date-column">
-                                <h5>تاریخ میلادی</h5>
-                                <div class="date-number">${isoDate}</div>
-                                <div class="date-full">${gregorianDateObj.format('dddd')} - ${gregorianDateObj.format('MMMM D, YYYY')}</div>
-                            </div>
-                        </div>
-                    `;
+                    // Get English month names
+                    const gregMonthsEng = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    const gregDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    
+                    // Create a JavaScript Date to get day of week
+                    const jsDate = new Date(gregorianDateObj.year(), gregorianDateObj.month() - 1, gregorianDateObj.date());
+                    const gregDayName = gregDayNames[jsDate.getDay()];
+                    const gregMonthName = gregMonthsEng[gregorianDateObj.month() - 1];
+                    const gregDateFull = gregDayName + ' - ' + gregorianDateObj.date() + ' ' + gregMonthName + ', ' + gregorianDateObj.year();
+                    
+                    document.getElementById('result').innerHTML = 
+                        '<h4>✅ نتیجه تبدیل:</h4>' +
+                        '<div class="result-grid">' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ خورشیدی</h5>' +
+                                '<div class="date-number">' + jy + '/' + String(jm).padStart(2, '0') + '/' + String(jd).padStart(2, '0') + '</div>' +
+                                '<div class="date-full">' + persianDateObj.format('dddd') + ' - ' + persianDateObj.format('D MMMM YYYY') + '</div>' +
+                            '</div>' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ میلادی</h5>' +
+                                '<div class="date-number">' + isoDate + '</div>' +
+                                '<div class="date-full">' + gregDateFull + '</div>' +
+                            '</div>' +
+                        '</div>';
                 } else {
-                    const [gy, gm, gd] = jalaliToGregorian(jy, jm, jd);
+                    const gregorianResult = jalaliToGregorian(jy, jm, jd);
+                    const gy = gregorianResult[0];
+                    const gm = gregorianResult[1];
+                    const gd = gregorianResult[2];
+                    
                     const persianMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
                     const gregMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                     
-                    const isoDate = `${gy}-${String(gm).padStart(2, '0')}-${String(gd).padStart(2, '0')}`;
+                    const isoDate = gy + '-' + String(gm).padStart(2, '0') + '-' + String(gd).padStart(2, '0');
                     document.getElementById('gDate').value = isoDate;
                     
-                    document.getElementById('result').innerHTML = `
-                        <h4>✅ نتیجه تبدیل:</h4>
-                        <div class="result-grid">
-                            <div class="date-column">
-                                <h5>تاریخ خورشیدی</h5>
-                                <div class="date-number">${jy}/${String(jm).padStart(2, '0')}/${String(jd).padStart(2, '0')}</div>
-                                <div class="date-full">${jd} ${persianMonths[jm-1]} ${jy}</div>
-                            </div>
-                            <div class="date-column">
-                                <h5>تاریخ میلادی</h5>
-                                <div class="date-number">${isoDate}</div>
-                                <div class="date-full">${gd} ${gregMonths[gm-1]}, ${gy}</div>
-                            </div>
-                        </div>
-                    `;
+                    document.getElementById('result').innerHTML = 
+                        '<h4>✅ نتیجه تبدیل:</h4>' +
+                        '<div class="result-grid">' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ خورشیدی</h5>' +
+                                '<div class="date-number">' + jy + '/' + String(jm).padStart(2, '0') + '/' + String(jd).padStart(2, '0') + '</div>' +
+                                '<div class="date-full">' + jd + ' ' + persianMonths[jm-1] + ' ' + jy + '</div>' +
+                            '</div>' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ میلادی</h5>' +
+                                '<div class="date-number">' + isoDate + '</div>' +
+                                '<div class="date-full">' + gd + ' ' + gregMonths[gm-1] + ', ' + gy + '</div>' +
+                            '</div>' +
+                        '</div>';
                 }
                 
             } catch (e) {
@@ -779,27 +798,40 @@
                     document.getElementById('jMonth').value = persianDateObj.month();
                     document.getElementById('jDay').value = persianDateObj.date();
                     
-                    document.getElementById('result').innerHTML = `
-                        <h4>✅ نتیجه تبدیل:</h4>
-                        <div class="result-grid">
-                            <div class="date-column">
-                                <h5>تاریخ خورشیدی</h5>
-                                <div class="date-number">${persianDateObj.year()}/${String(persianDateObj.month()).padStart(2, '0')}/${String(persianDateObj.date()).padStart(2, '0')}</div>
-                                <div class="date-full">${persianDateObj.format('dddd')} - ${persianDateObj.format('D MMMM YYYY')}</div>
-                            </div>
-                            <div class="date-column">
-                                <h5>تاریخ میلادی</h5>
-                                <div class="date-number">${gregorianDateObj.year()}-${String(gregorianDateObj.month()).padStart(2, '0')}-${String(gregorianDateObj.date()).padStart(2, '0')}</div>
-                                <div class="date-full">${gregorianDateObj.format('dddd')} - ${gregorianDateObj.format('MMMM D, YYYY')}</div>
-                            </div>
-                        </div>
-                    `;
+                    // Get English month names
+                    const gregMonthsEng = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                    const gregDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    
+                    // Create a JavaScript Date to get day of week
+                    const jsDate = new Date(gregorianDateObj.year(), gregorianDateObj.month() - 1, gregorianDateObj.date());
+                    const gregDayName = gregDayNames[jsDate.getDay()];
+                    const gregMonthName = gregMonthsEng[gregorianDateObj.month() - 1];
+                    const gregDateFull = gregDayName + ' - ' + gregorianDateObj.date() + ' ' + gregMonthName + ', ' + gregorianDateObj.year();
+                    
+                    document.getElementById('result').innerHTML = 
+                        '<h4>✅ نتیجه تبدیل:</h4>' +
+                        '<div class="result-grid">' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ خورشیدی</h5>' +
+                                '<div class="date-number">' + persianDateObj.year() + '/' + String(persianDateObj.month()).padStart(2, '0') + '/' + String(persianDateObj.date()).padStart(2, '0') + '</div>' +
+                                '<div class="date-full">' + persianDateObj.format('dddd') + ' - ' + persianDateObj.format('D MMMM YYYY') + '</div>' +
+                            '</div>' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ میلادی</h5>' +
+                                '<div class="date-number">' + gregorianDateObj.year() + '-' + String(gregorianDateObj.month()).padStart(2, '0') + '-' + String(gregorianDateObj.date()).padStart(2, '0') + '</div>' +
+                                '<div class="date-full">' + gregDateFull + '</div>' +
+                            '</div>' +
+                        '</div>';
                 } else {
                     const gy = date.getFullYear();
                     const gm = date.getMonth() + 1;
                     const gd = date.getDate();
                     
-                    const [jy, jm, jd] = gregorianToJalali(gy, gm, gd);
+                    const jalaliResult = gregorianToJalali(gy, gm, gd);
+                    const jy = jalaliResult[0];
+                    const jm = jalaliResult[1];
+                    const jd = jalaliResult[2];
+                    
                     const persianMonths = ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'];
                     const gregMonths = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
                     
@@ -807,21 +839,20 @@
                     document.getElementById('jMonth').value = jm;
                     document.getElementById('jDay').value = jd;
                     
-                    document.getElementById('result').innerHTML = `
-                        <h4>✅ نتیجه تبدیل:</h4>
-                        <div class="result-grid">
-                            <div class="date-column">
-                                <h5>تاریخ خورشیدی</h5>
-                                <div class="date-number">${jy}/${String(jm).padStart(2, '0')}/${String(jd).padStart(2, '0')}</div>
-                                <div class="date-full">${jd} ${persianMonths[jm-1]} ${jy}</div>
-                            </div>
-                            <div class="date-column">
-                                <h5>تاریخ میلادی</h5>
-                                <div class="date-number">${gy}-${String(gm).padStart(2, '0')}-${String(gd).padStart(2, '0')}</div>
-                                <div class="date-full">${gd} ${gregMonths[gm-1]}, ${gy}</div>
-                            </div>
-                        </div>
-                    `;
+                    document.getElementById('result').innerHTML = 
+                        '<h4>✅ نتیجه تبدیل:</h4>' +
+                        '<div class="result-grid">' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ خورشیدی</h5>' +
+                                '<div class="date-number">' + jy + '/' + String(jm).padStart(2, '0') + '/' + String(jd).padStart(2, '0') + '</div>' +
+                                '<div class="date-full">' + jd + ' ' + persianMonths[jm-1] + ' ' + jy + '</div>' +
+                            '</div>' +
+                            '<div class="date-column">' +
+                                '<h5>تاریخ میلادی</h5>' +
+                                '<div class="date-number">' + gy + '-' + String(gm).padStart(2, '0') + '-' + String(gd).padStart(2, '0') + '</div>' +
+                                '<div class="date-full">' + gd + ' ' + gregMonths[gm-1] + ', ' + gy + '</div>' +
+                            '</div>' +
+                        '</div>';
                 }
                 
             } catch (e) {
