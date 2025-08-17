@@ -533,7 +533,7 @@
     <!-- User Section -->
     <div class="user-section">
         <div id="userCard" class="user-card" style="display: none;">
-            <!-- <div class="user-avatar" id="userAvatar">�</div> -->
+            <!-- <div class="user-avatar" id="userAvatar">👤</div> -->
             <div class="user-info">
                 <h3 id="userName">نام کاربر</h3>
                 <p id="userMobile">موبایل کاربر</p>
@@ -658,7 +658,10 @@
             const loginPrompt = document.getElementById('loginPrompt');
             const headerTitle = document.querySelector('h1');
 
+            console.log('Hub: Received user data:', userData); // Debug log
+
             if (userData && userData.token) {
+                console.log('Hub: User is logged in, updating interface'); // Debug log
                 // Show user card
                 userCard.style.display = 'block';
                 loginPrompt.style.display = 'none';
@@ -670,15 +673,22 @@
                 // Update user info
                 const initials = fullName.split(' ').map(n => n[0]).join('');
                 
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('userName').textContent = fullName;
-                document.getElementById('userMobile').textContent = userData.user.data.mobile;
+                const userAvatar = document.getElementById('userAvatar');
+                const userName = document.getElementById('userName');
+                const userMobile = document.getElementById('userMobile');
+                
+                if (userAvatar) userAvatar.textContent = initials;
+                if (userName) userName.textContent = fullName;
+                if (userMobile) userMobile.textContent = userData.user.data.mobile;
                 
                 if (userData.user.financial && userData.user.financial.credit !== undefined) {
-                    document.getElementById('userCredit').textContent = 
-                        userData.user.financial.credit.toLocaleString('fa-IR') + ' تومان';
+                    const userCredit = document.getElementById('userCredit');
+                    if (userCredit) {
+                        userCredit.textContent = userData.user.financial.credit.toLocaleString('fa-IR') + ' تومان';
+                    }
                 }
             } else {
+                console.log('Hub: User not logged in, showing login prompt'); // Debug log
                 // Show login prompt
                 userCard.style.display = 'none';
                 loginPrompt.style.display = 'block';
