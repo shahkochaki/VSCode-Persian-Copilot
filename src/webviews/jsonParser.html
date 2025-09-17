@@ -6,7 +6,54 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.min.js"></script>
+    
+    <!-- js-beautify library with fallback -->
+    <script>
+        // Function to load js-beautify with fallback CDNs
+        function loadJsBeautify() {
+            const cdns = [
+                'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.min.js',
+                'https://unpkg.com/js-beautify@1.14.9/js/lib/beautify.min.js',
+                'https://cdn.jsdelivr.net/npm/js-beautify@1.14.9/js/lib/beautify.min.js'
+            ];
+            
+            let currentCdnIndex = 0;
+            
+            function tryLoadScript() {
+                if (currentCdnIndex >= cdns.length) {
+                    console.error('❌ Failed to load js-beautify from all CDNs');
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = cdns[currentCdnIndex];
+                
+                script.onload = function() {
+                    console.log(`✅ js-beautify loaded successfully from: ${cdns[currentCdnIndex]}`);
+                    // Test the library
+                    setTimeout(() => {
+                        const testFunc = getBeautifyFunction();
+                        if (testFunc) {
+                            console.log('🎉 js-beautify is ready to use!');
+                        }
+                    }, 100);
+                };
+                
+                script.onerror = function() {
+                    console.warn(`⚠️ Failed to load js-beautify from: ${cdns[currentCdnIndex]}`);
+                    currentCdnIndex++;
+                    tryLoadScript();
+                };
+                
+                document.head.appendChild(script);
+            }
+            
+            tryLoadScript();
+        }
+        
+        // Start loading immediately
+        loadJsBeautify();
+    </script>
     <style>
         :root {
             --vscode-foreground: var(--vscode-editor-foreground, #e1e4e8);
@@ -588,17 +635,38 @@
             return null;
         }
 
-        // Helper function to get js-beautify function
+        // Enhanced helper function to get js-beautify function
         function getBeautifyFunction() {
-            if (typeof js_beautify !== 'undefined') {
-                return js_beautify;
-            } else if (typeof beautify !== 'undefined') {
-                return beautify;
-            } else if (typeof window.js_beautify !== 'undefined') {
-                return window.js_beautify;
-            } else if (typeof window.beautify !== 'undefined') {
-                return window.beautify;
+            // Check different possible global names for js-beautify
+            const possibleNames = [
+                'js_beautify',
+                'beautify', 
+                'jsBeautify',
+                'window.js_beautify',
+                'window.beautify',
+                'window.jsBeautify'
+            ];
+            
+            for (const name of possibleNames) {
+                try {
+                    let func;
+                    if (name.startsWith('window.')) {
+                        const propName = name.split('.')[1];
+                        func = window[propName];
+                    } else {
+                        func = eval(`typeof ${name} !== 'undefined' ? ${name} : undefined`);
+                    }
+                    
+                    if (typeof func === 'function') {
+                        console.log(`🎯 Found js-beautify as: ${name}`);
+                        return func;
+                    }
+                } catch (e) {
+                    // Continue to next possibility
+                }
             }
+            
+            console.warn('⚠️ js-beautify function not found');
             return null;
         }
 
@@ -1313,20 +1381,49 @@
 
         // Auto-process on page load if there's content
         window.addEventListener('load', () => {
-            // Test js-beautify availability
-            console.log('🔍 Testing js-beautify availability...');
-            const beautifyFunc = getBeautifyFunction();
-            if (beautifyFunc) {
-                console.log('✅ js-beautify is loaded and ready!');
-                try {
-                    const testJson = '{"test":"value"}';
-                    const formatted = beautifyFunc(testJson, { indent_size: 2 });
-                    console.log('✅ js-beautify test successful:', formatted);
-                } catch (e) {
-                    console.error('❌ js-beautify test failed:', e);
+            console.log('🚀 Page loaded, initializing JSON Parser...');
+            
+            // Enhanced js-beautify testing
+            function testJsBeautify() {
+                console.log('🔍 Testing js-beautify availability...');
+                const beautifyFunc = getBeautifyFunction();
+                
+                if (beautifyFunc) {
+                    console.log('✅ js-beautify function found!');
+                    
+                    // Test with sample JSON
+                    try {
+                        const testJson = '{"name":"تست","value":123,"array":[1,2,3]}';
+                        const formatted = beautifyFunc(testJson, { 
+                            indent_size: 2,
+                            space_in_empty_paren: false,
+                            preserve_newlines: true,
+                            max_preserve_newlines: 2
+                        });
+                        
+                        console.log('✅ js-beautify test successful!');
+                        console.log('📄 Sample formatting:');
+                        console.log(formatted);
+                        return true;
+                    } catch (e) {
+                        console.error('❌ js-beautify test failed:', e);
+                        return false;
+                    }
+                } else {
+                    console.error('❌ js-beautify not found! JSON will use basic formatting.');
+                    return false;
                 }
-            } else {
-                console.error('❌ js-beautify not found!');
+            }
+            
+            // Test immediately and retry if needed
+            if (!testJsBeautify()) {
+                console.log('🔄 Retrying js-beautify test in 500ms...');
+                setTimeout(() => {
+                    if (!testJsBeautify()) {
+                        console.log('🔄 Final retry in 1000ms...');
+                        setTimeout(testJsBeautify, 1000);
+                    }
+                }, 500);
             }
             
             // Load saved JSON from localStorage
