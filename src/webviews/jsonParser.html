@@ -6,7 +6,7 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://unpkg.com/js-beautify@1.14.9/js/lib/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.min.js"></script>
     <style>
         :root {
             --vscode-foreground: var(--vscode-editor-foreground, #e1e4e8);
@@ -564,27 +564,117 @@
         let jsonData = null;
         let searchTerm = '';
 
+        // Helper function to save JSON to localStorage
+        function saveJsonToStorage(jsonContent) {
+            try {
+                localStorage.setItem('vscode-persian-copilot-json', jsonContent);
+                console.log('💾 JSON saved to localStorage');
+            } catch (e) {
+                console.error('❌ Failed to save JSON to localStorage:', e);
+            }
+        }
+
+        // Helper function to load JSON from localStorage
+        function loadJsonFromStorage() {
+            try {
+                const saved = localStorage.getItem('vscode-persian-copilot-json');
+                if (saved) {
+                    console.log('📥 JSON loaded from localStorage');
+                    return saved;
+                }
+            } catch (e) {
+                console.error('❌ Failed to load JSON from localStorage:', e);
+            }
+            return null;
+        }
+
+        // Helper function to get js-beautify function
+        function getBeautifyFunction() {
+            if (typeof js_beautify !== 'undefined') {
+                return js_beautify;
+            } else if (typeof beautify !== 'undefined') {
+                return beautify;
+            } else if (typeof window.js_beautify !== 'undefined') {
+                return window.js_beautify;
+            } else if (typeof window.beautify !== 'undefined') {
+                return window.beautify;
+            }
+            return null;
+        }
+
+        // Helper function to beautify JSON with js-beautify
+        function beautifyJson(jsonData) {
+            const beautifyFunction = getBeautifyFunction();
+            
+            if (beautifyFunction) {
+                try {
+                    const beautifyOptions = {
+                        indent_size: 2,
+                        indent_char: ' ',
+                        max_preserve_newlines: 2,
+                        preserve_newlines: true,
+                        keep_array_indentation: false,
+                        break_chained_methods: false,
+                        indent_scripts: 'normal',
+                        brace_style: 'collapse',
+                        space_before_conditional: true,
+                        unescape_strings: false,
+                        jslint_happy: false,
+                        end_with_newline: false,
+                        wrap_line_length: 0,
+                        indent_inner_html: false,
+                        comma_first: false,
+                        e4x: false,
+                        indent_empty_lines: false
+                    };
+                    
+                    const jsonString = JSON.stringify(jsonData);
+                    const formatted = beautifyFunction(jsonString, beautifyOptions);
+                    console.log('✅ JSON formatted using js-beautify');
+                    return formatted;
+                } catch (e) {
+                    console.error('❌ js-beautify error:', e);
+                }
+            } else {
+                console.warn('⚠️ js-beautify not found, using JSON.stringify fallback');
+            }
+            
+            // Fallback to regular JSON.stringify
+            return JSON.stringify(jsonData, null, 2);
+        }
+
         // Process JSON input
         function processJson() {
-            const input = document.getElementById('inputJson').value;
+            const inputEl = document.getElementById('inputJson');
             const inputStatus = document.getElementById('inputStatus');
             const inputLength = document.getElementById('inputLength');
             const outputStatus = document.getElementById('outputStatus');
             const jsonInfo = document.getElementById('jsonInfo');
             
-            inputLength.textContent = `${input.length} کاراکتر`;
+            if (!inputEl) return;
+            const input = inputEl.value;
+            
+            if (inputLength) inputLength.textContent = `${input.length} کاراکتر`;
             
             if (!input.trim()) {
-                inputStatus.textContent = 'آماده دریافت JSON...';
-                inputStatus.className = 'status-info';
+                if (inputStatus) {
+                    inputStatus.textContent = 'آماده دریافت JSON...';
+                    inputStatus.className = 'status-info';
+                }
                 clearOutput();
                 return;
             }
             
             try {
                 jsonData = JSON.parse(input);
-                inputStatus.textContent = 'JSON معتبر ✓';
-                inputStatus.className = 'status-valid';
+                
+                // Save the valid JSON to localStorage
+                saveJsonToStorage(input);
+                
+                if (inputStatus) {
+                    inputStatus.textContent = 'JSON معتبر ✓';
+                    inputStatus.className = 'status-valid';
+                }
                 
                 if (currentView === 'text') {
                     updateTextView();
@@ -594,23 +684,31 @@
                 
                 // Enhanced statistics using js-beautify
                 const stats = getJsonStatistics(jsonData);
-                jsonInfo.innerHTML = `
-                    <strong>📊 آمار:</strong><br>
-                    کلیدها: ${stats.keys.toLocaleString('fa-IR')} | 
-                    آرایه‌ها: ${stats.arrays.toLocaleString('fa-IR')} | 
-                    اشیاء: ${stats.objects.toLocaleString('fa-IR')} | 
-                    عمق: ${stats.depth.toLocaleString('fa-IR')} سطح
-                `;
-                outputStatus.textContent = 'نمایش موفق ✓';
-                outputStatus.className = 'status-valid';
+                if (jsonInfo) {
+                    jsonInfo.innerHTML = `
+                        <strong>📊 آمار:</strong><br>
+                        کلیدها: ${stats.keys.toLocaleString('fa-IR')} | 
+                        آرایه‌ها: ${stats.arrays.toLocaleString('fa-IR')} | 
+                        اشیاء: ${stats.objects.toLocaleString('fa-IR')} | 
+                        عمق: ${stats.depth.toLocaleString('fa-IR')} سطح
+                    `;
+                }
+                if (outputStatus) {
+                    outputStatus.textContent = 'نمایش موفق ✓';
+                    outputStatus.className = 'status-valid';
+                }
                 
             } catch (error) {
                 jsonData = null;  // Clear jsonData on error
-                inputStatus.textContent = `خطا: ${error.message}`;
-                inputStatus.className = 'status-invalid';
-                outputStatus.textContent = 'خطا در پردازش';
-                outputStatus.className = 'status-invalid';
-                jsonInfo.textContent = '';
+                if (inputStatus) {
+                    inputStatus.textContent = `خطا: ${error.message}`;
+                    inputStatus.className = 'status-invalid';
+                }
+                if (outputStatus) {
+                    outputStatus.textContent = 'خطا در پردازش';
+                    outputStatus.className = 'status-invalid';
+                }
+                if (jsonInfo) jsonInfo.textContent = '';
                 clearOutput();
             }
         }
@@ -618,53 +716,23 @@
         // Enhanced text view using js-beautify
         function updateTextView() {
             const output = document.getElementById('outputJson');
-            if (jsonData) {
-                // Use js-beautify for superior formatting
-                const beautifyOptions = {
-                    indent_size: 2,
-                    indent_char: ' ',
-                    max_preserve_newlines: 2,
-                    preserve_newlines: true,
-                    keep_array_indentation: false,
-                    break_chained_methods: false,
-                    indent_scripts: 'normal',
-                    brace_style: 'collapse',
-                    space_before_conditional: true,
-                    unescape_strings: false,
-                    jslint_happy: false,
-                    end_with_newline: false,
-                    wrap_line_length: 0,
-                    indent_inner_html: false,
-                    comma_first: false,
-                    e4x: false,
-                    indent_empty_lines: false
-                };
-
-                let formatted;
-                try {
-                    // Convert to string first, then beautify for better formatting
-                    const jsonString = JSON.stringify(jsonData);
-                    formatted = js_beautify(jsonString, beautifyOptions);
-                } catch (e) {
-                    // Fallback to regular JSON.stringify if js-beautify fails
-                    formatted = JSON.stringify(jsonData, null, 2);
-                }
-                
-                if (searchTerm) {
-                    formatted = highlightSearch(formatted, searchTerm);
-                    output.innerHTML = formatted;
-                } else {
-                    output.value = formatted;
-                }
+            if (!output || !jsonData) return;
+            
+            const formatted = beautifyJson(jsonData);
+            
+            if (searchTerm) {
+                const highlighted = highlightSearch(formatted, searchTerm);
+                output.innerHTML = highlighted;
+            } else {
+                output.value = formatted;
             }
         }
 
         // Update tree view
         function updateTreeView() {
             const viewer = document.getElementById('jsonViewer');
-            if (jsonData) {
-                viewer.innerHTML = renderJsonTree(jsonData, searchTerm);
-            }
+            if (!viewer || !jsonData) return;
+            viewer.innerHTML = renderJsonTree(jsonData, searchTerm);
         }
 
         // Render JSON as interactive tree
@@ -779,6 +847,8 @@
             const outputJson = document.getElementById('outputJson');
             const jsonViewer = document.getElementById('jsonViewer');
             
+            if (!textBtn || !treeBtn || !outputJson || !jsonViewer) return;
+            
             if (view === 'text') {
                 textBtn.classList.add('active');
                 treeBtn.classList.remove('active');
@@ -796,7 +866,10 @@
 
         // Search in JSON
         function searchInJson() {
-            searchTerm = document.getElementById('searchInput').value;
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+            
+            searchTerm = searchInput.value;
             if (jsonData) {
                 if (currentView === 'text') {
                     updateTextView();
@@ -1063,18 +1136,24 @@
         // Update tree view after editing
         function updateTreeView() {
             if (jsonData) {
-                document.getElementById('tree-content').innerHTML = renderJsonTree(jsonData);
+                const viewer = document.getElementById('jsonViewer');
+                if (viewer) {
+                    viewer.innerHTML = renderJsonTree(jsonData);
+                }
             }
         }
 
         // Update text view after editing
         function updateTextView() {
             if (jsonData) {
-                const formattedJson = js_beautify(JSON.stringify(jsonData), { 
-                    indent_size: 2, 
-                    space_in_empty_paren: true 
-                });
-                document.getElementById('formatted-output').textContent = formattedJson;
+                const output = document.getElementById('outputJson');
+                if (output) {
+                    const formattedJson = js_beautify(JSON.stringify(jsonData), { 
+                        indent_size: 2, 
+                        space_in_empty_paren: true 
+                    });
+                    output.value = formattedJson;
+                }
             }
         }
 
@@ -1099,54 +1178,48 @@
         }
 
         function clearInput() {
-            document.getElementById('inputJson').value = '';
+            const inputJson = document.getElementById('inputJson');
+            const inputStatus = document.getElementById('inputStatus');
+            const inputLength = document.getElementById('inputLength');
+            
+            if (inputJson) inputJson.value = '';
+            
+            // Clear localStorage
+            try {
+                localStorage.removeItem('vscode-persian-copilot-json');
+                console.log('🗑️ JSON cleared from localStorage');
+            } catch (e) {
+                console.error('❌ Failed to clear localStorage:', e);
+            }
+            
             clearOutput();
-            document.getElementById('inputStatus').textContent = 'آماده دریافت JSON...';
-            document.getElementById('inputStatus').className = 'status-info';
-            document.getElementById('inputLength').textContent = '0 کاراکتر';
+            if (inputStatus) {
+                inputStatus.textContent = 'آماده دریافت JSON...';
+                inputStatus.className = 'status-info';
+            }
+            if (inputLength) inputLength.textContent = '0 کاراکتر';
         }
 
         function clearOutput() {
-            document.getElementById('outputJson').value = '';
-            document.getElementById('jsonViewer').innerHTML = '';
-            document.getElementById('outputStatus').textContent = 'آماده نمایش...';
-            document.getElementById('outputStatus').className = 'status-info';
-            document.getElementById('jsonInfo').textContent = '';
+            const outputJson = document.getElementById('outputJson');
+            const jsonViewer = document.getElementById('jsonViewer');
+            const outputStatus = document.getElementById('outputStatus');
+            const jsonInfo = document.getElementById('jsonInfo');
+            
+            if (outputJson) outputJson.value = '';
+            if (jsonViewer) jsonViewer.innerHTML = '';
+            if (outputStatus) {
+                outputStatus.textContent = 'آماده نمایش...';
+                outputStatus.className = 'status-info';
+            }
+            if (jsonInfo) jsonInfo.textContent = '';
             jsonData = null;
         }
 
         function copyOutput() {
             if (!jsonData) return;
             
-            // Use js-beautify for better formatted copy
-            let text;
-            try {
-                const beautifyOptions = {
-                    indent_size: 2,
-                    indent_char: ' ',
-                    max_preserve_newlines: 2,
-                    preserve_newlines: true,
-                    keep_array_indentation: false,
-                    break_chained_methods: false,
-                    indent_scripts: 'normal',
-                    brace_style: 'collapse',
-                    space_before_conditional: true,
-                    unescape_strings: false,
-                    jslint_happy: false,
-                    end_with_newline: false,
-                    wrap_line_length: 0,
-                    indent_inner_html: false,
-                    comma_first: false,
-                    e4x: false,
-                    indent_empty_lines: false
-                };
-                
-                const jsonString = JSON.stringify(jsonData);
-                text = js_beautify(jsonString, beautifyOptions);
-            } catch (e) {
-                // Fallback to regular JSON.stringify
-                text = JSON.stringify(jsonData, null, 2);
-            }
+            const text = beautifyJson(jsonData);
             
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target.closest('.icon-btn');
@@ -1159,35 +1232,7 @@
         function downloadJson() {
             if (!jsonData) return;
             
-            // Use js-beautify for better formatted download
-            let text;
-            try {
-                const beautifyOptions = {
-                    indent_size: 2,
-                    indent_char: ' ',
-                    max_preserve_newlines: 2,
-                    preserve_newlines: true,
-                    keep_array_indentation: false,
-                    break_chained_methods: false,
-                    indent_scripts: 'normal',
-                    brace_style: 'collapse',
-                    space_before_conditional: true,
-                    unescape_strings: false,
-                    jslint_happy: false,
-                    end_with_newline: false,
-                    wrap_line_length: 0,
-                    indent_inner_html: false,
-                    comma_first: false,
-                    e4x: false,
-                    indent_empty_lines: false
-                };
-                
-                const jsonString = JSON.stringify(jsonData);
-                text = js_beautify(jsonString, beautifyOptions);
-            } catch (e) {
-                // Fallback to regular JSON.stringify
-                text = JSON.stringify(jsonData, null, 2);
-            }
+            const text = beautifyJson(jsonData);
             
             const blob = new Blob([text], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -1199,12 +1244,21 @@
         }
 
         function importFile() {
-            const file = document.getElementById('fileInput').files[0];
+            const fileInput = document.getElementById('fileInput');
+            const inputJson = document.getElementById('inputJson');
+            if (!fileInput || !inputJson) return;
+            
+            const file = fileInput.files[0];
             if (!file) return;
             
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('inputJson').value = e.target.result;
+                const content = e.target.result;
+                inputJson.value = content;
+                
+                // Save imported JSON to localStorage
+                saveJsonToStorage(content);
+                
                 processJson();
             };
             reader.readAsText(file);
@@ -1245,15 +1299,48 @@
                 }
             };
             
-            document.getElementById('inputJson').value = JSON.stringify(sample, null, 2);
-            processJson();
+            const inputJson = document.getElementById('inputJson');
+            if (inputJson) {
+                const sampleJsonString = JSON.stringify(sample, null, 2);
+                inputJson.value = sampleJsonString;
+                
+                // Save sample to localStorage
+                saveJsonToStorage(sampleJsonString);
+                
+                processJson();
+            }
         }
 
         // Auto-process on page load if there's content
         window.addEventListener('load', () => {
-            const input = document.getElementById('inputJson').value;
-            if (input.trim()) {
-                processJson();
+            // Test js-beautify availability
+            console.log('🔍 Testing js-beautify availability...');
+            const beautifyFunc = getBeautifyFunction();
+            if (beautifyFunc) {
+                console.log('✅ js-beautify is loaded and ready!');
+                try {
+                    const testJson = '{"test":"value"}';
+                    const formatted = beautifyFunc(testJson, { indent_size: 2 });
+                    console.log('✅ js-beautify test successful:', formatted);
+                } catch (e) {
+                    console.error('❌ js-beautify test failed:', e);
+                }
+            } else {
+                console.error('❌ js-beautify not found!');
+            }
+            
+            // Load saved JSON from localStorage
+            const inputEl = document.getElementById('inputJson');
+            if (inputEl) {
+                const savedJson = loadJsonFromStorage();
+                if (savedJson) {
+                    inputEl.value = savedJson;
+                    console.log('🔄 Restored previous JSON from localStorage');
+                    processJson();
+                } else if (inputEl.value.trim()) {
+                    // Process existing content if any
+                    processJson();
+                }
             }
         });
     </script>
