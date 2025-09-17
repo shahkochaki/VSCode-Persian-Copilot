@@ -6,7 +6,54 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="https://unpkg.com/js-beautify@1.14.9/js/lib/beautify.min.js"></script>
+    
+    <!-- js-beautify library with fallback -->
+    <script>
+        // Function to load js-beautify with fallback CDNs
+        function loadJsBeautify() {
+            const cdns = [
+                'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.9/beautify.min.js',
+                'https://unpkg.com/js-beautify@1.14.9/js/lib/beautify.min.js',
+                'https://cdn.jsdelivr.net/npm/js-beautify@1.14.9/js/lib/beautify.min.js'
+            ];
+            
+            let currentCdnIndex = 0;
+            
+            function tryLoadScript() {
+                if (currentCdnIndex >= cdns.length) {
+                    console.error('❌ Failed to load js-beautify from all CDNs');
+                    return;
+                }
+                
+                const script = document.createElement('script');
+                script.src = cdns[currentCdnIndex];
+                
+                script.onload = function() {
+                    console.log(`✅ js-beautify loaded successfully from: ${cdns[currentCdnIndex]}`);
+                    // Test the library
+                    setTimeout(() => {
+                        const testFunc = getBeautifyFunction();
+                        if (testFunc) {
+                            console.log('🎉 js-beautify is ready to use!');
+                        }
+                    }, 100);
+                };
+                
+                script.onerror = function() {
+                    console.warn(`⚠️ Failed to load js-beautify from: ${cdns[currentCdnIndex]}`);
+                    currentCdnIndex++;
+                    tryLoadScript();
+                };
+                
+                document.head.appendChild(script);
+            }
+            
+            tryLoadScript();
+        }
+        
+        // Start loading immediately
+        loadJsBeautify();
+    </script>
     <style>
         :root {
             --vscode-foreground: var(--vscode-editor-foreground, #e1e4e8);
@@ -214,18 +261,109 @@
         .json-key {
             color: #9cdcfe;
             font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .json-key:hover {
+            background: rgba(156, 220, 254, 0.1);
         }
 
         .json-string {
             color: #ce9178;
+            cursor: pointer;
+            position: relative;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .json-string:hover {
+            background: rgba(206, 145, 120, 0.1);
         }
 
         .json-number {
             color: #b5cea8;
+            cursor: pointer;
+            position: relative;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .json-number:hover {
+            background: rgba(181, 206, 168, 0.1);
         }
 
         .json-boolean {
             color: #569cd6;
+            cursor: pointer;
+            position: relative;
+            padding: 2px 4px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .json-boolean:hover {
+            background: rgba(86, 156, 214, 0.1);
+        }
+
+        .json-value-container {
+            display: inline-block;
+            position: relative;
+        }
+
+        .json-actions {
+            position: absolute;
+            top: -25px;
+            right: 0;
+            background: var(--vscode-panel-background);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 4px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .json-actions.show {
+            display: flex;
+            gap: 4px;
+        }
+
+        .json-action-btn {
+            background: none;
+            border: none;
+            color: var(--vscode-foreground);
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 2px;
+            font-size: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .json-action-btn:hover {
+            background: var(--vscode-button-background);
+            color: var(--vscode-button-foreground);
+        }
+
+        .json-edit-input {
+            background: var(--vscode-input-background);
+            border: 1px solid var(--vscode-button-background);
+            border-radius: 3px;
+            padding: 2px 4px;
+            color: var(--vscode-foreground);
+            font-family: inherit;
+            font-size: inherit;
+            min-width: 50px;
+        }
+
+        .json-edit-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
         }
 
         .json-null {
@@ -372,6 +510,20 @@
         .json-card:nth-child(2) {
             animation-delay: 0.1s;
         }
+
+        /* Paste notice banner */
+        .paste-notice {
+            background: rgba(0, 120, 212, 0.1);
+            border: 1px solid var(--vscode-button-background);
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin: 0 0 16px 0;
+            font-size: 0.85em;
+            text-align: right;
+            direction: rtl;
+            color: var(--vscode-button-background);
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -459,27 +611,138 @@
         let jsonData = null;
         let searchTerm = '';
 
+        // Helper function to save JSON to localStorage
+        function saveJsonToStorage(jsonContent) {
+            try {
+                localStorage.setItem('vscode-persian-copilot-json', jsonContent);
+                console.log('💾 JSON saved to localStorage');
+            } catch (e) {
+                console.error('❌ Failed to save JSON to localStorage:', e);
+            }
+        }
+
+        // Helper function to load JSON from localStorage
+        function loadJsonFromStorage() {
+            try {
+                const saved = localStorage.getItem('vscode-persian-copilot-json');
+                if (saved) {
+                    console.log('📥 JSON loaded from localStorage');
+                    return saved;
+                }
+            } catch (e) {
+                console.error('❌ Failed to load JSON from localStorage:', e);
+            }
+            return null;
+        }
+
+        // Enhanced helper function to get js-beautify function
+        function getBeautifyFunction() {
+            // Check different possible global names for js-beautify
+            const possibleNames = [
+                'js_beautify',
+                'beautify', 
+                'jsBeautify',
+                'window.js_beautify',
+                'window.beautify',
+                'window.jsBeautify'
+            ];
+            
+            for (const name of possibleNames) {
+                try {
+                    let func;
+                    if (name.startsWith('window.')) {
+                        const propName = name.split('.')[1];
+                        func = window[propName];
+                    } else {
+                        func = eval(`typeof ${name} !== 'undefined' ? ${name} : undefined`);
+                    }
+                    
+                    if (typeof func === 'function') {
+                        console.log(`🎯 Found js-beautify as: ${name}`);
+                        return func;
+                    }
+                } catch (e) {
+                    // Continue to next possibility
+                }
+            }
+            
+            console.warn('⚠️ js-beautify function not found');
+            return null;
+        }
+
+        // Helper function to beautify JSON with js-beautify
+        function beautifyJson(jsonData) {
+            const beautifyFunction = getBeautifyFunction();
+            
+            if (beautifyFunction) {
+                try {
+                    const beautifyOptions = {
+                        indent_size: 2,
+                        indent_char: ' ',
+                        max_preserve_newlines: 2,
+                        preserve_newlines: true,
+                        keep_array_indentation: false,
+                        break_chained_methods: false,
+                        indent_scripts: 'normal',
+                        brace_style: 'collapse',
+                        space_before_conditional: true,
+                        unescape_strings: false,
+                        jslint_happy: false,
+                        end_with_newline: false,
+                        wrap_line_length: 0,
+                        indent_inner_html: false,
+                        comma_first: false,
+                        e4x: false,
+                        indent_empty_lines: false
+                    };
+                    
+                    const jsonString = JSON.stringify(jsonData);
+                    const formatted = beautifyFunction(jsonString, beautifyOptions);
+                    console.log('✅ JSON formatted using js-beautify');
+                    return formatted;
+                } catch (e) {
+                    console.error('❌ js-beautify error:', e);
+                }
+            } else {
+                console.warn('⚠️ js-beautify not found, using JSON.stringify fallback');
+            }
+            
+            // Fallback to regular JSON.stringify
+            return JSON.stringify(jsonData, null, 2);
+        }
+
         // Process JSON input
         function processJson() {
-            const input = document.getElementById('inputJson').value;
+            const inputEl = document.getElementById('inputJson');
             const inputStatus = document.getElementById('inputStatus');
             const inputLength = document.getElementById('inputLength');
             const outputStatus = document.getElementById('outputStatus');
             const jsonInfo = document.getElementById('jsonInfo');
             
-            inputLength.textContent = `${input.length} کاراکتر`;
+            if (!inputEl) return;
+            const input = inputEl.value;
+            
+            if (inputLength) inputLength.textContent = `${input.length} کاراکتر`;
             
             if (!input.trim()) {
-                inputStatus.textContent = 'آماده دریافت JSON...';
-                inputStatus.className = 'status-info';
+                if (inputStatus) {
+                    inputStatus.textContent = 'آماده دریافت JSON...';
+                    inputStatus.className = 'status-info';
+                }
                 clearOutput();
                 return;
             }
             
             try {
                 jsonData = JSON.parse(input);
-                inputStatus.textContent = 'JSON معتبر ✓';
-                inputStatus.className = 'status-valid';
+                
+                // Save the valid JSON to localStorage
+                saveJsonToStorage(input);
+                
+                if (inputStatus) {
+                    inputStatus.textContent = 'JSON معتبر ✓';
+                    inputStatus.className = 'status-valid';
+                }
                 
                 if (currentView === 'text') {
                     updateTextView();
@@ -487,57 +750,99 @@
                     updateTreeView();
                 }
                 
-                // Update info
-                const size = JSON.stringify(jsonData).length;
-                const keys = countKeys(jsonData);
-                jsonInfo.textContent = `${keys} کلید، ${size} بایت`;
-                outputStatus.textContent = 'نمایش موفق ✓';
-                outputStatus.className = 'status-valid';
+                // Enhanced statistics using js-beautify
+                const stats = getJsonStatistics(jsonData);
+                if (jsonInfo) {
+                    jsonInfo.innerHTML = `
+                        <strong>📊 آمار:</strong><br>
+                        کلیدها: ${stats.keys.toLocaleString('fa-IR')} | 
+                        آرایه‌ها: ${stats.arrays.toLocaleString('fa-IR')} | 
+                        اشیاء: ${stats.objects.toLocaleString('fa-IR')} | 
+                        عمق: ${stats.depth.toLocaleString('fa-IR')} سطح
+                    `;
+                }
+                if (outputStatus) {
+                    outputStatus.textContent = 'نمایش موفق ✓';
+                    outputStatus.className = 'status-valid';
+                }
                 
             } catch (error) {
-                inputStatus.textContent = `خطا: ${error.message}`;
-                inputStatus.className = 'status-invalid';
-                outputStatus.textContent = 'خطا در پردازش';
-                outputStatus.className = 'status-invalid';
-                jsonInfo.textContent = '';
+                jsonData = null;  // Clear jsonData on error
+                if (inputStatus) {
+                    inputStatus.textContent = `خطا: ${error.message}`;
+                    inputStatus.className = 'status-invalid';
+                }
+                if (outputStatus) {
+                    outputStatus.textContent = 'خطا در پردازش';
+                    outputStatus.className = 'status-invalid';
+                }
+                if (jsonInfo) jsonInfo.textContent = '';
                 clearOutput();
             }
         }
 
-        // Update text view
+        // Enhanced text view using js-beautify
         function updateTextView() {
             const output = document.getElementById('outputJson');
-            if (jsonData) {
-                let formatted = JSON.stringify(jsonData, null, 2);
-                if (searchTerm) {
-                    formatted = highlightSearch(formatted, searchTerm);
-                    output.innerHTML = formatted;
-                } else {
-                    output.value = formatted;
-                }
+            if (!output || !jsonData) return;
+            
+            const formatted = beautifyJson(jsonData);
+            
+            if (searchTerm) {
+                const highlighted = highlightSearch(formatted, searchTerm);
+                output.innerHTML = highlighted;
+            } else {
+                output.value = formatted;
             }
         }
 
         // Update tree view
         function updateTreeView() {
             const viewer = document.getElementById('jsonViewer');
-            if (jsonData) {
-                viewer.innerHTML = renderJsonTree(jsonData, searchTerm);
-            }
+            if (!viewer || !jsonData) return;
+            viewer.innerHTML = renderJsonTree(jsonData, searchTerm);
         }
 
-        // Render JSON as tree
-        function renderJsonTree(obj, search = '', level = 0) {
-            if (obj === null) return '<span class="json-null">null</span>';
+        // Render JSON as interactive tree
+        function renderJsonTree(obj, search = '', level = 0, path = '') {
+            if (obj === null) return `<span class="json-null" onclick="showValueActions(this, 'null', '${path}')">null</span>`;
+            
             if (typeof obj === 'string') {
+                const escapedPath = path.replace(/'/g, "\\'");
                 let content = `"${obj}"`;
                 if (search && obj.toLowerCase().includes(search.toLowerCase())) {
                     content = highlightSearch(content, search);
                 }
-                return `<span class="json-string">${content}</span>`;
+                return `<span class="json-value-container">
+                    <span class="json-string" onclick="showValueActions(this, 'string', '${escapedPath}')">${content}</span>
+                    <div class="json-actions">
+                        <button class="json-action-btn" onclick="copyValue('${escapedPath}')">📋</button>
+                        <button class="json-action-btn" onclick="editValue(this, '${escapedPath}', 'string')">✏️</button>
+                    </div>
+                </span>`;
             }
-            if (typeof obj === 'number') return `<span class="json-number">${obj}</span>`;
-            if (typeof obj === 'boolean') return `<span class="json-boolean">${obj}</span>`;
+            
+            if (typeof obj === 'number') {
+                const escapedPath = path.replace(/'/g, "\\'");
+                return `<span class="json-value-container">
+                    <span class="json-number" onclick="showValueActions(this, 'number', '${escapedPath}')">${obj}</span>
+                    <div class="json-actions">
+                        <button class="json-action-btn" onclick="copyValue('${escapedPath}')">📋</button>
+                        <button class="json-action-btn" onclick="editValue(this, '${escapedPath}', 'number')">✏️</button>
+                    </div>
+                </span>`;
+            }
+            
+            if (typeof obj === 'boolean') {
+                const escapedPath = path.replace(/'/g, "\\'");
+                return `<span class="json-value-container">
+                    <span class="json-boolean" onclick="showValueActions(this, 'boolean', '${escapedPath}')">${obj}</span>
+                    <div class="json-actions">
+                        <button class="json-action-btn" onclick="copyValue('${escapedPath}')">📋</button>
+                        <button class="json-action-btn" onclick="editValue(this, '${escapedPath}', 'boolean')">✏️</button>
+                    </div>
+                </span>`;
+            }
             
             if (Array.isArray(obj)) {
                 if (obj.length === 0) return '<span class="json-punctuation">[]</span>';
@@ -545,7 +850,7 @@
                 let html = '<span class="json-punctuation">[</span>\n';
                 for (let i = 0; i < obj.length; i++) {
                     html += '<div class="json-node" style="margin-left: ' + ((level + 1) * 20) + 'px;">';
-                    html += renderJsonTree(obj[i], search, level + 1);
+                    html += renderJsonTree(obj[i], search, level + 1, `${path}[${i}]`);
                     if (i < obj.length - 1) html += '<span class="json-punctuation">,</span>';
                     html += '</div>';
                 }
@@ -571,6 +876,9 @@
                 
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
+                    const currentPath = path ? `${path}.${key}` : key;
+                    const escapedPath = currentPath.replace(/'/g, "\\'");
+                    
                     html += '<div class="json-node" style="margin-left: ' + ((level + 1) * 20) + 'px;">';
                     
                     let keyContent = `"${key}"`;
@@ -578,9 +886,15 @@
                         keyContent = highlightSearch(keyContent, search);
                     }
                     
-                    html += `<span class="json-key">${keyContent}</span>`;
+                    html += `<span class="json-value-container">
+                        <span class="json-key" onclick="showKeyActions(this, '${escapedPath}')">${keyContent}</span>
+                        <div class="json-actions">
+                            <button class="json-action-btn" onclick="copyKey('${escapedPath}')">📋</button>
+                            <button class="json-action-btn" onclick="copyPath('${escapedPath}')">🔗</button>
+                        </div>
+                    </span>`;
                     html += '<span class="json-punctuation">: </span>';
-                    html += renderJsonTree(obj[key], search, level + 1);
+                    html += renderJsonTree(obj[key], search, level + 1, currentPath);
                     if (i < keys.length - 1) html += '<span class="json-punctuation">,</span>';
                     html += '</div>';
                 }
@@ -601,6 +915,8 @@
             const outputJson = document.getElementById('outputJson');
             const jsonViewer = document.getElementById('jsonViewer');
             
+            if (!textBtn || !treeBtn || !outputJson || !jsonViewer) return;
+            
             if (view === 'text') {
                 textBtn.classList.add('active');
                 treeBtn.classList.remove('active');
@@ -618,7 +934,10 @@
 
         // Search in JSON
         function searchInJson() {
-            searchTerm = document.getElementById('searchInput').value;
+            const searchInput = document.getElementById('searchInput');
+            if (!searchInput) return;
+            
+            searchTerm = searchInput.value;
             if (jsonData) {
                 if (currentView === 'text') {
                     updateTextView();
@@ -651,6 +970,268 @@
             }
         }
 
+        // Enhanced JSON statistics function
+        function getJsonStatistics(obj, depth = 0) {
+            const stats = {
+                keys: 0,
+                arrays: 0,
+                objects: 0,
+                depth: depth,
+                maxDepth: depth
+            };
+
+            if (typeof obj === 'object' && obj !== null) {
+                if (Array.isArray(obj)) {
+                    stats.arrays = 1;
+                    obj.forEach(item => {
+                        const childStats = getJsonStatistics(item, depth + 1);
+                        stats.keys += childStats.keys;
+                        stats.arrays += childStats.arrays;
+                        stats.objects += childStats.objects;
+                        stats.maxDepth = Math.max(stats.maxDepth, childStats.maxDepth);
+                    });
+                } else {
+                    stats.objects = 1;
+                    const keys = Object.keys(obj);
+                    stats.keys += keys.length;
+                    
+                    keys.forEach(key => {
+                        const childStats = getJsonStatistics(obj[key], depth + 1);
+                        stats.keys += childStats.keys;
+                        stats.arrays += childStats.arrays;
+                        stats.objects += childStats.objects;
+                        stats.maxDepth = Math.max(stats.maxDepth, childStats.maxDepth);
+                    });
+                }
+            }
+
+            return {
+                keys: stats.keys,
+                arrays: stats.arrays,
+                objects: stats.objects,
+                depth: stats.maxDepth
+            };
+        }
+
+        // Interactive JSON actions
+        function showValueActions(element, type, path) {
+            // Hide all other actions first
+            document.querySelectorAll('.json-actions').forEach(el => el.classList.remove('show'));
+            
+            const container = element.closest('.json-value-container');
+            const actions = container.querySelector('.json-actions');
+            actions.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                actions.classList.remove('show');
+            }, 3000);
+        }
+
+        function showKeyActions(element, path) {
+            // Hide all other actions first
+            document.querySelectorAll('.json-actions').forEach(el => el.classList.remove('show'));
+            
+            const container = element.closest('.json-value-container');
+            const actions = container.querySelector('.json-actions');
+            actions.classList.add('show');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                actions.classList.remove('show');
+            }, 3000);
+        }
+
+        function getValueByPath(obj, path) {
+            if (!path) return obj;
+            return path.split(/[.\[\]]/).filter(Boolean).reduce((current, key) => {
+                return current && current[key] !== undefined ? current[key] : undefined;
+            }, obj);
+        }
+
+        function setValueByPath(obj, path, value) {
+            if (!path) return;
+            const keys = path.split(/[.\[\]]/).filter(Boolean);
+            const lastKey = keys.pop();
+            const target = keys.reduce((current, key) => current[key], obj);
+            
+            if (target && lastKey !== undefined) {
+                target[lastKey] = value;
+            }
+        }
+
+        function copyValue(path) {
+            const value = getValueByPath(jsonData, path);
+            let textToCopy;
+            
+            if (typeof value === 'string') {
+                textToCopy = value;
+            } else {
+                textToCopy = JSON.stringify(value, null, 2);
+            }
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showNotification('مقدار کپی شد! 📋');
+            });
+        }
+
+        function copyKey(path) {
+            const keys = path.split(/[.\[\]]/).filter(Boolean);
+            const key = keys[keys.length - 1];
+            
+            navigator.clipboard.writeText(key).then(() => {
+                showNotification('کلید کپی شد! 🔑');
+            });
+        }
+
+        function copyPath(path) {
+            navigator.clipboard.writeText(path).then(() => {
+                showNotification('مسیر کپی شد! 🔗');
+            });
+        }
+
+        function editValue(actionBtn, path, type) {
+            const container = actionBtn.closest('.json-value-container');
+            const valueElement = container.querySelector(`.json-${type}`);
+            const currentValue = getValueByPath(jsonData, path);
+            
+            // Create input element
+            const input = document.createElement('input');
+            input.className = 'json-edit-input';
+            input.type = type === 'number' ? 'number' : 'text';
+            
+            if (type === 'string') {
+                input.value = currentValue;
+            } else if (type === 'boolean') {
+                input.type = 'checkbox';
+                input.checked = currentValue;
+            } else {
+                input.value = currentValue;
+            }
+            
+            // Replace element with input
+            valueElement.style.display = 'none';
+            container.insertBefore(input, valueElement);
+            input.focus();
+            
+            // Handle save
+            const saveEdit = () => {
+                let newValue;
+                
+                if (type === 'string') {
+                    newValue = input.value;
+                } else if (type === 'number') {
+                    newValue = parseFloat(input.value) || 0;
+                } else if (type === 'boolean') {
+                    newValue = input.checked;
+                }
+                
+                // Update the JSON data
+                setValueByPath(jsonData, path, newValue);
+                
+                // Remove input and show updated value
+                input.remove();
+                valueElement.style.display = 'inline';
+                
+                // Update the display
+                updateTreeView();
+                updateTextView();
+                
+                showNotification('مقدار ویرایش شد! ✏️');
+            };
+            
+            // Handle cancel
+            const cancelEdit = () => {
+                input.remove();
+                valueElement.style.display = 'inline';
+            };
+            
+            // Event listeners
+            input.addEventListener('blur', saveEdit);
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    saveEdit();
+                } else if (e.key === 'Escape') {
+                    cancelEdit();
+                }
+            });
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--vscode-button-background);
+                color: var(--vscode-button-foreground);
+                padding: 12px 16px;
+                border-radius: 6px;
+                z-index: 10000;
+                font-size: 14px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                animation: slideInRight 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            
+            // Add animation styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideInRight {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 2 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    notification.remove();
+                    style.remove();
+                }, 300);
+            }, 2000);
+        }
+
+        // Update tree view after editing
+        function updateTreeView() {
+            if (jsonData) {
+                const viewer = document.getElementById('jsonViewer');
+                if (viewer) {
+                    viewer.innerHTML = renderJsonTree(jsonData);
+                }
+            }
+        }
+
+        // Update text view after editing
+        function updateTextView() {
+            if (jsonData) {
+                const output = document.getElementById('outputJson');
+                if (output) {
+                    const formattedJson = js_beautify(JSON.stringify(jsonData), { 
+                        indent_size: 2, 
+                        space_in_empty_paren: true 
+                    });
+                    output.value = formattedJson;
+                }
+            }
+        }
+
+        // Hide actions when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.json-value-container')) {
+                document.querySelectorAll('.json-actions').forEach(el => el.classList.remove('show'));
+            }
+        });
+
         // Utility functions
         function countKeys(obj, count = 0) {
             if (typeof obj === 'object' && obj !== null) {
@@ -665,26 +1246,49 @@
         }
 
         function clearInput() {
-            document.getElementById('inputJson').value = '';
+            const inputJson = document.getElementById('inputJson');
+            const inputStatus = document.getElementById('inputStatus');
+            const inputLength = document.getElementById('inputLength');
+            
+            if (inputJson) inputJson.value = '';
+            
+            // Clear localStorage
+            try {
+                localStorage.removeItem('vscode-persian-copilot-json');
+                console.log('🗑️ JSON cleared from localStorage');
+            } catch (e) {
+                console.error('❌ Failed to clear localStorage:', e);
+            }
+            
             clearOutput();
-            document.getElementById('inputStatus').textContent = 'آماده دریافت JSON...';
-            document.getElementById('inputStatus').className = 'status-info';
-            document.getElementById('inputLength').textContent = '0 کاراکتر';
+            if (inputStatus) {
+                inputStatus.textContent = 'آماده دریافت JSON...';
+                inputStatus.className = 'status-info';
+            }
+            if (inputLength) inputLength.textContent = '0 کاراکتر';
         }
 
         function clearOutput() {
-            document.getElementById('outputJson').value = '';
-            document.getElementById('jsonViewer').innerHTML = '';
-            document.getElementById('outputStatus').textContent = 'آماده نمایش...';
-            document.getElementById('outputStatus').className = 'status-info';
-            document.getElementById('jsonInfo').textContent = '';
+            const outputJson = document.getElementById('outputJson');
+            const jsonViewer = document.getElementById('jsonViewer');
+            const outputStatus = document.getElementById('outputStatus');
+            const jsonInfo = document.getElementById('jsonInfo');
+            
+            if (outputJson) outputJson.value = '';
+            if (jsonViewer) jsonViewer.innerHTML = '';
+            if (outputStatus) {
+                outputStatus.textContent = 'آماده نمایش...';
+                outputStatus.className = 'status-info';
+            }
+            if (jsonInfo) jsonInfo.textContent = '';
             jsonData = null;
         }
 
         function copyOutput() {
             if (!jsonData) return;
             
-            const text = JSON.stringify(jsonData, null, 2);
+            const text = beautifyJson(jsonData);
+            
             navigator.clipboard.writeText(text).then(() => {
                 const btn = event.target.closest('.icon-btn');
                 const originalContent = btn.innerHTML;
@@ -696,7 +1300,8 @@
         function downloadJson() {
             if (!jsonData) return;
             
-            const text = JSON.stringify(jsonData, null, 2);
+            const text = beautifyJson(jsonData);
+            
             const blob = new Blob([text], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -707,12 +1312,21 @@
         }
 
         function importFile() {
-            const file = document.getElementById('fileInput').files[0];
+            const fileInput = document.getElementById('fileInput');
+            const inputJson = document.getElementById('inputJson');
+            if (!fileInput || !inputJson) return;
+            
+            const file = fileInput.files[0];
             if (!file) return;
             
             const reader = new FileReader();
             reader.onload = function(e) {
-                document.getElementById('inputJson').value = e.target.result;
+                const content = e.target.result;
+                inputJson.value = content;
+                
+                // Save imported JSON to localStorage
+                saveJsonToStorage(content);
+                
                 processJson();
             };
             reader.readAsText(file);
@@ -753,15 +1367,77 @@
                 }
             };
             
-            document.getElementById('inputJson').value = JSON.stringify(sample, null, 2);
-            processJson();
+            const inputJson = document.getElementById('inputJson');
+            if (inputJson) {
+                const sampleJsonString = JSON.stringify(sample, null, 2);
+                inputJson.value = sampleJsonString;
+                
+                // Save sample to localStorage
+                saveJsonToStorage(sampleJsonString);
+                
+                processJson();
+            }
         }
 
         // Auto-process on page load if there's content
         window.addEventListener('load', () => {
-            const input = document.getElementById('inputJson').value;
-            if (input.trim()) {
-                processJson();
+            console.log('🚀 Page loaded, initializing JSON Parser...');
+            
+            // Enhanced js-beautify testing
+            function testJsBeautify() {
+                console.log('🔍 Testing js-beautify availability...');
+                const beautifyFunc = getBeautifyFunction();
+                
+                if (beautifyFunc) {
+                    console.log('✅ js-beautify function found!');
+                    
+                    // Test with sample JSON
+                    try {
+                        const testJson = '{"name":"تست","value":123,"array":[1,2,3]}';
+                        const formatted = beautifyFunc(testJson, { 
+                            indent_size: 2,
+                            space_in_empty_paren: false,
+                            preserve_newlines: true,
+                            max_preserve_newlines: 2
+                        });
+                        
+                        console.log('✅ js-beautify test successful!');
+                        console.log('📄 Sample formatting:');
+                        console.log(formatted);
+                        return true;
+                    } catch (e) {
+                        console.error('❌ js-beautify test failed:', e);
+                        return false;
+                    }
+                } else {
+                    console.error('❌ js-beautify not found! JSON will use basic formatting.');
+                    return false;
+                }
+            }
+            
+            // Test immediately and retry if needed
+            if (!testJsBeautify()) {
+                console.log('🔄 Retrying js-beautify test in 500ms...');
+                setTimeout(() => {
+                    if (!testJsBeautify()) {
+                        console.log('🔄 Final retry in 1000ms...');
+                        setTimeout(testJsBeautify, 1000);
+                    }
+                }, 500);
+            }
+            
+            // Load saved JSON from localStorage
+            const inputEl = document.getElementById('inputJson');
+            if (inputEl) {
+                const savedJson = loadJsonFromStorage();
+                if (savedJson) {
+                    inputEl.value = savedJson;
+                    console.log('🔄 Restored previous JSON from localStorage');
+                    processJson();
+                } else if (inputEl.value.trim()) {
+                    // Process existing content if any
+                    processJson();
+                }
             }
         });
     </script>

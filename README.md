@@ -13,7 +13,7 @@
 ## 🚀 **COMING SOON - Exciting New Features!**
 
 ### 📝 **Persian ToDo Manager** 
-> 🔜 **Coming in v1.6.0**
+> 🔜 **Coming in v1.7.0**
 
 Get ready for the most comprehensive Persian task management system directly in VS Code:
 - **📋 Smart Task Organization** - Create, manage, and organize your Persian tasks
@@ -24,7 +24,7 @@ Get ready for the most comprehensive Persian task management system directly in 
 - **📱 Cross-Device Sync** - Access your tasks everywhere
 
 ### 📚 **Developer Cheat Sheets Hub**
-> 🔜 **Coming in v1.6.0**
+> 🔜 **Coming in v1.7.0**
 
 The ultimate collection of Persian developer reference materials:
 - **⚡ Quick Reference Cards** - Instant access to syntax and commands
@@ -176,7 +176,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🚀 **به زودی - امکانات هیجان‌انگیز جدید!**
 
 ### 📝 **مدیریت کارهای فارسی (Persian ToDo Manager)** 
-> 🔜 **در نسخه 1.6.0 عرضه می‌شود**
+> 🔜 **در نسخه 1.7.0 عرضه می‌شود**
 
 آماده باشید برای کامل‌ترین سیستم مدیریت کارها به زبان فارسی مستقیماً در VS Code:
 - **📋 سازماندهی هوشمند کارها** - ایجاد، مدیریت و سازماندهی کارهای فارسی
@@ -187,7 +187,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **📱 همگام‌سازی چندپلتفرمه** - دسترسی به کارهایتان در همه جا
 
 ### 📚 **مرکز برگه‌های تقلب توسعه‌دهنده - Cheat Sheet**
-> 🔜 **در نسخه 1.6.0 عرضه می‌شود**
+> 🔜 **در نسخه 1.7.0 عرضه می‌شود**
 
 کامل‌ترین مجموعه منابع مرجع فارسی برای توسعه‌دهندگان:
 - **⚡ کارت‌های مرجع سریع** - دسترسی فوری به نحو و دستورات
