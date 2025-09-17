@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="VSCode Persian Copilot - Professional RTL support and complete Persian Tools Hub for Visual Studio Code">
+    <meta name="keywords" content="VSCode, Persian Copilot, RTL, Persian Tools, Visual Studio Code Extension, Farsi, Persian Calendar">
+    <meta name="author" content="Ali Shahkochaki">
+    <title>VSCode Persian Copilot — Professional Persian Tools Hub</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/icon.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/icon.png">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot">
+    <meta property="og:title" content="VSCode Persian Copilot — Professional Persian Tools Hub">
+    <meta property="og:description" content="Professional RTL support and complete Persian Tools Hub for Visual Studio Code. Calendar, JSON Parser, Number Converter and more!">
+    <meta property="og:image" content="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/hub-demo.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot">
+    <meta property="twitter:title" content="VSCode Persian Copilot — Professional Persian Tools Hub">
+    <meta property="twitter:description" content="Professional RTL support and complete Persian Tools Hub for Visual Studio Code. Calendar, JSON Parser, Number Converter and more!">
+    <meta property="twitter:image" content="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/hub-demo.jpg">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .persian {
+            font-family: 'Vazirmatn', sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .english {
+            font-family: 'Inter', sans-serif;
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="1000" height="1000" fill="url(%23grid)"/></svg>');
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.1);
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .language-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        .language-btn:hover, .language-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Section */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--gray-900);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            text-align: center;
+            color: var(--gray-600);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--gray-900);
+        }
+
+        .feature-description {
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Screenshots */
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .screenshot-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .screenshot-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: var(--gray-100);
+            border-radius: 8px 8px 0 0;
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot-card:hover .screenshot-img {
+            transform: scale(1.02);
+        }
+
+        /* Image loading fallback */
+        .screenshot-img[src=""] {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-600);
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+        }
+
+        /* Image error handling */
+        .screenshot-img:not([src]),
+        .screenshot-img[src=""] {
+            background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+            position: relative;
+        }
+
+        .screenshot-img:not([src])::after,
+        .screenshot-img[src=""]::after {
+            content: "🖼️";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            opacity: 0.6;
+        }
+
+        .screenshot-content {
+            padding: 1.5rem;
+        }
+
+        .screenshot-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .screenshot-description {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Installation Section */
+        .installation {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 3rem 0;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+
+        .install-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .install-step {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: 600;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-900);
+        }
+
+        .step-description {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* CTA Buttons */
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gray-900);
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-300);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--gray-700);
+            padding-top: 2rem;
+            text-align: center;
+            color: var(--gray-400);
+        }
+
+        /* Language Content Toggle */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .header .subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .screenshots-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card, .screenshot-card, .installation {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gray-400);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-600);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/icon.png" alt="VSCode Persian Copilot Logo" style="width: 60px; height: 60px; border-radius: 12px;">
+            </div>
+            <h1>VSCode Persian Copilot</h1>
+            
+            <div class="lang-content english active" id="header-en">
+                <p class="subtitle">Professional RTL support and complete Persian Tools Hub for Visual Studio Code</p>
+            </div>
+            
+            <div class="lang-content persian" id="header-fa">
+                <p class="subtitle">پشتیبانی حرفه‌ای RTL و مجموعه کامل ابزارهای فارسی برای ویژوال استودیو کد</p>
+            </div>
+            
+            <div class="language-toggle">
+                <button class="language-btn active" onclick="switchLanguage('en')" id="btn-en">
+                    <i class="fas fa-globe"></i> English
+                </button>
+                <button class="language-btn" onclick="switchLanguage('fa')" id="btn-fa">
+                    <i class="fas fa-globe"></i> فارسی
+                </button>
+            </div>
+        </div>
+    </header>
+</head>
+<body>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Features Section -->
+        <section class="section">
+            <div class="container">
+                <!-- English Content -->
+                <div class="lang-content english active" id="features-en">
+                    <h2 class="section-title">Powerful Features</h2>
+                    <p class="section-subtitle">Everything you need for Persian development in VS Code</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-align-right"></i>
+                            </div>
+                            <h3 class="feature-title">RTL Support</h3>
+                            <p class="feature-description">Professional right-to-left text support for Persian and Arabic languages with enhanced Copilot Chat experience.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3 class="feature-title">Persian Calendar</h3>
+                            <p class="feature-description">Interactive Jalali calendar with date conversion tools and Persian month/day names.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h3 class="feature-title">Number Converter</h3>
+                            <p class="feature-description">Convert between Persian and English numbers, with number-to-words functionality in Farsi.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h3 class="feature-title">Arabic to Persian</h3>
+                            <p class="feature-description">Intelligent text conversion from Arabic characters to proper Persian equivalents.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-file-code"></i>
+                            </div>
+                            <h3 class="feature-title">JSON Parser</h3>
+                            <p class="feature-description">Advanced JSON parser with js-beautify integration, localStorage persistence, and interactive features.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3 class="feature-title">IP & URL Tools</h3>
+                            <p class="feature-description">Comprehensive IP address and URL analysis tools with geolocation information.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Persian Content -->
+                <div class="lang-content persian" id="features-fa">
+                    <h2 class="section-title">ویژگی‌های قدرتمند</h2>
+                    <p class="section-subtitle">همه چیزی که برای توسعه فارسی در VS Code نیاز دارید</p>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-align-right"></i>
+                            </div>
+                            <h3 class="feature-title">پشتیبانی RTL</h3>
+                            <p class="feature-description">پشتیبانی حرفه‌ای از متن راست‌چین برای زبان‌های فارسی و عربی با تجربه بهبود یافته Copilot Chat.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h3 class="feature-title">تقویم فارسی</h3>
+                            <p class="feature-description">تقویم تعاملی جلالی با ابزارهای تبدیل تاریخ و نام‌های فارسی ماه‌ها و روزها.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h3 class="feature-title">مبدل اعداد</h3>
+                            <p class="feature-description">تبدیل بین اعداد فارسی و انگلیسی، با قابلیت تبدیل عدد به حروف به زبان فارسی.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h3 class="feature-title">عربی به فارسی</h3>
+                            <p class="feature-description">تبدیل هوشمند متن از حروف عربی به معادل‌های صحیح فارسی.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-file-code"></i>
+                            </div>
+                            <h3 class="feature-title">پردازشگر JSON</h3>
+                            <p class="feature-description">پردازشگر پیشرفته JSON با یکپارچگی js-beautify، ذخیره‌سازی localStorage و ویژگی‌های تعاملی.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <h3 class="feature-title">ابزارهای IP و URL</h3>
+                            <p class="feature-description">ابزارهای جامع تجزیه و تحلیل آدرس IP و URL با اطلاعات موقعیت جغرافیایی.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section class="section" style="background: var(--gray-50);">
+            <div class="container">
+                <!-- English Content -->
+                <div class="lang-content english active" id="screenshots-en">
+                    <h2 class="section-title">Extension in Action</h2>
+                    <p class="section-subtitle">See how VSCode Persian Copilot enhances your development experience</p>
+                    
+                    <div class="screenshots-grid">
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/hub-demo.jpg" alt="Persian Tools Hub" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">Persian Tools Hub</h3>
+                                <p class="screenshot-description">Centralized access to all Persian development tools in one convenient panel.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/calendar-demo.jpg" alt="Interactive Calendar" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">Interactive Calendar</h3>
+                                <p class="screenshot-description">Beautiful Persian calendar with date conversion and cultural information.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/jsonparser-demo.jpg" alt="JSON Parser" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">JSON Parser</h3>
+                                <p class="screenshot-description">Advanced JSON processing with beautification and interactive editing capabilities.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/rtl-demo.png" alt="RTL Chat Support" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">RTL Chat Support</h3>
+                                <p class="screenshot-description">Enhanced Copilot Chat experience with proper RTL text rendering.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Persian Content -->
+                <div class="lang-content persian" id="screenshots-fa">
+                    <h2 class="section-title">افزونه در عمل</h2>
+                    <p class="section-subtitle">ببینید که چگونه VSCode Persian Copilot تجربه توسعه شما را بهبود می‌بخشد</p>
+                    
+                    <div class="screenshots-grid">
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/hub-demo.jpg" alt="مرکز ابزارهای فارسی" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">مرکز ابزارهای فارسی</h3>
+                                <p class="screenshot-description">دسترسی متمرکز به تمام ابزارهای توسعه فارسی در یک پنل راحت.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/calendar-demo.jpg" alt="تقویم تعاملی" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">تقویم تعاملی</h3>
+                                <p class="screenshot-description">تقویم زیبای فارسی با تبدیل تاریخ و اطلاعات فرهنگی.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/jsonparser-demo.jpg" alt="پردازشگر JSON" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">پردازشگر JSON</h3>
+                                <p class="screenshot-description">پردازش پیشرفته JSON با زیباسازی و قابلیت‌های ویرایش تعاملی.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="screenshot-card">
+                            <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/rtl-demo.png" alt="پشتیبانی RTL Chat" class="screenshot-img" style="height: 250px; object-fit: cover; width: 100%;">
+                            <div class="screenshot-content">
+                                <h3 class="screenshot-title">پشتیبانی RTL Chat</h3>
+                                <p class="screenshot-description">تجربه بهبود یافته Copilot Chat با رندر صحیح متن RTL.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="section">
+            <div class="container">
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label lang-content english active">Powerful Tools</div>
+                        <div class="stat-label lang-content persian">ابزار قدرتمند</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1.6.3</div>
+                        <div class="stat-label lang-content english active">Latest Version</div>
+                        <div class="stat-label lang-content persian">آخرین نسخه</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label lang-content english active">Open Source</div>
+                        <div class="stat-label lang-content persian">متن‌باز</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">⭐</div>
+                        <div class="stat-label lang-content english active">Community Driven</div>
+                        <div class="stat-label lang-content persian">مبتنی بر جامعه</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation Section -->
+        <section class="section" style="background: var(--gray-50);">
+            <div class="container">
+                <div class="installation">
+                    <!-- English Content -->
+                    <div class="lang-content english active" id="installation-en">
+                        <h2 class="section-title">Easy Installation</h2>
+                        <p class="section-subtitle">Get started with VSCode Persian Copilot in just a few clicks</p>
+                        
+                        <div class="install-steps">
+                            <div class="install-step">
+                                <div class="step-number">1</div>
+                                <h3 class="step-title">Open VS Code</h3>
+                                <p class="step-description">Launch Visual Studio Code on your system</p>
+                            </div>
+                            <div class="install-step">
+                                <div class="step-number">2</div>
+                                <h3 class="step-title">Extension Marketplace</h3>
+                                <p class="step-description">Navigate to the Extensions tab (Ctrl+Shift+X)</p>
+                            </div>
+                            <div class="install-step">
+                                <div class="step-number">3</div>
+                                <h3 class="step-title">Search & Install</h3>
+                                <p class="step-description">Search for "Persian Copilot" and click Install</p>
+                            </div>
+                            <div class="install-step">
+                                <div class="step-number">4</div>
+                                <h3 class="step-title">Start Using</h3>
+                                <p class="step-description">Access Persian Tools from the Activity Bar</p>
+                            </div>
+                        </div>
+                        
+                        <div class="cta-buttons">
+                            <a href="https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot" class="btn btn-primary" target="_blank">
+                                <i class="fas fa-download"></i> Install Now
+                            </a>
+                            <a href="https://github.com/shahkochaki/vscode-persian-copilot" class="btn btn-secondary" target="_blank">
+                                <i class="fab fa-github"></i> View on GitHub
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Persian Content -->
+                    <div class="lang-content persian" id="installation-fa">
+                        <h2 class="section-title">نصب آسان</h2>
+                        <p class="section-subtitle">با VSCode Persian Copilot در چند کلیک شروع کنید</p>
+                        
+                        <div class="install-steps">
+                            <div class="install-step">
+                                <div class="step-number">۱</div>
+                                <h3 class="step-title">باز کردن VS Code</h3>
+                                <p class="step-description">ویژوال استودیو کد را در سیستم خود اجرا کنید</p>
+                            </div>
+                            <div class="install-step">
+                                <div class="step-number">۲</div>
+                                <h3 class="step-title">مارکت‌پلیس افزونه‌ها</h3>
+                                <p class="step-description">به تب Extensions بروید (Ctrl+Shift+X)</p>
+                            </div>
+                            <div class="install-step">
+                                <div class="step-number">۳</div>
+                                <h3 class="step-title">جستجو و نصب</h3>
+                                <p class="step-description">"Persian Copilot" را جستجو کنید و Install کلیک کنید</p>
+                            </div>
+                            <div class="install-step">
+                                <div class="step-number">۴</div>
+                                <h3 class="step-title">شروع استفاده</h3>
+                                <p class="step-description">از Activity Bar به ابزارهای فارسی دسترسی پیدا کنید</p>
+                            </div>
+                        </div>
+                        
+                        <div class="cta-buttons">
+                            <a href="https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot" class="btn btn-primary" target="_blank">
+                                <i class="fas fa-download"></i> نصب کنید
+                            </a>
+                            <a href="https://github.com/shahkochaki/vscode-persian-copilot" class="btn btn-secondary" target="_blank">
+                                <i class="fab fa-github"></i> مشاهده در GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- English Footer -->
+                <div class="footer-section lang-content english active">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/icon.png" alt="VSCode Persian Copilot" style="width: 40px; height: 40px; border-radius: 8px;">
+                        <h3 style="margin: 0;">VSCode Persian Copilot</h3>
+                    </div>
+                    <p>Professional Persian development tools for Visual Studio Code. Enhance your coding experience with RTL support and comprehensive Persian utilities.</p>
+                </div>
+                
+                <!-- Persian Footer -->
+                <div class="footer-section lang-content persian">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <img src="https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/icon.png" alt="VSCode Persian Copilot" style="width: 40px; height: 40px; border-radius: 8px;">
+                        <h3 style="margin: 0;">VSCode Persian Copilot</h3>
+                    </div>
+                    <p>ابزارهای حرفه‌ای توسعه فارسی برای ویژوال استودیو کد. تجربه کدنویسی خود را با پشتیبانی RTL و ابزارهای جامع فارسی بهبود بخشید.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="lang-content english active">Quick Links</h3>
+                    <h3 class="lang-content persian">پیوندهای سریع</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://marketplace.visualstudio.com/items?itemName=shahkochaki.vscode-persian-copilot" target="_blank">
+                            <span class="lang-content english active">Marketplace</span>
+                            <span class="lang-content persian">مارکت‌پلیس</span>
+                        </a></li>
+                        <li><a href="https://github.com/shahkochaki/vscode-persian-copilot" target="_blank">GitHub</a></li>
+                        <li><a href="https://github.com/shahkochaki/vscode-persian-copilot/issues" target="_blank">
+                            <span class="lang-content english active">Report Issues</span>
+                            <span class="lang-content persian">گزارش مشکل</span>
+                        </a></li>
+                        <li><a href="https://github.com/shahkochaki/vscode-persian-copilot/blob/main/CHANGELOG.md" target="_blank">
+                            <span class="lang-content english active">Changelog</span>
+                            <span class="lang-content persian">تغییرات</span>
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="lang-content english active">Features</h3>
+                    <h3 class="lang-content persian">ویژگی‌ها</h3>
+                    <ul class="footer-links">
+                        <li><span class="lang-content english active">RTL Support</span><span class="lang-content persian">پشتیبانی RTL</span></li>
+                        <li><span class="lang-content english active">Persian Calendar</span><span class="lang-content persian">تقویم فارسی</span></li>
+                        <li><span class="lang-content english active">Number Tools</span><span class="lang-content persian">ابزارهای عددی</span></li>
+                        <li><span class="lang-content english active">JSON Parser</span><span class="lang-content persian">پردازشگر JSON</span></li>
+                        <li><span class="lang-content english active">Text Converters</span><span class="lang-content persian">مبدل متن</span></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="lang-content english active">Developer</h3>
+                    <h3 class="lang-content persian">توسعه‌دهنده</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:shahkochaki@hotmail.com">
+                            <i class="fas fa-envelope"></i> 
+                            <span class="lang-content english active">Contact</span>
+                            <span class="lang-content persian">تماس</span>
+                        </a></li>
+                        <li><a href="https://github.com/shahkochaki" target="_blank">
+                            <i class="fab fa-github"></i> GitHub Profile
+                        </a></li>
+                        <li><a href="https://www.linkedin.com/in/shahkochaki" target="_blank">
+                            <i class="fab fa-linkedin"></i> LinkedIn
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="lang-content english active">
+                    © 2025 Ali Shahkochaki. Made with ❤️ for the Persian developer community.
+                </p>
+                <p class="lang-content persian">
+                    © ۱۴۰۴ با ❤️ برای جامعه توسعه‌دهندگان فارسی‌زبان ساخته شده.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function switchLanguage(lang) {
+            // Hide all language content
+            document.querySelectorAll('.lang-content').forEach(element => {
+                element.classList.remove('active');
+            });
+            
+            // Show selected language content
+            if (lang === 'en') {
+                document.querySelectorAll('.lang-content.english').forEach(element => {
+                    element.classList.add('active');
+                });
+                document.documentElement.setAttribute('lang', 'en');
+                document.documentElement.setAttribute('dir', 'ltr');
+            } else {
+                document.querySelectorAll('.lang-content.persian').forEach(element => {
+                    element.classList.add('active');
+                });
+                document.documentElement.setAttribute('lang', 'fa');
+                document.documentElement.setAttribute('dir', 'rtl');
+            }
+            
+            // Update button states
+            document.querySelectorAll('.language-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`btn-${lang}`).classList.add('active');
+            
+            // Save preference
+            localStorage.setItem('preferred-language', lang);
+        }
+        
+        // Load saved language preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLang = localStorage.getItem('preferred-language') || 'en';
+            switchLanguage(savedLang);
+            
+            // Add smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add intersection observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe feature cards and screenshot cards
+            document.querySelectorAll('.feature-card, .screenshot-card, .stat-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+        
+        // Add parallax effect to header
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.header');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+        
+        // Add floating animation to logo
+        function animateLogo() {
+            const logo = document.querySelector('.logo');
+            if (logo) {
+                logo.style.animation = 'float 3s ease-in-out infinite';
+            }
+        }
+        
+        // Add CSS for floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Start logo animation
+        setTimeout(animateLogo, 1000);
+    </script>
+</body>
+</html>
