@@ -278,7 +278,7 @@ function startAutoApply() {
 	// Show initial setup message only once
 	setTimeout(() => {
 		vscode.window.showInformationMessage(
-			'🚀 Persian Copilot is ready! Click "Apply CSS" to activate RTL support.',
+			'🚀 Persian Copilot is ready! Click "Apply CSS" to activate RTL support. If paste doesn\'t work, enable "Allow pasting".',
 			'Apply CSS',
 			'Setup Guide'
 		).then(selection => {
@@ -335,6 +335,7 @@ function getSetupGuideHTML(): string {
 		<h3>Step 3: Apply CSS</h3>
 		<p>Use Command Palette (<span class="highlight">Ctrl+Shift+P</span>) → Search <strong>"Apply Persian CSS"</strong></p>
 		<p>Then paste the copied script in Console and press Enter</p>
+		<p><strong>⚠️ Note:</strong> If paste doesn't work, enable "Allow pasting" in the browser console.</p>
 	</div>
 	
 	<div class="step">
