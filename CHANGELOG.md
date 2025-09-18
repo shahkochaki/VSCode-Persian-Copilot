@@ -2,6 +2,24 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.6.4] - 2025-09-18
+
+### ✨ New Features
+- **Enhanced JSON Parser**: Implemented feature X with significant performance optimizations
+- **Comprehensive Documentation**: Added detailed readme.html with responsive design, installation instructions, and feature showcase
+
+### 🔧 Technical Improvements
+- **Performance Optimizations**: Enhanced user experience with improved response times
+- **Dependency Cleanup**: Removed @vscode/vsce dependency to reduce package size
+- **JSON Processing**: Enhanced JSON parser with advanced features and better error handling
+
+### 📝 Documentation
+- **User Guide**: Added comprehensive HTML readme with detailed feature descriptions
+- **Installation Instructions**: Clear step-by-step setup guide for users
+- **Feature Showcase**: Visual demonstrations of all Persian tools and RTL capabilities
+
+---
+
 ## [1.5.2] - 2025-08-17
 
 ### 🔧 Bug Fixes
