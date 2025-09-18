@@ -5,15 +5,18 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [1.6.4] - 2025-09-18
 
 ### ✨ New Features
+
 - **Enhanced JSON Parser**: Implemented feature X with significant performance optimizations
 - **Comprehensive Documentation**: Added detailed readme.html with responsive design, installation instructions, and feature showcase
 
 ### 🔧 Technical Improvements
+
 - **Performance Optimizations**: Enhanced user experience with improved response times
 - **Dependency Cleanup**: Removed @vscode/vsce dependency to reduce package size
 - **JSON Processing**: Enhanced JSON parser with advanced features and better error handling
 
 ### 📝 Documentation
+
 - **User Guide**: Added comprehensive HTML readme with detailed feature descriptions
 - **Installation Instructions**: Clear step-by-step setup guide for users
 - **Feature Showcase**: Visual demonstrations of all Persian tools and RTL capabilities
@@ -23,11 +26,13 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [1.5.2] - 2025-08-17
 
 ### 🔧 Bug Fixes
-- **Calendar Day Alignment**: Fixed Persian calendar grid alignment - days now start on correct weekdays 
+
+- **Calendar Day Alignment**: Fixed Persian calendar grid alignment - days now start on correct weekdays
 - **Hub User Info Updates**: Fixed automatic user data refresh in hub interface
 - **Month Start Position**: Corrected calculation for first day of month display in calendar widget
 
-### 🎯 Technical Improvements  
+### 🎯 Technical Improvements
+
 - Improved calendar date conversion algorithm accuracy
 - Enhanced webview data synchronization for real-time user info updates
 - Optimized Persian calendar rendering for better visual alignment
@@ -37,6 +42,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [1.5.1] - 2025-08-17 ✨
 
 ### 🗓️ Enhanced Persian Calendar Widget
+
 - **Interactive Calendar Grid**: Beautiful monthly calendar with clickable Persian dates
 - **Smart Date Selection**: Click any date to automatically convert and fill forms
 - **Today Highlighting**: Special animated styling for current date with pulse effect
@@ -47,12 +53,14 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 - **Enhanced Date Display**: Beautiful today section with star icon and inspiring messages
 
 ### 🎨 UI/UX Improvements
+
 - **Visual Feedback**: Better highlighting and selection states
 - **Responsive Design**: Optimized for different screen sizes
 - **Animation Effects**: Smooth transitions and engaging micro-interactions
 - **Better Typography**: Improved readability and text hierarchy
 
 ### 🔧 Bug Fixes
+
 - Fixed Persian months display inconsistency in various components
 - Resolved template literal compatibility issues
 - Improved date conversion accuracy
@@ -61,6 +69,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [1.6.0] - Coming Soon 🚀
 
 ### 📝 Persian ToDo Manager (Upcoming)
+
 - **Smart Task Organization**: Create, manage, and organize Persian tasks with priority levels
 - **Persian Calendar Integration**: Set deadlines using Persian dates with smart reminders
 - **Tag System**: Organize tasks with Persian labels and categories
@@ -70,6 +79,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 - **Notification System**: Smart reminders based on Persian calendar
 
 ### 📚 Developer Cheat Sheets Hub (Upcoming)
+
 - **Quick Reference Cards**: Instant access to syntax and commands in Persian
 - **CSS RTL Properties**: Comprehensive guide for right-to-left styling
 - **Web Development**: HTML, CSS, JavaScript references in Persian
@@ -80,6 +90,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 - **Algorithm Templates**: Common algorithms and data structures with Persian comments
 
 ### 🎯 Enhanced Integration
+
 - **Smart Search**: Find cheat sheets and todos with Persian keyword search
 - **Context-Aware Suggestions**: Relevant cheat sheets based on current file type
 - **Export Functions**: Export todos and cheat sheets for offline use
@@ -89,30 +100,35 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [1.5.0] - 2025-08-16
 
 ### 🔐 New Authentication System
+
 - **User Login Integration**: Complete OAuth login system with mobile OTP verification
 - **Helpix.app API Integration**: Advanced IP lookup features for authenticated users
 - **Secure Token Management**: User data stored securely in extension global state
 - **Hub User Interface**: Login status display with user profile in Persian Tools Hub
 
 ### 🚀 Enhanced Features
+
 - **Advanced IP Details**: Premium API access for authenticated users with threat analysis
 - **User Profile Management**: Display user name, mobile, credit balance, and status
 - **Smart API Switching**: Automatic fallback to free API for non-authenticated users
 - **Login Webview**: Beautiful Persian login interface with OTP verification flow
 
 ### 🎨 UI/UX Improvements
+
 - **User Card Interface**: Professional user profile display in hub
 - **Login Prompt**: Elegant call-to-action for non-authenticated users
 - **Status Indicators**: Clear visual feedback for authentication status
 - **Responsive Design**: Mobile-friendly login and user interface
 
 ### 🔧 Technical Enhancements
+
 - **VSCode API Integration**: Seamless communication between webviews and extension
 - **Global State Management**: Persistent user data across VS Code sessions
 - **Message Handling**: Robust webview-to-extension communication system
 - **Context Management**: User context passed to all relevant tools
 
 ### 🛡️ Security Features
+
 - **Token-based Authentication**: Secure JWT token management
 - **Session Persistence**: Automatic login state restoration
 - **Secure Storage**: Extension global state for sensitive user data
@@ -121,6 +137,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [1.4.0] - 2025-08-12
 
 ### Enhanced
+
 - 🔥 **JSON Parser Complete Redesign**: Next.js-style modern interface with two-column layout
 - 🌳 **Tree View Default**: Professional JSON tree visualization as default view mode
 - 🔍 **Advanced Search**: Real-time search with highlighting across JSON structure
@@ -131,12 +148,14 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 - 🎭 **Modern Animations**: Smooth transitions and professional card effects
 
 ### Fixed
+
 - ✅ **Calendar Months**: Gregorian months now display in English (January, February, etc.)
 - ✅ **Hub Animations**: Enhanced icon effects with float, pulse, rotate, bounce, swing, glow
 - ✅ **Tooltip Overflow**: Fixed tooltip positioning to appear above elements properly
 - ✅ **Tree View Navigation**: Collapsible JSON objects for better large data handling
 
 ### Technical Improvements
+
 - Material Icons integration for consistent UI
 - Enhanced CSS with better color schemes and gradients
 - Improved responsive design for mobile and desktop
@@ -145,6 +164,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [0.0.1] - 2024-12-28
 
 ### Added
+
 - Initial release of VSCode Persian Copilot
 - RTL support for chat interface with `.interactive-item-container` targeting
 - Vazirmatn Google Fonts integration for beautiful Persian text rendering
@@ -155,6 +175,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 - Font family override with Vazirmatn as primary Persian font
 
 ### Features
+
 - **Persian RTL Chat**: Transforms VS Code chat interface to support right-to-left Persian text
 - **Beautiful Typography**: Uses Vazirmatn font for optimal Persian text readability
 - **Easy Application**: Automatic activation and manual command options
@@ -163,11 +184,16 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ## [1.3.1] - 2025-08-10
 
 ### Changed
+
 - حذف فونت فارسی از CSS افزونه (سازگاری بیشتر)
 - افزودن margin fix برای کد بلاک‌ها:
   ```css
-  .interactive-item-container .value .rendered-markdown ul .interactive-result-code-block {
-      margin-right: -24px !important;
-      margin-left: 0;
+  .interactive-item-container
+    .value
+    .rendered-markdown
+    ul
+    .interactive-result-code-block {
+    margin-right: -24px !important;
+    margin-left: 0;
   }
   ```
