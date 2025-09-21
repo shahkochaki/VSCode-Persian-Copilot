@@ -2,6 +2,39 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.7.0] - 2025-09-21
+
+### ✨ New Features
+
+- **🆕 Cheat Sheets Hub**: Added comprehensive cheat sheets service with API integration
+  - Browse and view developer cheat sheets from curated collection
+  - Clean, responsive card-based interface for easy navigation
+  - Code examples with one-click copy functionality
+  - Real-time data from console.helpix.app API
+  - Support for multiple programming languages and frameworks
+
+### 🎨 Design Improvements
+
+- **Enhanced UI/UX**: Modern, clean design matching VS Code's native interface
+- **Professional Styling**: Consistent typography using Vazirmatn font family
+- **Responsive Layout**: Optimized for different screen sizes and VS Code themes
+- **Keyboard Navigation**: Added Escape key support for better accessibility
+
+### 🔧 Technical Enhancements
+
+- **API Integration**: Seamless integration with external cheat sheets API
+- **Error Handling**: Robust error handling with user-friendly messages
+- **Loading States**: Smooth loading animations and state management
+- **Code Safety**: Proper HTML escaping and input sanitization
+
+### 📋 Extension Updates
+
+- **New Command**: Added `vscode-persian-copilot.cheatSheet` command
+- **Configuration**: Added `enableCheatSheet` setting for tool toggle
+- **Menu Integration**: Cheat sheets accessible from command palette and activity bar
+
+---
+
 ## [1.6.4] - 2025-09-18
 
 ### ✨ New Features

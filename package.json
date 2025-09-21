@@ -1,8 +1,8 @@
 {
   "name": "vscode-persian-copilot",
   "displayName": "VSCode Persian Copilot — RTL & Persian Tools Hub",
-  "description": "Professional RTL support and a complete Persian Tools Hub for VS Code: calendar, number tools, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, JSON parser, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
-  "version": "1.6.4",
+  "description": "Professional RTL support and a complete Persian Tools Hub for VS Code: calendar, number tools, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, JSON parser, cheat sheets, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
+  "version": "1.7.0",
   "publisher": "shahkochaki",
   "repository": {
     "type": "git",
@@ -105,6 +105,11 @@
           "command": "vscode-persian-copilot.ipDetails",
           "when": "true",
           "group": "navigation@9"
+        },
+        {
+          "command": "vscode-persian-copilot.cheatSheet",
+          "when": "true",
+          "group": "navigation@10"
         }
       ],
       "view/title": [
@@ -152,6 +157,11 @@
           "command": "vscode-persian-copilot.jsonParser",
           "when": "view == persian-tools-hub",
           "group": "navigation@9"
+        },
+        {
+          "command": "vscode-persian-copilot.cheatSheet",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@10"
         }
       ]
     },
@@ -231,6 +241,12 @@
         "icon": "$(json)"
       },
       {
+        "command": "vscode-persian-copilot.cheatSheet",
+        "title": "📚 Cheat Sheets",
+        "category": "Persian Copilot",
+        "icon": "$(book)"
+      },
+      {
         "command": "vscode-persian-copilot.login",
         "title": "🔐 ورود به حساب کاربری",
         "category": "Persian Copilot",
@@ -289,6 +305,11 @@
           "type": "boolean",
           "default": true,
           "description": "Enable JSON Parser tool (فعال‌سازی ابزار پردازش JSON)"
+        },
+        "persian-copilot.enableCheatSheet": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Cheat Sheets tool (فعال‌سازی ابزار چیت شیت‌ها)"
         }
       }
     }
