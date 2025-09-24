@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.8.3] - 2025-09-24
+
+### 🔧 Improvements
+
+- **📚 CheatSheets Authentication Flow**: Simplified authentication flow in CheatSheets
+  - Removed duplicate login/register functionality from CheatSheets page
+  - Users are now redirected to Hub page for all authentication needs
+  - Simplified UI focused on core CheatSheet functionality
+  - Better integration between Hub and CheatSheets components
+
 ## [1.8.0] - 2025-09-24
 
 ### 🚀 Major Feature: Personal CheatSheets Hub
