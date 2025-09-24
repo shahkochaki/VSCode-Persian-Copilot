@@ -12,29 +12,19 @@
 
 ## 🚀 **COMING SOON - Exciting New Features!**
 
+### � **Personal CheatSheets Hub** ✨ **NEW in v1.8.0**
+The most advanced cheat sheets system for developers:
+- **� Personal Account System** - Create, manage your own cheat sheets collection
+- **📝 Custom CheatSheets** - Create personalized reference materials
+- **� Smart Filtering** - Find exactly what you need instantly
+- **� Cloud Sync** - Access your cheat sheets from any device
+- **🌐 Public Library** - Browse community-shared cheat sheets
+- **⚡ Quick Copy** - One-click code copying with syntax highlighting
+- **🏷️ Category Organization** - Organize by language, framework, or topic
+- **� Privacy Controls** - Choose public or private visibility
+
 ### 📝 **Persian ToDo Manager** 
-> 🔜 **Coming in v1.7.0**
-
-Get ready for the most comprehensive Persian task management system directly in VS Code:
-- **📋 Smart Task Organization** - Create, manage, and organize your Persian tasks
-- **⏰ Time Tracking & Deadlines** - Set Persian dates and track progress
-- **🏷️ Persian Tags & Categories** - Organize with Persian labels
-- **📊 Visual Progress Dashboard** - Beautiful charts and analytics
-- **🔔 Smart Notifications** - Persian calendar-based reminders
-- **📱 Cross-Device Sync** - Access your tasks everywhere
-
-### 📚 **Developer Cheat Sheets Hub**
-> 🔜 **Coming in v1.7.0**
-
-The ultimate collection of Persian developer reference materials:
-- **⚡ Quick Reference Cards** - Instant access to syntax and commands
-- **🎨 CSS Persian Properties** - RTL-specific styling guides
-- **🌐 Web Development** - HTML, CSS, JavaScript in Persian
-- **🐍 Python Cheat Sheets** - Complete Python reference in Persian
-- **⚛️ React & Frontend** - Modern framework guides
-- **🗄️ Database Queries** - SQL and NoSQL references
-- **🔧 Terminal Commands** - Linux, Windows, and Git commands
-- **📐 Algorithm Templates** - Common algorithms and data structures
+> 🔜 **Coming in v1.9.0**
 
 **💡 Stay tuned!** These features are in active development and will revolutionize your Persian development workflow.
 

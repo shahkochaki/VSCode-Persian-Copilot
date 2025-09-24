@@ -2,6 +2,65 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.8.0] - 2025-09-24
+
+### 🚀 Major Feature: Personal CheatSheets Hub
+
+- **🔐 User Authentication System**: Complete login/registration functionality
+  - Secure JWT token-based authentication
+  - Seamless integration with existing helpix.app user system
+  - Automatic session management and token persistence
+  - User-friendly modal dialogs for login/register
+
+- **📝 Personal CheatSheets Management**: Full CRUD operations for personal cheat sheets
+  - Create, edit, and delete custom cheat sheets
+  - Public/private visibility settings
+  - Rich content support with code examples
+  - Order management for cheat sheet items
+
+- **🎯 Smart Content Filtering**: Advanced filtering and search capabilities
+  - View public cheat sheets (unauthenticated users)
+  - View public + personal cheat sheets (authenticated users)
+  - Filter by category and search by title/content
+  - Real-time filtering with responsive UI
+
+### 🛠️ Technical Architecture
+
+- **Service-Oriented Design**: Modular service architecture
+  - `CheatSheetService.js`: Complete API integration for cheat sheet management
+  - `AuthenticationManager.js`: Comprehensive authentication handling
+  - Clean separation of concerns with reusable components
+
+- **API Integration**: Full Laravel backend compatibility
+  - RESTful API endpoints for all CRUD operations
+  - Proper authentication headers and error handling
+  - Support for pagination and advanced queries
+  - Seamless token management across sessions
+
+### 🎨 Enhanced User Experience
+
+- **Responsive UI Components**: Modern, accessible interface design
+  - Authentication bar with user status display
+  - Modal dialogs for forms and user interactions
+  - Toast notifications for user feedback
+  - Keyboard shortcuts (ESC to close modals/details)
+
+- **Smart State Management**: Intelligent UI state handling
+  - Automatic login state detection
+  - Dynamic menu visibility based on authentication
+  - Seamless transitions between authenticated/unauthenticated states
+  - Persistent user preferences and settings
+
+### 📚 Comprehensive Documentation
+
+- **Developer Guide**: Complete implementation documentation
+  - Service usage examples and API documentation
+  - Authentication flow diagrams and best practices
+  - Security considerations and implementation notes
+  - Troubleshooting and debugging guidelines
+
+---
+
 ## [1.7.0] - 2025-09-21
 
 ### ✨ New Features
