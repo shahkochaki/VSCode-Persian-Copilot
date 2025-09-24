@@ -13,7 +13,9 @@
 ## 🚀 **COMING SOON - Exciting New Features!**
 
 ### � **Personal CheatSheets Hub** ✨ **NEW in v1.8.0**
+
 The most advanced cheat sheets system for developers:
+
 - **� Personal Account System** - Create, manage your own cheat sheets collection
 - **📝 Custom CheatSheets** - Create personalized reference materials
 - **� Smart Filtering** - Find exactly what you need instantly
@@ -23,7 +25,8 @@ The most advanced cheat sheets system for developers:
 - **🏷️ Category Organization** - Organize by language, framework, or topic
 - **� Privacy Controls** - Choose public or private visibility
 
-### 📝 **Persian ToDo Manager** 
+### 📝 **Persian ToDo Manager**
+
 > 🔜 **Coming in v1.9.0**
 
 **💡 Stay tuned!** These features are in active development and will revolutionize your Persian development workflow.
@@ -37,6 +40,7 @@ The most advanced cheat sheets system for developers:
 ### 🌟 Key Features
 
 #### 🎯 **Persian Tools Hub**
+
 Access a powerful collection of Persian development tools directly from VS Code's Activity Bar:
 
 ![Persian Tools Hub](screenshots/hub-demo.jpg)
@@ -47,10 +51,25 @@ Access a powerful collection of Persian development tools directly from VS Code'
 - **✍️ Persian Lorem Generator** - Generate Persian placeholder text
 - **💰 Money Converter** - Convert between Rial and Toman
 - **🔠 Number to Words** - Convert numbers to Persian text
-- **📋 JSON Parser & Formatter** - Parse, format, and validate JSON
+- **� Personal CheatSheets Hub** ✨ **NEW in v1.8.0** - Create and manage your coding references
+- **�📋 JSON Parser & Formatter** - Parse, format, and validate JSON
 - **🌐 IP Details Lookup** - Get detailed information about IP addresses
 
+#### 📚 **Personal CheatSheets Hub** ✨ **NEW**
+
+Revolutionary personal cheat sheets system with full CRUD capabilities:
+
+- **🔐 User Authentication** - Secure login/registration with JWT tokens
+- **📝 Personal Collections** - Create, edit, delete your own cheat sheets
+- **🌐 Community Library** - Browse and access public cheat sheets
+- **🔍 Smart Search & Filter** - Find content by category, title, or keywords
+- **💾 Code Examples** - Syntax-highlighted code with one-click copy
+- **🔒 Privacy Controls** - Choose public or private visibility
+- **⚡ Real-time Sync** - Cloud-based storage and instant updates
+- **📱 Responsive Design** - Perfect experience across all screen sizes
+
 #### 📅 **Advanced Persian Calendar**
+
 Professional Persian calendar with accurate date conversion algorithms:
 
 ![Persian Calendar](screenshots/calendar-demo.jpg)
@@ -61,6 +80,7 @@ Professional Persian calendar with accurate date conversion algorithms:
 - User-friendly interface with Vazirmatn font
 
 #### 📋 **JSON Tools**
+
 Comprehensive JSON parsing and formatting capabilities:
 
 ![JSON Parser](screenshots/jsonparser-demo.jpg)
@@ -71,6 +91,7 @@ Comprehensive JSON parsing and formatting capabilities:
 - Support for large JSON files
 
 #### 🎨 **RTL Support for Copilot Chat**
+
 Transform your VS Code experience with proper Persian text rendering:
 
 ![RTL Demo](screenshots/rtl-demo.png)
@@ -99,11 +120,13 @@ ext install shahkochaki.vscode-persian-copilot
 ### 📖 Usage
 
 #### Persian Tools Hub
+
 - Click the **Persian Tools** icon in VS Code's Activity Bar
 - Select any tool from the hub interface
 - Each tool opens in a dedicated webview with full functionality
 
 #### RTL Support
+
 - Use Command Palette: `Persian Copilot: Apply Persian CSS to Chat`
 - Follow the guided instructions for DevTools or Custom CSS
 - Enable auto-apply for automatic RTL styling
@@ -126,16 +149,16 @@ ext install shahkochaki.vscode-persian-copilot
 
 ### 📊 Features Overview
 
-| Feature | Description | Status |
-|---------|-------------|--------|
+| Feature          | Description                          | Status   |
+| ---------------- | ------------------------------------ | -------- |
 | Persian Calendar | Accurate Jalali-Gregorian conversion | ✅ Ready |
-| Number Tools | Persian/English number conversion | ✅ Ready |
-| Text Tools | Arabic to Persian conversion | ✅ Ready |
-| JSON Parser | Parse, format, validate JSON | ✅ Ready |
-| IP Lookup | Get IP address details | ✅ Ready |
-| RTL Support | Right-to-left Copilot Chat | ✅ Ready |
-| Lorem Generator | Persian placeholder text | ✅ Ready |
-| Money Converter | Rial/Toman conversion | ✅ Ready |
+| Number Tools     | Persian/English number conversion    | ✅ Ready |
+| Text Tools       | Arabic to Persian conversion         | ✅ Ready |
+| JSON Parser      | Parse, format, validate JSON         | ✅ Ready |
+| IP Lookup        | Get IP address details               | ✅ Ready |
+| RTL Support      | Right-to-left Copilot Chat           | ✅ Ready |
+| Lorem Generator  | Persian placeholder text             | ✅ Ready |
+| Money Converter  | Rial/Toman conversion                | ✅ Ready |
 
 ### 🤝 Contributing
 
@@ -165,10 +188,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🚀 **به زودی - امکانات هیجان‌انگیز جدید!**
 
-### 📝 **مدیریت کارهای فارسی (Persian ToDo Manager)** 
+### 📝 **مدیریت کارهای فارسی (Persian ToDo Manager)**
+
 > 🔜 **در نسخه 1.7.0 عرضه می‌شود**
 
 آماده باشید برای کامل‌ترین سیستم مدیریت کارها به زبان فارسی مستقیماً در VS Code:
+
 - **📋 سازماندهی هوشمند کارها** - ایجاد، مدیریت و سازماندهی کارهای فارسی
 - **⏰ ردیابی زمان و مهلت‌ها** - تنظیم تاریخ شمسی و پیگیری پیشرفت
 - **🏷️ برچسب‌ها و دسته‌بندی فارسی** - سازماندهی با برچسب‌های فارسی
@@ -177,9 +202,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **📱 همگام‌سازی چندپلتفرمه** - دسترسی به کارهایتان در همه جا
 
 ### 📚 **مرکز برگه‌های تقلب توسعه‌دهنده - Cheat Sheet**
+
 > 🔜 **در نسخه 1.7.0 عرضه می‌شود**
 
 کامل‌ترین مجموعه منابع مرجع فارسی برای توسعه‌دهندگان:
+
 - **⚡ کارت‌های مرجع سریع** - دسترسی فوری به نحو و دستورات
 - **🎨 ویژگی‌های فارسی CSS** - راهنمای استایل‌دهی RTL
 - **🌐 توسعه وب** - HTML، CSS، JavaScript به فارسی
@@ -196,6 +223,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ### 🌟 امکانات کلیدی
 
 #### 🎯 **مرکز ابزارهای فارسی**
+
 دسترسی به مجموعه قدرتمندی از ابزارهای توسعه فارسی مستقیماً از نوار کناری VS Code:
 
 ![مرکز ابزارهای فارسی](screenshots/hub-demo.jpg)
@@ -210,6 +238,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **🌐 جستجوی جزئیات IP** - دریافت اطلاعات تفصیلی آدرس IP
 
 #### 📅 **تقویم پیشرفته فارسی**
+
 تقویم حرفه‌ای فارسی با الگوریتم‌های دقیق تبدیل تاریخ:
 
 ![تقویم فارسی](screenshots/calendar-demo.jpg)
@@ -220,6 +249,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - رابط کاربری دوستانه با فونت وزیرمتن
 
 #### 📋 **ابزارهای JSON**
+
 قابلیت‌های جامع تجزیه و فرمت‌دهی JSON:
 
 ![پردازشگر JSON](screenshots/jsonparser-demo.jpg)
@@ -230,6 +260,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - پشتیبانی از فایل‌های JSON بزرگ
 
 #### 🎨 **پشتیبانی راست‌چین برای چت Copilot**
+
 تبدیل تجربه VS Code با نمایش صحیح متن فارسی:
 
 ![نمایش راست‌چین](screenshots/rtl-demo.png)
@@ -258,11 +289,13 @@ ext install shahkochaki.vscode-persian-copilot
 ### 📖 نحوه استفاده
 
 #### مرکز ابزارهای فارسی
+
 - روی آیکون **Persian Tools** در نوار کناری VS Code کلیک کنید
 - هر ابزار را از رابط hub انتخاب کنید
 - هر ابزار در یک webview اختصاصی با قابلیت کامل باز می‌شود
 
 #### پشتیبانی راست‌چین
+
 - از Command Palette استفاده کنید: `Persian Copilot: Apply Persian CSS to Chat`
 - دستورالعمل‌های راهنما برای DevTools یا Custom CSS را دنبال کنید
 - auto-apply را برای استایل‌دهی خودکار راست‌چین فعال کنید
@@ -306,6 +339,7 @@ ext install shahkochaki.vscode-persian-copilot
 - **مستندسازی جامع:** راهنمای کامل (انگلیسی و فارسی)، اسکرین‌شات و نکات رفع اشکال.
 
 ### 🚀 نحوه استفاده
+
 1. از Command Palette دستور `Persian Tools Hub` یا سایر دستورات افزونه را اجرا کنید.
 2. ابزارهای متنوع (تبدیل تاریخ، اعداد، تقویم، IP و ...) را در مرکز ابزارها تجربه کنید.
 3. برای راست‌چین‌سازی، طبق راهنمای افزونه، کد را در DevTools یا افزونه Custom CSS قرار دهید.
@@ -314,12 +348,14 @@ ext install shahkochaki.vscode-persian-copilot
 > **توجه:** به دلیل سیاست‌های امنیتی VS Code، تزریق مستقیم CSS فقط با راهنمای دستی ممکن است. این افزونه بهترین و امن‌ترین روش‌ها را به شما آموزش می‌دهد تا محیط شما همیشه پایدار و امن بماند.
 
 ### 📝 چرا این افزونه؟
+
 - تجربه‌ای طبیعی و حرفه‌ای برای خواندن فارسی در چت Copilot، markdown و ابزارهای VS Code.
 - همه ابزارهای فارسی در یک افزونه: تاریخ، عدد، متن و ...
 - همیشه به‌روز و سازگار با آخرین نسخه‌های VS Code.
 - مناسب تیم‌ها، مدرسین و همه علاقه‌مندان به محتوای فارسی در VS Code.
 
 ### 💡 رفع اشکال و ارتباط
+
 در صورت بروز مشکل یا داشتن پیشنهاد، لطفاً issue یا pull request خود را در [گیت‌هاب](https://github.com/shahkochaki/vscode-persian-copilot) ثبت کنید.
 
 ---
@@ -331,6 +367,7 @@ ext install shahkochaki.vscode-persian-copilot
 ---
 
 ## License
+
 MIT
 
 ---

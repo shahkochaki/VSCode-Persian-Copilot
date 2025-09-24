@@ -7,12 +7,14 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ### 🚀 Major Feature: Personal CheatSheets Hub
 
 - **🔐 User Authentication System**: Complete login/registration functionality
+
   - Secure JWT token-based authentication
   - Seamless integration with existing helpix.app user system
   - Automatic session management and token persistence
   - User-friendly modal dialogs for login/register
 
 - **📝 Personal CheatSheets Management**: Full CRUD operations for personal cheat sheets
+
   - Create, edit, and delete custom cheat sheets
   - Public/private visibility settings
   - Rich content support with code examples
@@ -27,6 +29,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ### 🛠️ Technical Architecture
 
 - **Service-Oriented Design**: Modular service architecture
+
   - `CheatSheetService.js`: Complete API integration for cheat sheet management
   - `AuthenticationManager.js`: Comprehensive authentication handling
   - Clean separation of concerns with reusable components
@@ -40,6 +43,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ### 🎨 Enhanced User Experience
 
 - **Responsive UI Components**: Modern, accessible interface design
+
   - Authentication bar with user status display
   - Modal dialogs for forms and user interactions
   - Toast notifications for user feedback
