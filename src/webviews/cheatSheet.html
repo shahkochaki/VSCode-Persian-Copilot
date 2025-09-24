@@ -770,6 +770,52 @@
     </div>
 
     <script>
+      // VS Code API Integration
+      const vscode = acquireVsCodeApi();
+      let currentUser = null;
+
+      // Initialize page
+      window.addEventListener("load", () => {
+        requestUserData();
+        loadCheatSheets();
+      });
+
+      function requestUserData() {
+        vscode.postMessage({
+          command: "getUserData",
+        });
+      }
+
+      function updateUserInterface(userData) {
+        currentUser = userData;
+        console.log("CheatSheet: Received user data:", userData);
+
+        // Update auth manager with current user data
+        if (userData && userData.token) {
+          authManager.setUserData(userData);
+          cheatSheetService.setAuthToken(userData.token);
+          updateAuthUI(true, userData.user);
+        } else {
+          authManager.clearUserData();
+          cheatSheetService.setAuthToken(null);
+          updateAuthUI(false, null);
+        }
+
+        // Reload cheat sheets to show personal ones if logged in
+        loadCheatSheets();
+      }
+
+      // Handle messages from extension
+      window.addEventListener("message", (event) => {
+        const message = event.data;
+
+        switch (message.command) {
+          case "setUserData":
+            updateUserInterface(message.data);
+            break;
+        }
+      });
+
       // Import services - در محیط واقعی این کدها را در فایل‌های جداگانه قرار دهید
 
       /**
@@ -834,6 +880,20 @@
           this.user = null;
           localStorage.removeItem("helpix_user_data");
           this.notifyAuthStateChange(false);
+        }
+
+        // New methods for VS Code integration
+        setUserData(userData) {
+          if (userData && userData.token && userData.user) {
+            this.token = userData.token;
+            this.user = userData.user;
+            this.storeAuthData(userData.token, userData.user);
+            this.notifyAuthStateChange(true);
+          }
+        }
+
+        clearUserData() {
+          this.clearAuthData();
         }
 
         isAuthenticated() {
@@ -1136,8 +1196,7 @@
       // Initialize on page load
       document.addEventListener("DOMContentLoaded", function () {
         setupEventListeners();
-        checkAuthStatus();
-        loadCheatSheets();
+        // loadCheatSheets will be called by updateUserInterface after getting user data
       });
 
       function setupEventListeners() {
@@ -1146,8 +1205,18 @@
           .querySelector(".login-button")
           ?.addEventListener("click", () => {
             vscode.postMessage({
-              command: "openCommand",
-              commandId: "extension.openLoginPage",
+              command: "openTool",
+              tool: "login",
+            });
+          });
+
+        // Also handle the guide button in status bar
+        document
+          .getElementById("goToLoginBtn")
+          ?.addEventListener("click", () => {
+            vscode.postMessage({
+              command: "openTool",
+              tool: "login",
             });
           });
 
@@ -1200,45 +1269,52 @@
       }
 
       function updateAuthUI(isAuthenticated, user) {
-        const loginSection = document.getElementById("loginSection");
+        const guestSection = document.getElementById("guestSection");
         const userSection = document.getElementById("userSection");
         const myFilter = document.getElementById("myFilter");
         const headerDescription = document.getElementById("headerDescription");
 
         if (isAuthenticated && user) {
-          loginSection.style.display = "none";
+          guestSection.style.display = "none";
           userSection.style.display = "flex";
-          myFilter.style.display = "block";
+          if (myFilter) myFilter.style.display = "block";
+
+          // Extract user name from the user data structure
+          let userName = "کاربر";
+          if (user.data && (user.data.firstName || user.data.lastName)) {
+            userName = `${user.data.firstName || ""} ${
+              user.data.lastName || ""
+            }`.trim();
+          } else if (user.name) {
+            userName = user.name;
+          }
+
           document.getElementById(
             "userWelcome"
-          ).textContent = `خوش آمدید، ${user.name}`;
+          ).textContent = `خوش آمدید، ${userName}`;
           headerDescription.textContent =
             "مجموعه‌ای از چیت شیت‌های عمومی و شخصی شما";
         } else {
-          loginSection.style.display = "flex";
+          guestSection.style.display = "block";
           userSection.style.display = "none";
-          myFilter.style.display = "none";
+          if (myFilter) myFilter.style.display = "none";
           headerDescription.textContent = "مجموعه‌ای از چیت شیت‌های عمومی";
         }
       }
 
-      async function checkAuthStatus() {
-        const isAuthenticated = await authManager.checkAuthStatus();
-        updateAuthUI(isAuthenticated, authManager.getCurrentUser());
-
-        // همگام‌سازی توکن با CheatSheetService
-        if (isAuthenticated) {
-          cheatSheetService.setAuthToken(authManager.getToken());
-        }
-      }
-
       async function logout() {
-        const result = await authManager.logout();
-        if (result.success) {
-          showMessage("با موفقیت خارج شدید", "success");
-          currentFilter = "all";
-          document.getElementById("typeFilter").value = "all";
-        }
+        // Clear local data
+        currentUser = null;
+        updateUserInterface(null);
+
+        // Open login page to handle logout
+        vscode.postMessage({
+          command: "openTool",
+          tool: "login",
+        });
+
+        currentFilter = "all";
+        document.getElementById("typeFilter").value = "all";
       }
 
       async function loadCheatSheets() {

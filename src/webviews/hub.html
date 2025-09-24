@@ -216,6 +216,35 @@
         transform: translateY(-1px);
       }
 
+      /* User Actions Container */
+      .user-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 16px;
+        flex-wrap: wrap;
+      }
+
+      .user-actions .logout-btn,
+      .user-actions .update-profile-btn {
+        margin-top: 0;
+        margin-left: 0;
+        flex: 1;
+        min-width: 120px;
+      }
+
+      @media (max-width: 768px) {
+        .user-actions {
+          flex-direction: column;
+        }
+
+        .user-actions .logout-btn,
+        .user-actions .update-profile-btn {
+          flex: none;
+          width: 100%;
+        }
+      }
+
       /* Profile Update Modal Styles */
       .profile-modal {
         display: none;
@@ -684,7 +713,7 @@
       }
 
       .tool-card:nth-child(3) .tool-icon {
-        animation: rotate-gentle 4s linear infinite;
+        animation: float 4s linear infinite;
       }
 
       .tool-card:nth-child(4) .tool-icon {
@@ -900,8 +929,9 @@
             <input
               type="tel"
               id="profileMobile"
+              dir="ltr"
               class="profile-form-input"
-              required
+              disabled
             />
           </div>
 
@@ -910,6 +940,7 @@
             <input
               type="email"
               id="profileEmail"
+              dir="ltr"
               class="profile-form-input"
               required
             />
@@ -948,10 +979,12 @@
             <div class="value">فعال</div>
           </div>
         </div>
-        <button class="logout-btn" onclick="logout()">خروج از حساب</button>
-        <button class="update-profile-btn" onclick="openProfileModal()">
-          ویرایش پروفایل
-        </button>
+        <div class="user-actions">
+          <button class="update-profile-btn" onclick="openProfileModal()">
+            ویرایش پروفایل
+          </button>
+          <button class="logout-btn" onclick="logout()">خروج از حساب</button>
+        </div>
       </div>
 
       <div id="loginPrompt" class="login-prompt" onclick="openTool('login')">
@@ -1296,7 +1329,7 @@
                 body: JSON.stringify({
                   first_name: firstName,
                   last_name: lastName,
-                  mobile: mobile,
+                  // mobile: mobile,
                   email: email,
                 }),
               }
@@ -1311,7 +1344,7 @@
               if (currentUser.user && currentUser.user.data) {
                 currentUser.user.data.firstName = firstName;
                 currentUser.user.data.lastName = lastName;
-                currentUser.user.data.mobile = mobile;
+                // currentUser.user.data.mobile = mobile;
                 currentUser.user.data.email = email;
 
                 // Update the UI
