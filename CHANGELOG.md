@@ -2,6 +2,16 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.8.4] - 2025-09-24
+
+### 🔧 Bug Fixes
+
+- **📚 CheatSheets Authentication**: Fixed authentication system in CheatSheets
+  - Simplified authentication to match Hub.html behavior exactly
+  - Removed complex AuthenticationManager class
+  - Direct integration with VS Code API for user data
+  - Fixed login state detection and UI updates
+
 ## [1.8.3] - 2025-09-24
 
 ### 🔧 Improvements
