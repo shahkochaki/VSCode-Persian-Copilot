@@ -790,18 +790,7 @@
         currentUser = userData;
         console.log("CheatSheet: Received user data:", userData);
 
-        // Update auth manager with current user data
-        if (userData && userData.token) {
-          authManager.setUserData(userData);
-          cheatSheetService.setAuthToken(userData.token);
-          updateAuthUI(true, userData.user);
-        } else {
-          authManager.clearUserData();
-          cheatSheetService.setAuthToken(null);
-          updateAuthUI(false, null);
-        }
-
-        // Reload cheat sheets to show personal ones if logged in
+        updateAuthUI();
         loadCheatSheets();
       }
 
@@ -819,121 +808,15 @@
       // Import services - در محیط واقعی این کدها را در فایل‌های جداگانه قرار دهید
 
       /**
-       * Simple Authentication Manager - فقط برای بررسی وضعیت لاگین
-       */
-      class AuthenticationManager {
-        constructor() {
-          this.token = this.getStoredToken();
-          this.user = this.getStoredUser();
-          this.onAuthStateChangeCallbacks = [];
-        }
-
-        getStoredToken() {
-          const userData = localStorage.getItem("helpix_user_data");
-          if (userData) {
-            try {
-              const parsedData = JSON.parse(userData);
-              return parsedData.token;
-            } catch (error) {
-              console.error("Error parsing user data:", error);
-              return null;
-            }
-          }
-          return null;
-        }
-
-        getStoredUser() {
-          const userData = localStorage.getItem("helpix_user_data");
-          if (userData) {
-            try {
-              const parsedData = JSON.parse(userData);
-              return parsedData.user;
-            } catch (error) {
-              console.error("Error parsing user data:", error);
-              return null;
-            }
-          }
-          return null;
-        }
-
-        // Methods for VS Code integration
-        setUserData(userData) {
-          if (userData && userData.token && userData.user) {
-            this.token = userData.token;
-            this.user = userData.user;
-            this.notifyAuthStateChange(true);
-          }
-        }
-
-        clearUserData() {
-          this.token = null;
-          this.user = null;
-          this.notifyAuthStateChange(false);
-        }
-
-        isAuthenticated() {
-          return !!this.token && !!this.user;
-        }
-
-        getCurrentUser() {
-          return this.user;
-        }
-
-        getToken() {
-          return this.token;
-        }
-
-        onAuthStateChange(callback) {
-          this.onAuthStateChangeCallbacks.push(callback);
-        }
-
-        removeAuthStateChangeListener(callback) {
-          const index = this.onAuthStateChangeCallbacks.indexOf(callback);
-          if (index > -1) {
-            this.onAuthStateChangeCallbacks.splice(index, 1);
-          }
-        }
-
-        notifyAuthStateChange(isAuthenticated) {
-          this.onAuthStateChangeCallbacks.forEach((callback) => {
-            try {
-              callback(isAuthenticated, this.user);
-            } catch (error) {
-              console.error("Auth state change callback error:", error);
-            }
-          });
-        }
-      }
-
-      /**
        * CheatSheet Service برای مدیریت چیت شیت‌ها
        */
       class CheatSheetService {
         constructor() {
           this.baseUrl = "https://console.helpix.app/api/v1";
-          this.token = this.getStoredToken();
-        }
-
-        setAuthToken(token) {
-          this.token = token;
-        }
-
-        getStoredToken() {
-          const userData = localStorage.getItem("helpix_user_data");
-          if (userData) {
-            try {
-              const parsedData = JSON.parse(userData);
-              return parsedData.token;
-            } catch (error) {
-              console.error("Error parsing user data:", error);
-              return null;
-            }
-          }
-          return null;
         }
 
         isAuthenticated() {
-          return !!this.token;
+          return !!(currentUser && currentUser.token);
         }
 
         getHeaders() {
@@ -942,8 +825,8 @@
             Accept: "application/json",
           };
 
-          if (this.token) {
-            headers["Authorization"] = `Bearer ${this.token}`;
+          if (currentUser && currentUser.token) {
+            headers["Authorization"] = `Bearer ${currentUser.token}`;
           }
 
           return headers;
@@ -1034,12 +917,8 @@
       let currentCategory = "";
       let currentSearch = "";
 
-      // Initialize authentication manager and cheat sheet service
-      const authManager = new AuthenticationManager();
+      // Initialize cheat sheet service
       const cheatSheetService = new CheatSheetService();
-
-      // Set API URL (از کد موجود استفاده می‌کنیم)
-      const API_BASE_URL = "https://console.helpix.app/api/v1";
 
       // Initialize on page load
       document.addEventListener("DOMContentLoaded", function () {
@@ -1050,16 +929,6 @@
       function setupEventListeners() {
         // Authentication buttons - redirect to hub for login
         document
-          .querySelector(".login-button")
-          ?.addEventListener("click", () => {
-            vscode.postMessage({
-              command: "openTool",
-              tool: "hub",
-            });
-          });
-
-        // Also handle the guide button in status bar
-        document
           .getElementById("goToLoginBtn")
           ?.addEventListener("click", () => {
             vscode.postMessage({
@@ -1068,7 +937,6 @@
             });
           });
 
-        document.getElementById("logoutBtn")?.addEventListener("click", logout);
         document
           .getElementById("createNewBtn")
           .addEventListener("click", () => openModal("cheatSheetModal"));
@@ -1095,43 +963,39 @@
         document
           .getElementById("cheatSheetForm")
           .addEventListener("submit", handleCheatSheetSubmit);
-
-        // Auth state change listener
-        authManager.onAuthStateChange(onAuthStateChanged);
       }
 
-      function onAuthStateChanged(isAuthenticated, user) {
-        updateAuthUI(isAuthenticated, user);
+      function updateUserInterface(userData) {
+        currentUser = userData;
+        console.log("CheatSheet: Received user data:", userData);
 
-        // همگام‌سازی توکن با CheatSheetService
-        if (isAuthenticated) {
-          cheatSheetService.setAuthToken(authManager.getToken());
-        } else {
-          cheatSheetService.setAuthToken(null);
-        }
-
-        loadCheatSheets(); // Reload cheat sheets to show personal ones if logged in
+        updateAuthUI();
+        loadCheatSheets();
       }
 
-      function updateAuthUI(isAuthenticated, user) {
+      function updateAuthUI() {
         const guestSection = document.getElementById("guestSection");
         const userSection = document.getElementById("userSection");
         const myFilter = document.getElementById("myFilter");
         const headerDescription = document.getElementById("headerDescription");
 
-        if (isAuthenticated && user) {
+        if (currentUser && currentUser.token) {
           guestSection.style.display = "none";
           userSection.style.display = "flex";
           if (myFilter) myFilter.style.display = "block";
 
           // Extract user name from the user data structure
           let userName = "کاربر";
-          if (user.data && (user.data.firstName || user.data.lastName)) {
-            userName = `${user.data.firstName || ""} ${
-              user.data.lastName || ""
+          if (
+            currentUser.user &&
+            currentUser.user.data &&
+            (currentUser.user.data.firstName || currentUser.user.data.lastName)
+          ) {
+            userName = `${currentUser.user.data.firstName || ""} ${
+              currentUser.user.data.lastName || ""
             }`.trim();
-          } else if (user.name) {
-            userName = user.name;
+          } else if (currentUser.user && currentUser.user.name) {
+            userName = currentUser.user.name;
           }
 
           document.getElementById(
@@ -1145,21 +1009,6 @@
           if (myFilter) myFilter.style.display = "none";
           headerDescription.textContent = "مجموعه‌ای از چیت شیت‌های عمومی";
         }
-      }
-
-      async function logout() {
-        // Clear local data
-        currentUser = null;
-        updateUserInterface(null);
-
-        // Redirect to hub for logout
-        vscode.postMessage({
-          command: "openTool",
-          tool: "hub",
-        });
-
-        currentFilter = "all";
-        document.getElementById("typeFilter").value = "all";
       }
 
       async function loadCheatSheets() {
@@ -1178,7 +1027,7 @@
 
           let response;
 
-          if (currentFilter === "my" && authManager.isAuthenticated()) {
+          if (currentFilter === "my" && cheatSheetService.isAuthenticated()) {
             response = await cheatSheetService.getMyCheatSheets();
           } else if (currentFilter === "public") {
             // For public only, we'll handle this in the service
@@ -1270,7 +1119,7 @@
               <div class="empty-state-icon">📄</div>
               <div>هیچ چیت شیتی یافت نشد.</div>
               ${
-                authManager.isAuthenticated()
+                cheatSheetService.isAuthenticated()
                   ? '<button class="auth-button primary" onclick="openModal(\'cheatSheetModal\')">ایجاد اولین چیت شیت</button>'
                   : ""
               }
@@ -1286,9 +1135,10 @@
 
           const itemCount = cheatSheet.items ? cheatSheet.items.length : 0;
           const isOwner =
-            authManager.isAuthenticated() &&
-            authManager.getCurrentUser() &&
-            cheatSheet.user_id === authManager.getCurrentUser().id;
+            cheatSheetService.isAuthenticated() &&
+            currentUser &&
+            currentUser.user &&
+            cheatSheet.user_id === currentUser.user.id;
 
           const ownerBadge = cheatSheet.is_public
             ? '<span class="badge public">عمومی</span>'
@@ -1673,9 +1523,6 @@
           });
         }
       });
-
-      // Load cheat sheets when page loads
-      window.addEventListener("load", loadCheatSheets);
     </script>
   </body>
 </html>
