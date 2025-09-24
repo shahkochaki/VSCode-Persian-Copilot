@@ -70,6 +70,15 @@ export function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(disposableLogin);
 
+  // Register openLoginPage command for redirecting from tools
+  const disposableOpenLoginPage = vscode.commands.registerCommand(
+    "extension.openLoginPage",
+    () => {
+      openLoginWebview(context);
+    }
+  );
+  context.subscriptions.push(disposableOpenLoginPage);
+
   // Persian Copilot Activity Bar Icon (View Container) - Always register
   const provider = vscode.window.registerWebviewViewProvider(
     "persian-tools-hub",

@@ -196,6 +196,217 @@
         transform: translateY(-1px);
       }
 
+      .update-profile-btn {
+        font-family: "Vazirmatn", sans-serif;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 8px 16px;
+        cursor: pointer;
+        font-size: 0.9em;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        margin-top: 12px;
+        margin-left: 8px;
+      }
+
+      .update-profile-btn:hover {
+        background: linear-gradient(135deg, #20c997, #198754);
+        transform: translateY(-1px);
+      }
+
+      /* Profile Update Modal Styles */
+      .profile-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+      }
+
+      .profile-modal-content {
+        background: var(--vscode-background);
+        margin: 5% auto;
+        padding: 24px;
+        border: 1px solid var(--vscode-input-border);
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        direction: rtl;
+        font-family: "Vazirmatn", sans-serif;
+      }
+
+      .profile-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid var(--vscode-input-border);
+      }
+
+      .profile-modal-title {
+        color: var(--vscode-button-background);
+        font-size: 1.3em;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .profile-close {
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        color: var(--vscode-foreground);
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .profile-close:hover {
+        opacity: 1;
+      }
+
+      .profile-form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .profile-form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .profile-form-label {
+        font-weight: 500;
+        color: var(--vscode-foreground);
+        font-size: 0.9em;
+      }
+
+      .profile-form-input {
+        font-family: "Vazirmatn", sans-serif;
+        padding: 12px;
+        border: 1px solid var(--vscode-input-border);
+        border-radius: 6px;
+        background: var(--vscode-input-background);
+        color: var(--vscode-foreground);
+        font-size: 0.9em;
+        direction: rtl;
+        transition: border-color 0.3s ease;
+      }
+
+      .profile-form-input:focus {
+        outline: none;
+        border-color: var(--vscode-button-background);
+        box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+      }
+
+      .profile-form-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--vscode-input-border);
+      }
+
+      .profile-form-btn {
+        font-family: "Vazirmatn", sans-serif;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9em;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        min-width: 80px;
+      }
+
+      .profile-save-btn {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+      }
+
+      .profile-save-btn:hover {
+        background: linear-gradient(135deg, #20c997, #198754);
+        transform: translateY(-1px);
+      }
+
+      .profile-save-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .profile-cancel-btn {
+        background: var(--vscode-panel-background);
+        color: var(--vscode-foreground);
+        border: 1px solid var(--vscode-input-border);
+      }
+
+      .profile-cancel-btn:hover {
+        background: var(--vscode-hover-background);
+      }
+
+      .profile-loading {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: var(--vscode-foreground);
+        opacity: 0.7;
+      }
+
+      .profile-message {
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 16px;
+        text-align: center;
+        font-size: 0.9em;
+        display: none;
+      }
+
+      .profile-message.success {
+        background-color: rgba(40, 167, 69, 0.1);
+        border: 1px solid #28a745;
+        color: #28a745;
+      }
+
+      .profile-message.error {
+        background-color: rgba(220, 53, 69, 0.1);
+        border: 1px solid #dc3545;
+        color: #dc3545;
+      }
+
+      @media (max-width: 768px) {
+        .profile-modal-content {
+          margin: 10% auto;
+          width: 95%;
+          padding: 20px;
+        }
+
+        .profile-form-actions {
+          flex-direction: column-reverse;
+        }
+
+        .profile-form-btn {
+          width: 100%;
+        }
+      }
+
       .tools-list {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -640,6 +851,86 @@
   </head>
   <body>
     <h1>مرکز ابزارهای فارسی</h1>
+
+    <!-- Profile Update Modal -->
+    <div id="profileModal" class="profile-modal">
+      <div class="profile-modal-content">
+        <div class="profile-modal-header">
+          <h3 class="profile-modal-title">ویرایش پروفایل</h3>
+          <button class="profile-close" onclick="closeProfileModal()">
+            &times;
+          </button>
+        </div>
+
+        <div id="profileMessage" class="profile-message"></div>
+
+        <div id="profileLoading" class="profile-loading">
+          <div>در حال بارگذاری...</div>
+        </div>
+
+        <form id="profileForm" class="profile-form">
+          <div class="profile-form-group">
+            <label class="profile-form-label" for="profileFirstName"
+              >نام:</label
+            >
+            <input
+              type="text"
+              id="profileFirstName"
+              class="profile-form-input"
+              required
+            />
+          </div>
+
+          <div class="profile-form-group">
+            <label class="profile-form-label" for="profileLastName"
+              >نام خانوادگی:</label
+            >
+            <input
+              type="text"
+              id="profileLastName"
+              class="profile-form-input"
+              required
+            />
+          </div>
+
+          <div class="profile-form-group">
+            <label class="profile-form-label" for="profileMobile"
+              >شماره موبایل:</label
+            >
+            <input
+              type="tel"
+              id="profileMobile"
+              class="profile-form-input"
+              required
+            />
+          </div>
+
+          <div class="profile-form-group">
+            <label class="profile-form-label" for="profileEmail">ایمیل:</label>
+            <input
+              type="email"
+              id="profileEmail"
+              class="profile-form-input"
+              required
+            />
+          </div>
+
+          <div class="profile-form-actions">
+            <button
+              type="button"
+              class="profile-form-btn profile-cancel-btn"
+              onclick="closeProfileModal()"
+            >
+              انصراف
+            </button>
+            <button type="submit" class="profile-form-btn profile-save-btn">
+              ذخیره تغییرات
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <!-- User Section -->
     <div class="user-section">
       <div id="userCard" class="user-card" style="display: none">
@@ -658,6 +949,9 @@
           </div>
         </div>
         <button class="logout-btn" onclick="logout()">خروج از حساب</button>
+        <button class="update-profile-btn" onclick="openProfileModal()">
+          ویرایش پروفایل
+        </button>
       </div>
 
       <div id="loginPrompt" class="login-prompt" onclick="openTool('login')">
@@ -891,6 +1185,170 @@
       // Make cards focusable
       document.querySelectorAll(".tool-card").forEach((card) => {
         card.setAttribute("tabindex", "0");
+      });
+
+      // Profile Update Modal Functions
+      function openProfileModal() {
+        if (!currentUser || !currentUser.user) {
+          showProfileMessage("ابتدا وارد حساب کاربری خود شوید", "error");
+          return;
+        }
+
+        // Fill the form with current user data
+        const userData = currentUser.user.data;
+        document.getElementById("profileFirstName").value =
+          userData.firstName || "";
+        document.getElementById("profileLastName").value =
+          userData.lastName || "";
+        document.getElementById("profileMobile").value = userData.mobile || "";
+        document.getElementById("profileEmail").value = userData.email || "";
+
+        // Clear any previous messages
+        hideProfileMessage();
+
+        document.getElementById("profileModal").style.display = "block";
+      }
+
+      function closeProfileModal() {
+        document.getElementById("profileModal").style.display = "none";
+        // Reset form
+        document.getElementById("profileForm").reset();
+        hideProfileMessage();
+      }
+
+      function showProfileMessage(message, type) {
+        const messageEl = document.getElementById("profileMessage");
+        messageEl.textContent = message;
+        messageEl.className = `profile-message ${type}`;
+        messageEl.style.display = "block";
+      }
+
+      function hideProfileMessage() {
+        const messageEl = document.getElementById("profileMessage");
+        messageEl.style.display = "none";
+        messageEl.className = "profile-message";
+      }
+
+      function showProfileLoading(show) {
+        document.getElementById("profileLoading").style.display = show
+          ? "block"
+          : "none";
+        document.getElementById("profileForm").style.display = show
+          ? "none"
+          : "block";
+      }
+
+      // Handle profile form submission
+      document
+        .getElementById("profileForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          if (!currentUser || !currentUser.token) {
+            showProfileMessage("خطا در احراز هویت", "error");
+            return;
+          }
+
+          // Get form data
+          const firstName = document
+            .getElementById("profileFirstName")
+            .value.trim();
+          const lastName = document
+            .getElementById("profileLastName")
+            .value.trim();
+          const mobile = document.getElementById("profileMobile").value.trim();
+          const email = document.getElementById("profileEmail").value.trim();
+
+          // Basic validation
+          if (!firstName || !lastName || !mobile || !email) {
+            showProfileMessage("لطفاً تمام فیلدها را پر کنید", "error");
+            return;
+          }
+
+          // Email validation
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            showProfileMessage("فرمت ایمیل صحیح نیست", "error");
+            return;
+          }
+
+          // Mobile validation (Iranian format)
+          const mobileRegex = /^(\+98|0)?9\d{9}$/;
+          if (!mobileRegex.test(mobile)) {
+            showProfileMessage("فرمت شماره موبایل صحیح نیست", "error");
+            return;
+          }
+
+          // Show loading
+          showProfileLoading(true);
+          hideProfileMessage();
+
+          try {
+            // Make API request
+            const response = await fetch(
+              "https://console.helpix.app/api/v1/profile/update",
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${currentUser.token}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  first_name: firstName,
+                  last_name: lastName,
+                  mobile: mobile,
+                  email: email,
+                }),
+              }
+            );
+
+            const result = await response.json();
+
+            if (result.status) {
+              showProfileMessage("پروفایل با موفقیت به‌روزرسانی شد", "success");
+
+              // Update current user data locally
+              if (currentUser.user && currentUser.user.data) {
+                currentUser.user.data.firstName = firstName;
+                currentUser.user.data.lastName = lastName;
+                currentUser.user.data.mobile = mobile;
+                currentUser.user.data.email = email;
+
+                // Update the UI
+                updateUserInterface(currentUser);
+              }
+
+              // Close modal after 2 seconds
+              setTimeout(() => {
+                closeProfileModal();
+              }, 2000);
+            } else {
+              showProfileMessage(
+                result.message || "خطا در به‌روزرسانی پروفایل",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Profile update error:", error);
+            showProfileMessage("خطا در ارتباط با سرور", "error");
+          } finally {
+            showProfileLoading(false);
+          }
+        });
+
+      // Close modal when clicking outside
+      window.addEventListener("click", function (event) {
+        const modal = document.getElementById("profileModal");
+        if (event.target === modal) {
+          closeProfileModal();
+        }
+      });
+
+      // Close modal on Escape key
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closeProfileModal();
+        }
       });
     </script>
 

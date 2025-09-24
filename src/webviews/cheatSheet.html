@@ -31,21 +31,53 @@
         border-bottom: 2px solid var(--vscode-panel-border);
       }
 
-      /* Authentication Bar */
-      .auth-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+      /* Status Bar */
+      .status-bar {
         padding: 15px 0;
         border-bottom: 1px solid var(--vscode-panel-border);
         margin-bottom: 20px;
       }
 
-      .auth-section,
+      .guest-section {
+        text-align: center;
+      }
+
+      .info-message {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        background: var(--vscode-editor-inactiveSelectionBackground);
+        border: 1px solid var(--vscode-panel-border);
+        border-radius: 8px;
+        padding: 15px 20px;
+        color: var(--vscode-foreground);
+      }
+
+      .info-message span:first-child {
+        font-size: 1.2rem;
+      }
+
+      .login-guide-button {
+        background: #007acc;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+      }
+
+      .login-guide-button:hover {
+        background: #005a9e;
+      }
+
       .user-section {
         display: flex;
-        gap: 10px;
+        justify-content: center;
         align-items: center;
+        gap: 20px;
       }
 
       .auth-button {
@@ -314,65 +346,168 @@
         background: var(--vscode-button-hoverBackground);
       }
 
-      .cheat-sheets-grid {
+      .cheat-sheet-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
         margin-bottom: 30px;
       }
 
       .cheat-sheet-card {
         background: var(--vscode-editor-background);
         border: 1px solid var(--vscode-panel-border);
-        border-radius: 8px;
-        padding: 20px;
+        border-radius: 6px;
+        padding: 16px;
         cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: relative;
       }
 
       .cheat-sheet-card:hover {
         background: var(--vscode-list-hoverBackground);
-        border-color: #007acc;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-color: var(--vscode-focusBorder);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 8px;
       }
 
       .card-title {
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: 600;
-        margin-bottom: 8px;
+        margin: 0;
         color: var(--vscode-textPreformat-foreground);
+        line-height: 1.3;
+        flex: 1;
+        margin-right: 8px;
       }
 
       .card-description {
         color: var(--vscode-descriptionForeground);
         margin-bottom: 12px;
-        font-size: 0.9rem;
-        line-height: 1.5;
+        font-size: 0.85rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       .card-meta {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 15px;
-        font-size: 0.85rem;
+        margin-top: 12px;
+        font-size: 0.8rem;
+        gap: 8px;
       }
 
       .card-category {
-        background: #007acc;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 0.8rem;
+        background: var(--vscode-button-background);
+        color: var(--vscode-button-foreground);
+        padding: 2px 8px;
+        border-radius: 10px;
+        font-size: 0.75rem;
         font-weight: 500;
+        white-space: nowrap;
       }
 
       .card-count {
         color: var(--vscode-descriptionForeground);
+        font-size: 0.75rem;
       }
 
+      .card-author {
+        color: var(--vscode-descriptionForeground);
+        font-size: 0.75rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .badge {
+        padding: 2px 6px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+
+      .badge.public {
+        background: var(--vscode-charts-green);
+        color: white;
+      }
+
+      .badge.private {
+        background: var(--vscode-charts-orange);
+        color: white;
+      }
+
+      .card-actions {
+        display: flex;
+        gap: 6px;
+        margin-top: 12px;
+        padding-top: 8px;
+        border-top: 1px solid var(--vscode-panel-border);
+      }
+
+      .card-actions button {
+        flex: 1;
+        padding: 6px 12px;
+        border: none;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .card-actions button:first-child {
+        background: var(--vscode-button-background);
+        color: var(--vscode-button-foreground);
+      }
+
+      .card-actions button:first-child:hover {
+        background: var(--vscode-button-hoverBackground);
+      }
+
+      .card-actions button:last-child {
+        background: var(--vscode-button-secondaryBackground);
+        color: var(--vscode-button-secondaryForeground);
+      }
+
+      .card-actions button:last-child:hover {
+        background: var(--vscode-button-secondaryHoverBackground);
+      }
+
+      .copy-btn {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: var(--vscode-button-secondaryBackground);
+        color: var(--vscode-button-secondaryForeground);
+        border: none;
+        border-radius: 4px;
+        padding: 4px 6px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s;
+        z-index: 1;
+      }
+
+      .cheat-sheet-card:hover .copy-btn {
+        opacity: 1;
+      }
+
+      .copy-btn:hover {
+        background: var(--vscode-button-secondaryHoverBackground);
+      }
       .cheat-sheet-detail {
         display: none;
       }
@@ -397,74 +532,81 @@
 
       .items-container {
         display: grid;
-        gap: 20px;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       }
 
       .item-card {
         background: var(--vscode-editor-background);
         border: 1px solid var(--vscode-panel-border);
-        border-radius: 8px;
-        padding: 20px;
+        border-radius: 6px;
+        padding: 14px;
         transition: all 0.2s ease;
+        position: relative;
       }
 
       .item-card:hover {
-        border-color: #007acc;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-color: var(--vscode-focusBorder);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+      }
+
+      .item-card .copy-btn {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        background: var(--vscode-button-secondaryBackground);
+        color: var(--vscode-button-secondaryForeground);
+        border: none;
+        border-radius: 3px;
+        padding: 3px 5px;
+        font-size: 0.7rem;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s;
+        z-index: 1;
+      }
+
+      .item-card:hover .copy-btn {
+        opacity: 1;
+      }
+
+      .item-card .copy-btn:hover {
+        background: var(--vscode-button-secondaryHoverBackground);
       }
 
       .item-title {
-        font-size: 1.1rem;
+        font-size: 0.95rem;
         font-weight: 600;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         color: var(--vscode-textPreformat-foreground);
+        line-height: 1.3;
       }
 
       .item-content {
         color: var(--vscode-descriptionForeground);
-        margin-bottom: 15px;
-        line-height: 1.6;
+        margin-bottom: 12px;
+        line-height: 1.5;
+        font-size: 0.85rem;
       }
 
       .code-block {
         position: relative;
         background: var(--vscode-textCodeBlock-background);
         border: 1px solid var(--vscode-panel-border);
-        border-radius: 6px;
-        padding: 15px;
+        border-radius: 4px;
+        padding: 12px;
         font-family: "Courier New", monospace;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: var(--vscode-textPreformat-foreground);
         direction: ltr;
         text-align: left;
         overflow-x: auto;
       }
 
-      .copy-button {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        background: #007acc;
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.8rem;
-        opacity: 0;
-        transition: all 0.2s;
-      }
-
-      .code-block:hover .copy-button {
-        opacity: 1;
-      }
-
-      .copy-button:hover {
-        background: #005a9e;
-      }
-
-      .copy-button.copied {
-        background: #28a745;
+      .code-block pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-all;
       }
 
       .empty-state {
@@ -484,7 +626,7 @@
           padding: 15px;
         }
 
-        .cheat-sheets-grid {
+        .cheat-sheet-grid {
           grid-template-columns: 1fr;
           gap: 15px;
         }
@@ -497,21 +639,25 @@
   </head>
   <body>
     <div class="container">
-      <!-- Authentication Bar -->
-      <div id="authBar" class="auth-bar">
-        <div id="loginSection" class="auth-section">
-          <button id="loginBtn" class="auth-button">ورود</button>
-          <button id="registerBtn" class="auth-button">ثبت‌نام</button>
+      <!-- User Status Bar -->
+      <div id="statusBar" class="status-bar">
+        <div id="guestSection" class="guest-section">
+          <div class="info-message">
+            <span>💡</span>
+            <span
+              >برای ایجاد و مدیریت چیت شیت‌های شخصی، ابتدا وارد حساب کاربری خود
+              شوید</span
+            >
+            <button id="goToLoginBtn" class="login-guide-button">
+              رفتن به صفحه ورود
+            </button>
+          </div>
         </div>
         <div id="userSection" class="user-section" style="display: none">
           <span id="userWelcome"></span>
-          <button id="myCheatSheetsBtn" class="auth-button">
-            چیت شیت‌های من
-          </button>
           <button id="createNewBtn" class="auth-button primary">
-            ایجاد جدید
+            ایجاد چیت شیت جدید
           </button>
-          <button id="logoutBtn" class="auth-button">خروج</button>
         </div>
       </div>
 
@@ -559,7 +705,7 @@
       </div>
 
       <div id="cheatSheetsSection" style="display: none">
-        <div id="cheatSheetsGrid" class="cheat-sheets-grid">
+        <div id="cheatSheetsGrid" class="cheat-sheet-grid">
           <!-- Cheat sheets will be populated here -->
         </div>
       </div>
@@ -575,87 +721,6 @@
         </div>
         <div id="itemsContainer" class="items-container">
           <!-- Items will be populated here -->
-        </div>
-      </div>
-
-      <!-- Login Modal -->
-      <div id="loginModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2>ورود به حساب کاربری</h2>
-          </div>
-          <form id="loginForm">
-            <div class="form-group">
-              <label for="loginEmail">ایمیل:</label>
-              <input type="email" id="loginEmail" required />
-            </div>
-            <div class="form-group">
-              <label for="loginPassword">رمز عبور:</label>
-              <input type="password" id="loginPassword" required />
-            </div>
-            <div
-              id="loginError"
-              class="error-message"
-              style="display: none"
-            ></div>
-            <div class="modal-actions">
-              <button type="submit" class="btn-primary">ورود</button>
-              <button
-                type="button"
-                class="btn-secondary"
-                onclick="closeModal('loginModal')"
-              >
-                انصراف
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- Register Modal -->
-      <div id="registerModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h2>ثبت‌نام</h2>
-          </div>
-          <form id="registerForm">
-            <div class="form-group">
-              <label for="registerName">نام:</label>
-              <input type="text" id="registerName" required />
-            </div>
-            <div class="form-group">
-              <label for="registerEmail">ایمیل:</label>
-              <input type="email" id="registerEmail" required />
-            </div>
-            <div class="form-group">
-              <label for="registerPassword">رمز عبور:</label>
-              <input
-                type="password"
-                id="registerPassword"
-                required
-                minlength="6"
-              />
-            </div>
-            <div class="form-group">
-              <label for="registerPasswordConfirm">تکرار رمز عبور:</label>
-              <input type="password" id="registerPasswordConfirm" required />
-            </div>
-            <div
-              id="registerError"
-              class="error-message"
-              style="display: none"
-            ></div>
-            <div class="modal-actions">
-              <button type="submit" class="btn-primary">ثبت‌نام</button>
-              <button
-                type="button"
-                class="btn-secondary"
-                onclick="closeModal('registerModal')"
-              >
-                انصراف
-              </button>
-            </div>
-          </form>
         </div>
       </div>
 
@@ -1076,17 +1141,20 @@
       });
 
       function setupEventListeners() {
-        // Authentication buttons
+        // Authentication buttons - redirect to main login
         document
-          .getElementById("loginBtn")
-          .addEventListener("click", () => openModal("loginModal"));
-        document
-          .getElementById("registerBtn")
-          .addEventListener("click", () => openModal("registerModal"));
-        document.getElementById("logoutBtn").addEventListener("click", logout);
+          .querySelector(".login-button")
+          ?.addEventListener("click", () => {
+            vscode.postMessage({
+              command: "openCommand",
+              commandId: "extension.openLoginPage",
+            });
+          });
+
+        document.getElementById("logoutBtn")?.addEventListener("click", logout);
         document
           .getElementById("myCheatSheetsBtn")
-          .addEventListener("click", showMyCheatSheets);
+          ?.addEventListener("click", showMyCheatSheets);
         document
           .getElementById("createNewBtn")
           .addEventListener("click", () => openModal("cheatSheetModal"));
@@ -1110,12 +1178,6 @@
           .addEventListener("change", filterByType);
 
         // Form submissions
-        document
-          .getElementById("loginForm")
-          .addEventListener("submit", handleLogin);
-        document
-          .getElementById("registerForm")
-          .addEventListener("submit", handleRegister);
         document
           .getElementById("cheatSheetForm")
           .addEventListener("submit", handleCheatSheetSubmit);
@@ -1167,67 +1229,6 @@
         // همگام‌سازی توکن با CheatSheetService
         if (isAuthenticated) {
           cheatSheetService.setAuthToken(authManager.getToken());
-        }
-      }
-
-      async function handleLogin(e) {
-        e.preventDefault();
-
-        const email = document.getElementById("loginEmail").value;
-        const password = document.getElementById("loginPassword").value;
-        const errorDiv = document.getElementById("loginError");
-
-        try {
-          const result = await authManager.login(email, password);
-
-          if (result.success) {
-            closeModal("loginModal");
-            showMessage("با موفقیت وارد شدید!", "success");
-          } else {
-            errorDiv.textContent = result.message;
-            errorDiv.style.display = "block";
-          }
-        } catch (error) {
-          errorDiv.textContent = "خطا در ورود: " + error.message;
-          errorDiv.style.display = "block";
-        }
-      }
-
-      async function handleRegister(e) {
-        e.preventDefault();
-
-        const name = document.getElementById("registerName").value;
-        const email = document.getElementById("registerEmail").value;
-        const password = document.getElementById("registerPassword").value;
-        const passwordConfirm = document.getElementById(
-          "registerPasswordConfirm"
-        ).value;
-        const errorDiv = document.getElementById("registerError");
-
-        if (password !== passwordConfirm) {
-          errorDiv.textContent = "رمزهای عبور یکسان نیستند";
-          errorDiv.style.display = "block";
-          return;
-        }
-
-        try {
-          const result = await authManager.register({
-            name,
-            email,
-            password,
-            password_confirmation: passwordConfirm,
-          });
-
-          if (result.success) {
-            closeModal("registerModal");
-            showMessage("حساب کاربری با موفقیت ایجاد شد!", "success");
-          } else {
-            errorDiv.textContent = result.message;
-            errorDiv.style.display = "block";
-          }
-        } catch (error) {
-          errorDiv.textContent = "خطا در ثبت‌نام: " + error.message;
-          errorDiv.style.display = "block";
         }
       }
 
@@ -1442,16 +1443,17 @@
                 const safeCode = escapeHtml(item.code_example);
                 codeHtml = `
                                 <div class="code-block">
-                                    <button class="copy-button" onclick="copyCode(this, '${safeCode.replace(
-                                      /'/g,
-                                      "\\'"
-                                    )}')" title="کپی کردن کد">کپی</button>
                                     <pre>${safeCode}</pre>
                                 </div>
                             `;
               }
 
               itemCard.innerHTML = `
+                            <button class="copy-btn" onclick="copyItemContent(event, '${escapeHtml(
+                              item.title
+                            )}', '${escapeHtml(item.content)}', '${
+                item.code_example ? escapeHtml(item.code_example) : ""
+              }')" title="کپی محتوای آیتم">📋</button>
                             <div class="item-title">${escapeHtml(
                               item.title
                             )}</div>
@@ -1478,23 +1480,57 @@
         document.getElementById("cheatSheetsSection").style.display = "block";
       }
 
-      async function copyCode(button, code) {
-        try {
-          await navigator.clipboard.writeText(code);
-          const originalText = button.textContent;
-          button.textContent = "✓ کپی شد";
-          button.classList.add("copied");
+      async function copyCheatSheetContent(event, cheatSheetId) {
+        event.stopPropagation();
 
-          setTimeout(() => {
-            button.textContent = originalText;
-            button.classList.remove("copied");
-          }, 2000);
-        } catch (err) {
-          console.error("Failed to copy: ", err);
-          button.textContent = "❌ خطا";
-          setTimeout(() => {
-            button.textContent = "کپی";
-          }, 2000);
+        try {
+          const cheatSheet = await cheatSheetService.getCheatSheet(
+            cheatSheetId
+          );
+          if (cheatSheet && cheatSheet.items) {
+            let content = `${cheatSheet.title}\n`;
+            content += `${
+              cheatSheet.description ? cheatSheet.description + "\n" : ""
+            }`;
+            content += "=".repeat(50) + "\n\n";
+
+            cheatSheet.items.forEach((item, index) => {
+              content += `${index + 1}. ${item.title}\n`;
+              if (item.description) {
+                content += `   ${item.description}\n`;
+              }
+              if (item.code) {
+                content += `   کد: ${item.code}\n`;
+              }
+              content += "\n";
+            });
+
+            await navigator.clipboard.writeText(content);
+            showMessage("محتوای چیت‌شیت کپی شد!", "success");
+          }
+        } catch (error) {
+          console.error("Error copying cheat sheet:", error);
+          showMessage("خطا در کپی کردن محتوا", "error");
+        }
+      }
+
+      async function copyItemContent(event, title, content, code) {
+        event.stopPropagation();
+
+        try {
+          let itemContent = `${title}\n`;
+          if (content) {
+            itemContent += `${content}\n`;
+          }
+          if (code) {
+            itemContent += `\nکد:\n${code}\n`;
+          }
+
+          await navigator.clipboard.writeText(itemContent);
+          showMessage("محتوای آیتم کپی شد!", "success");
+        } catch (error) {
+          console.error("Error copying item:", error);
+          showMessage("خطا در کپی کردن آیتم", "error");
         }
       }
 
@@ -1513,12 +1549,8 @@
         const errorElements = document.querySelectorAll(".error-message");
         errorElements.forEach((el) => (el.style.display = "none"));
 
-        // Reset forms
-        if (modalId === "loginModal") {
-          document.getElementById("loginForm").reset();
-        } else if (modalId === "registerModal") {
-          document.getElementById("registerForm").reset();
-        } else if (modalId === "cheatSheetModal") {
+        // Reset cheat sheet form
+        if (modalId === "cheatSheetModal") {
           document.getElementById("cheatSheetForm").reset();
           document.getElementById("cheatSheetModalTitle").textContent =
             "ایجاد چیت شیت جدید";
