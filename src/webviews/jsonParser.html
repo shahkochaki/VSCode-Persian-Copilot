@@ -13,6 +13,28 @@
       rel="stylesheet"
     />
 
+    <!-- JSON Viewer Libraries for Vanilla HTML/JS -->
+    <script src="https://cdn.jsdelivr.net/npm/renderjson@1.4.0/renderjson.js"></script>
+    <script src="https://unpkg.com/@alenaksu/json-viewer@2.0.1/dist/json-viewer.bundle.js"></script>
+    <script>
+      // Configure renderjson
+      if (typeof renderjson !== "undefined") {
+        renderjson.set_icons("▶", "▼");
+        renderjson.set_show_by_default(false);
+        renderjson.set_max_string_length(100);
+        console.log("✅ renderjson configured successfully");
+      } else {
+        console.warn("⚠️ renderjson not loaded");
+      }
+
+      // Check json-viewer availability
+      if (typeof JSONViewer !== "undefined") {
+        console.log("✅ json-viewer available");
+      } else {
+        console.warn("⚠️ json-viewer not loaded");
+      }
+    </script>
+
     <!-- js-beautify library with fallback -->
     <script>
       // Function to load js-beautify with fallback CDNs
@@ -253,6 +275,7 @@
         box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
       }
 
+      /* Enhanced JSON Viewer Styles */
       .json-viewer {
         width: 100%;
         height: 100%;
@@ -261,6 +284,371 @@
         border-radius: 8px;
         padding: 16px;
         overflow-y: auto;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .enhanced-json-viewer {
+        width: 100%;
+        height: 100%;
+        background: var(--vscode-input-background);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow-y: auto;
+        font-family: "Courier New", monospace !important;
+        font-size: 13px;
+        padding: 16px;
+      }
+
+      /* Beautiful enhanced renderjson styles */
+      .enhanced-json-viewer .renderjson {
+        color: var(--vscode-foreground) !important;
+        background: transparent !important;
+        font-family: "Courier New", monospace !important;
+        font-size: 13px !important;
+        line-height: 1.6 !important;
+        padding: 8px 0 !important;
+      }
+
+      .enhanced-json-viewer .renderjson .disclosure {
+        color: #569cd6 !important;
+        font-size: 16px !important;
+        cursor: pointer;
+        user-select: none;
+        margin-right: 6px !important;
+        transition: all 0.2s ease !important;
+        border-radius: 3px !important;
+        padding: 2px 4px !important;
+        font-weight: bold !important;
+      }
+
+      .enhanced-json-viewer .renderjson .disclosure:hover {
+        background: rgba(86, 156, 214, 0.2) !important;
+        transform: scale(1.1) !important;
+      }
+
+      .enhanced-json-viewer .renderjson .syntax {
+        color: #d4d4d4 !important;
+        font-weight: bold !important;
+      }
+
+      .enhanced-json-viewer .renderjson .string {
+        color: #ce9178 !important;
+        cursor: pointer !important;
+        transition: color 0.2s ease !important;
+        position: relative !important;
+        display: inline-block !important;
+      }
+
+      .enhanced-json-viewer .renderjson .number {
+        color: #b5cea8 !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: color 0.2s ease !important;
+        position: relative !important;
+        display: inline-block !important;
+      }
+
+      .enhanced-json-viewer .renderjson .boolean {
+        color: #569cd6 !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        transition: color 0.2s ease !important;
+        position: relative !important;
+        display: inline-block !important;
+      }
+
+      .enhanced-json-viewer .renderjson .key {
+        color: #9cdcfe !important;
+        font-weight: 600 !important;
+        margin-right: 8px !important;
+        display: inline-block !important;
+      }
+
+      /* Inline editing styles */
+      .json-inline-edit {
+        background: var(--vscode-input-background) !important;
+        border: 1px solid var(--vscode-button-background) !important;
+        border-radius: 3px !important;
+        color: var(--vscode-foreground) !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        padding: 2px 4px !important;
+        outline: none !important;
+        min-width: 60px !important;
+        width: auto !important;
+      }
+
+      .json-inline-edit:focus {
+        box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3) !important;
+      }
+
+      /* Hover action buttons */
+      .json-hover-actions {
+        position: absolute;
+        right: -80px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: var(--vscode-panel-background);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 2px;
+        display: none;
+        align-items: center;
+        gap: 2px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        z-index: 1000;
+        animation: hoverActionsShow 0.2s ease-out;
+      }
+
+      @keyframes hoverActionsShow {
+        from {
+          opacity: 0;
+          transform: translateY(-50%) translateX(-5px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(-50%) translateX(0) scale(1);
+        }
+      }
+
+      .json-item-wrapper:hover .json-hover-actions {
+        display: flex !important;
+      }
+
+      .json-hover-action-btn {
+        background: none;
+        border: none;
+        color: var(--vscode-foreground);
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.7;
+      }
+
+      .json-hover-action-btn:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      .json-hover-action-btn.copy-btn:hover {
+        background: rgba(76, 175, 80, 0.2);
+        color: #4caf50;
+      }
+
+      .json-hover-action-btn.edit-btn:hover {
+        background: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+      }
+
+      .json-hover-action-btn.delete-btn:hover {
+        background: rgba(244, 67, 54, 0.2);
+        color: #f44336;
+      }
+
+      .json-hover-action-btn .material-icons {
+        font-size: 14px;
+      }
+
+      /* Wrapper for json items to handle hover */
+      .json-item-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+
+      .enhanced-json-viewer .renderjson .null {
+        color: #808080 !important;
+        font-style: italic !important;
+        background: rgba(128, 128, 128, 0.1) !important;
+        padding: 2px 6px !important;
+        border-radius: 3px !important;
+      }
+
+      .enhanced-json-viewer .renderjson a {
+        text-decoration: none !important;
+        color: inherit !important;
+      }
+
+      .enhanced-json-viewer .renderjson .collapsed {
+        white-space: nowrap;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px dashed var(--border-color) !important;
+        border-radius: 6px !important;
+        padding: 4px 8px !important;
+        margin: 2px 0 !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+      }
+
+      .enhanced-json-viewer .renderjson .collapsed:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: var(--vscode-button-background) !important;
+        transform: scale(1.02) !important;
+      }
+
+      .enhanced-json-viewer .renderjson .expanded {
+        white-space: pre;
+        border-left: 2px solid var(--vscode-button-background) !important;
+        padding-left: 12px !important;
+        margin-left: 8px !important;
+        position: relative !important;
+      }
+
+      .enhanced-json-viewer .renderjson .expanded::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: -2px;
+        bottom: -2px;
+        width: 2px;
+        background: linear-gradient(
+          180deg,
+          transparent 0%,
+          var(--vscode-button-background) 20%,
+          var(--vscode-button-background) 80%,
+          transparent 100%
+        ) !important;
+        border-radius: 2px !important;
+      }
+
+      /* Edit overlay styles */
+      .json-edit-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 20000;
+        animation: overlayShow 0.2s ease-out;
+      }
+
+      @keyframes overlayShow {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .json-edit-modal {
+        background: var(--vscode-panel-background);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        min-width: 400px;
+        max-width: 600px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        animation: modalShow 0.3s ease-out;
+      }
+
+      @keyframes modalShow {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .json-edit-modal h3 {
+        margin-bottom: 16px;
+        color: var(--vscode-button-background);
+        font-size: 16px;
+        direction: rtl;
+      }
+
+      .json-edit-modal input,
+      .json-edit-modal textarea {
+        width: 100%;
+        padding: 12px;
+        background: var(--vscode-input-background);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        color: var(--vscode-foreground);
+        font-family: "Courier New", monospace;
+        margin-bottom: 16px;
+        transition: all 0.2s ease;
+      }
+
+      .json-edit-modal input:focus,
+      .json-edit-modal textarea:focus {
+        outline: none;
+        border-color: var(--vscode-button-background);
+        box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+      }
+
+      .json-edit-modal .button-group {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        direction: rtl;
+      }
+
+      .json-edit-modal button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: "Vazirmatn", sans-serif;
+        font-size: 13px;
+        transition: all 0.2s ease;
+      }
+
+      .json-edit-modal .btn-primary {
+        background: var(--vscode-button-background);
+        color: var(--vscode-button-foreground);
+      }
+
+      .json-edit-modal .btn-primary:hover {
+        background: #106ebe;
+        transform: translateY(-1px);
+      }
+
+      .json-edit-modal .btn-secondary {
+        background: var(--vscode-input-background);
+        color: var(--vscode-foreground);
+        border: 1px solid var(--border-color);
+      }
+
+      .json-edit-modal .btn-secondary:hover {
+        background: var(--vscode-panel-background);
+        transform: translateY(-1px);
+      }
+
+      /* JSON Viewer (alenaksu) styles */
+      .enhanced-json-viewer json-viewer {
+        --background-color: var(--vscode-input-background);
+        --color: var(--vscode-foreground);
+        --string-color: #ce9178;
+        --number-color: #b5cea8;
+        --boolean-color: #569cd6;
+        --null-color: #808080;
+        --property-color: #9cdcfe;
+        --font-family: "Courier New", monospace;
+        --font-size: 13px;
+        --line-height: 1.5;
+        --indent-size: 1em;
+        width: 100%;
+        height: 100%;
+      }
+
+      .enhanced-json-viewer json-viewer::part(base) {
+        background: transparent;
+        color: var(--vscode-foreground);
         font-family: "Courier New", monospace;
         font-size: 13px;
         line-height: 1.5;
@@ -669,7 +1057,23 @@
                 onkeyup="searchInJson()"
               />
               <button
+                class="icon-btn tooltip"
+                data-tooltip="جمع کردن همه"
+                id="collapseAllBtn"
+                onclick="toggleAllCollapse()"
+              >
+                <span class="material-icons">unfold_less</span>
+              </button>
+              <button
                 class="icon-btn tooltip active"
+                data-tooltip="نمای پیشرفته"
+                id="enhancedViewBtn"
+                onclick="toggleView('enhanced')"
+              >
+                <span class="material-icons">auto_awesome</span>
+              </button>
+              <button
+                class="icon-btn tooltip"
                 data-tooltip="نمای درختی"
                 id="treeViewBtn"
                 onclick="toggleView('tree')"
@@ -710,6 +1114,11 @@
             <div
               id="jsonViewer"
               class="json-viewer"
+              style="display: none"
+            ></div>
+            <div
+              id="enhancedJsonViewer"
+              class="enhanced-json-viewer"
               style="display: block"
             ></div>
           </div>
@@ -721,10 +1130,27 @@
       </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div id="jsonEditOverlay" class="json-edit-overlay">
+      <div class="json-edit-modal">
+        <h3 id="editModalTitle">ویرایش مقدار</h3>
+        <div id="editModalContent">
+          <!-- Dynamic content will be inserted here -->
+        </div>
+        <div class="button-group">
+          <button class="btn-primary" onclick="saveJsonEdit()">ذخیره</button>
+          <button class="btn-secondary" onclick="cancelJsonEdit()">لغو</button>
+        </div>
+      </div>
+    </div>
+
     <script>
-      let currentView = "tree"; // Default to tree view
+      let currentView = "enhanced"; // Default to enhanced view
       let jsonData = null;
       let searchTerm = "";
+      let currentJsonViewer = null;
+      let isAllCollapsed = false;
+      let editModalData = null;
 
       // Helper function to save JSON to localStorage
       function saveJsonToStorage(jsonContent) {
@@ -865,6 +1291,8 @@
 
           if (currentView === "text") {
             updateTextView();
+          } else if (currentView === "enhanced") {
+            updateEnhancedView();
           } else {
             updateTreeView();
           }
@@ -914,14 +1342,886 @@
         }
       }
 
+      // Update Enhanced JSON view using renderjson or json-viewer
+      function updateEnhancedView() {
+        const container = document.getElementById("enhancedJsonViewer");
+        if (!container || !jsonData) return;
+
+        // Clear previous content
+        container.innerHTML = "";
+
+        try {
+          // Try using renderjson first
+          if (typeof renderjson !== "undefined") {
+            console.log("🎨 Using renderjson for enhanced view");
+
+            // Create wrapper div
+            const wrapper = document.createElement("div");
+            wrapper.style.cssText = `
+              color: var(--vscode-foreground);
+              font-family: "Courier New", monospace;
+              font-size: 13px;
+              line-height: 1.5;
+              padding: 8px;
+            `;
+
+            // Set renderjson options for beautiful display
+            renderjson.set_icons("▶", "▼");
+            renderjson.set_show_by_default(!isAllCollapsed);
+            renderjson.set_max_string_length(100);
+            renderjson.set_sort_objects(false);
+            renderjson.set_replacer(null);
+            renderjson.set_property_list(null);
+
+            // Render JSON with enhanced hover actions support
+            const rendered = renderjson(jsonData);
+            addHoverActionsToRenderjson(rendered);
+            wrapper.appendChild(rendered);
+            container.appendChild(wrapper);
+
+            console.log("✅ Enhanced view rendered with beautiful renderjson");
+          } else if (typeof JSONViewer !== "undefined") {
+            console.log("🎨 Using json-viewer for enhanced view");
+
+            // Create json-viewer element
+            const jsonViewer = document.createElement("json-viewer");
+            jsonViewer.data = jsonData;
+            jsonViewer.style.cssText = `
+              --background-color: transparent;
+              --color: var(--vscode-foreground);
+              --string-color: #ce9178;
+              --number-color: #b5cea8;
+              --boolean-color: #569cd6;
+              --null-color: #808080;
+              --property-color: #9cdcfe;
+              --font-family: "Courier New", monospace;
+              --font-size: 13px;
+              width: 100%;
+              height: 100%;
+            `;
+
+            container.appendChild(jsonViewer);
+            console.log("✅ Enhanced view rendered with json-viewer");
+          } else {
+            // Fallback to a styled JSON display
+            console.log("⚠️ Using fallback enhanced view");
+            const pre = document.createElement("pre");
+            pre.style.cssText = `
+              color: var(--vscode-foreground);
+              font-family: "Courier New", monospace;
+              font-size: 13px;
+              line-height: 1.5;
+              margin: 0;
+              padding: 8px;
+              white-space: pre-wrap;
+              word-wrap: break-word;
+            `;
+            pre.textContent = JSON.stringify(jsonData, null, 2);
+            container.appendChild(pre);
+          }
+        } catch (error) {
+          console.error("❌ Failed to render enhanced view:", error);
+          // Final fallback
+          container.innerHTML = `
+            <div style="color: var(--error-color); padding: 16px; font-family: 'Courier New', monospace;">
+              خطا در نمایش پیشرفته JSON<br>
+              <small>${error.message}</small>
+              <pre style="margin-top: 10px; color: var(--vscode-foreground);">${JSON.stringify(
+                jsonData,
+                null,
+                2
+              )}</pre>
+            </div>
+          `;
+        }
+      }
+
+      // Add hover action buttons to renderjson elements (only for values, not keys)
+      function addHoverActionsToRenderjson(element) {
+        const strings = element.querySelectorAll(".string");
+        const numbers = element.querySelectorAll(".number");
+        const booleans = element.querySelectorAll(".boolean");
+        const nulls = element.querySelectorAll(".null");
+
+        // Only add hover actions to values, not keys
+        [...strings, ...numbers, ...booleans, ...nulls].forEach((el, index) => {
+          // Skip if this is a key element
+          if (el.classList.contains("key")) return;
+
+          // Double-check: skip if this element seems to be followed by a colon (indicating it's a key)
+          const nextSibling = el.nextSibling;
+          if (
+            nextSibling &&
+            nextSibling.textContent &&
+            nextSibling.textContent.trim().startsWith(":")
+          ) {
+            return; // This is likely a key, skip it
+          }
+
+          // Check if the parent contains key-like patterns
+          const parentText = el.parentElement
+            ? el.parentElement.textContent
+            : "";
+          const elementText = el.textContent;
+          const elementIndex = parentText.indexOf(elementText);
+          if (elementIndex > 0) {
+            const beforeElement = parentText.substring(0, elementIndex).trim();
+            const afterElement = parentText
+              .substring(elementIndex + elementText.length)
+              .trim();
+            if (afterElement.startsWith(":")) {
+              return; // This is a key followed by colon
+            }
+          }
+
+          // Wrap element in a wrapper for hover actions
+          if (!el.parentElement.classList.contains("json-item-wrapper")) {
+            const wrapper = document.createElement("span");
+            wrapper.className = "json-item-wrapper";
+            el.parentNode.insertBefore(wrapper, el);
+            wrapper.appendChild(el);
+
+            // Create hover actions
+            const hoverActions = document.createElement("div");
+            hoverActions.className = "json-hover-actions";
+            hoverActions.innerHTML = `
+              <button class="json-hover-action-btn copy-btn" onclick="copyJsonValue(this.closest('.json-item-wrapper').querySelector('.string, .number, .boolean, .null'))" title="کپی">
+                <span class="material-icons">content_copy</span>
+              </button>
+              <button class="json-hover-action-btn edit-btn" onclick="startInlineEdit(this.closest('.json-item-wrapper').querySelector('.string, .number, .boolean, .null'))" title="ویرایش">
+                <span class="material-icons">edit</span>
+              </button>
+              <button class="json-hover-action-btn delete-btn" onclick="deleteJsonValue(this.closest('.json-item-wrapper'))" title="حذف کامل ردیف">
+                <span class="material-icons">delete</span>
+              </button>
+            `;
+            wrapper.appendChild(hoverActions);
+          }
+        });
+      }
+
+      // Toggle collapse/expand all
+      function toggleAllCollapse() {
+        isAllCollapsed = !isAllCollapsed;
+        const btn = document.getElementById("collapseAllBtn");
+        const icon = btn.querySelector(".material-icons");
+
+        if (isAllCollapsed) {
+          icon.textContent = "unfold_more";
+          btn.setAttribute("data-tooltip", "باز کردن همه");
+          showNotification("همه بخش‌ها جمع شدند 📁");
+        } else {
+          icon.textContent = "unfold_less";
+          btn.setAttribute("data-tooltip", "جمع کردن همه");
+          showNotification("همه بخش‌ها باز شدند 📂");
+        }
+
+        // Update current view
+        if (currentView === "enhanced") {
+          updateEnhancedView();
+        } else if (currentView === "tree") {
+          updateTreeView();
+        }
+      }
+
+      // Copy JSON value
+      function copyJsonValue(element) {
+        const text = element.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          showNotification(
+            `کپی شد: ${
+              text.length > 20 ? text.substring(0, 20) + "..." : text
+            } 📋`
+          );
+        });
+      }
+
+      // Start inline editing of JSON value
+      function startInlineEdit(element) {
+        // Get current value
+        const currentValue = element.textContent.replace(/['"]/g, "");
+        const valueType = element.className.includes("string")
+          ? "string"
+          : element.className.includes("number")
+          ? "number"
+          : element.className.includes("boolean")
+          ? "boolean"
+          : "string";
+
+        // Store reference for later operations
+        element.setAttribute("data-original-value", element.textContent);
+        element.setAttribute("data-value-type", valueType);
+
+        // Create input element
+        const input = document.createElement("input");
+        input.className = "json-inline-edit";
+        input.type = valueType === "number" ? "number" : "text";
+        input.value = currentValue;
+
+        // Replace element with input
+        element.style.display = "none";
+        element.parentNode.insertBefore(input, element.nextSibling);
+
+        // Focus and select all text
+        input.focus();
+        input.select();
+
+        // Handle save on Enter or blur
+        const saveEdit = () => {
+          const newValue = input.value.trim();
+          let displayValue = newValue;
+
+          // Format value based on type
+          if (valueType === "string") {
+            displayValue = `"${newValue}"`;
+          } else if (valueType === "boolean") {
+            displayValue = newValue === "true" ? "true" : "false";
+          } else if (valueType === "number") {
+            displayValue = newValue;
+          }
+
+          // Update element
+          element.textContent = displayValue;
+          element.style.display = "inline-block";
+
+          // Remove input
+          input.remove();
+
+          // Try to update the actual JSON data
+          const wrapper = element.closest(".json-item-wrapper");
+          if (wrapper) {
+            const jsonPath = findJsonPath(wrapper);
+
+            if (jsonPath && jsonData) {
+              // Update the actual JSON data
+              let current = jsonData;
+
+              try {
+                // Navigate to parent of target
+                for (let i = 0; i < jsonPath.length - 1; i++) {
+                  const key = jsonPath[i];
+                  if (current[key] !== undefined) {
+                    current = current[key];
+                  } else {
+                    throw new Error("Path not found");
+                  }
+                }
+
+                // Update the final value
+                const finalKey = jsonPath[jsonPath.length - 1];
+                let processedValue = newValue;
+
+                // Convert value based on type
+                if (valueType === "number") {
+                  processedValue = parseFloat(newValue);
+                } else if (valueType === "boolean") {
+                  processedValue = newValue === "true";
+                } else {
+                  processedValue = newValue; // Keep as string
+                }
+
+                current[finalKey] = processedValue;
+
+                // Update the input field
+                const inputEl = document.getElementById("inputJson");
+                if (inputEl) {
+                  inputEl.value = JSON.stringify(jsonData, null, 2);
+                  saveJsonToStorage(inputEl.value);
+                }
+
+                showNotification(
+                  `مقدار به "${newValue}" تغییر یافت و ذخیره شد ✅`
+                );
+              } catch (error) {
+                console.warn("Could not update JSON data:", error);
+                showNotification(
+                  `مقدار به "${newValue}" تغییر یافت (فقط بصری) ⚠️`
+                );
+              }
+            } else {
+              showNotification(
+                `مقدار به "${newValue}" تغییر یافت (فقط بصری) ⚠️`
+              );
+            }
+          }
+        };
+
+        // Handle cancel on Escape
+        const cancelEdit = () => {
+          element.style.display = "inline-block";
+          input.remove();
+        };
+
+        // Event listeners
+        input.addEventListener("blur", saveEdit);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            saveEdit();
+          } else if (e.key === "Escape") {
+            e.preventDefault();
+            cancelEdit();
+          }
+        });
+      }
+
+      // Update JSON data from the current view
+      function updateJsonDataFromView() {
+        try {
+          // Get all the rendered text and try to reconstruct JSON
+          const container = document.getElementById("enhancedJsonViewer");
+          if (!container) return;
+
+          // Extract text content and clean it up
+          let textContent = container.textContent || "";
+
+          // Try to parse the visible content back to JSON
+          // This is a simplified approach - in a real implementation,
+          // we would need to track each element's path more carefully
+
+          // For now, let's try to maintain the structure by rebuilding from scratch
+          const inputEl = document.getElementById("inputJson");
+          if (inputEl && jsonData) {
+            inputEl.value = JSON.stringify(jsonData, null, 2);
+            saveJsonToStorage(inputEl.value);
+          }
+        } catch (error) {
+          console.error("Error updating JSON data:", error);
+        }
+      }
+
+      // Edit JSON value
+      function editJsonValue(element) {
+        const overlay = document.getElementById("jsonEditOverlay");
+        const title = document.getElementById("editModalTitle");
+        const content = document.getElementById("editModalContent");
+
+        title.textContent = "ویرایش مقدار";
+
+        const currentValue = element.textContent.replace(/['"]/g, "");
+        const valueType = element.className.includes("string")
+          ? "string"
+          : element.className.includes("number")
+          ? "number"
+          : element.className.includes("boolean")
+          ? "boolean"
+          : "string";
+
+        editModalData = {
+          element: element,
+          originalValue: currentValue,
+          type: valueType,
+          action: "edit",
+        };
+
+        if (valueType === "boolean") {
+          content.innerHTML = `
+            <label style="display: block; margin-bottom: 8px; color: var(--vscode-foreground);">مقدار:</label>
+            <select id="editValue" style="width: 100%; padding: 12px; background: var(--vscode-input-background); border: 1px solid var(--border-color); border-radius: 6px; color: var(--vscode-foreground);">
+              <option value="true" ${
+                currentValue === "true" ? "selected" : ""
+              }>true</option>
+              <option value="false" ${
+                currentValue === "false" ? "selected" : ""
+              }>false</option>
+            </select>
+          `;
+        } else if (currentValue.length > 100) {
+          content.innerHTML = `
+            <label style="display: block; margin-bottom: 8px; color: var(--vscode-foreground);">مقدار:</label>
+            <textarea id="editValue" rows="6" placeholder="مقدار جدید را وارد کنید">${currentValue}</textarea>
+          `;
+        } else {
+          content.innerHTML = `
+            <label style="display: block; margin-bottom: 8px; color: var(--vscode-foreground);">مقدار:</label>
+            <input type="${
+              valueType === "number" ? "number" : "text"
+            }" id="editValue" value="${currentValue}" placeholder="مقدار جدید را وارد کنید">
+          `;
+        }
+
+        overlay.style.display = "flex";
+        setTimeout(() => document.getElementById("editValue").focus(), 100);
+      }
+
+      // Add JSON value (for objects and arrays)
+      function addJsonValue(element) {
+        const overlay = document.getElementById("jsonEditOverlay");
+        const title = document.getElementById("editModalTitle");
+        const content = document.getElementById("editModalContent");
+
+        title.textContent = "اضافه کردن مقدار جدید";
+
+        editModalData = {
+          element: element,
+          action: "add",
+        };
+
+        content.innerHTML = `
+          <label style="display: block; margin-bottom: 8px; color: var(--vscode-foreground);">کلید:</label>
+          <input type="text" id="addKey" placeholder="نام کلید جدید" style="margin-bottom: 16px;">
+          
+          <label style="display: block; margin-bottom: 8px; color: var(--vscode-foreground);">نوع مقدار:</label>
+          <select id="addType" onchange="updateAddValueInput()" style="margin-bottom: 16px; width: 100%; padding: 12px; background: var(--vscode-input-background); border: 1px solid var(--border-color); border-radius: 6px; color: var(--vscode-foreground);">
+            <option value="string">رشته (String)</option>
+            <option value="number">عدد (Number)</option>
+            <option value="boolean">درست/غلط (Boolean)</option>
+            <option value="null">خالی (Null)</option>
+            <option value="object">شیء (Object)</option>
+            <option value="array">آرایه (Array)</option>
+          </select>
+          
+          <label style="display: block; margin-bottom: 8px; color: var(--vscode-foreground);">مقدار:</label>
+          <input type="text" id="addValue" placeholder="مقدار جدید را وارد کنید">
+        `;
+
+        overlay.style.display = "flex";
+        setTimeout(() => document.getElementById("addKey").focus(), 100);
+      }
+
+      // Update add value input based on type
+      function updateAddValueInput() {
+        const type = document.getElementById("addType").value;
+        const valueInput = document.getElementById("addValue");
+
+        switch (type) {
+          case "string":
+            valueInput.type = "text";
+            valueInput.placeholder = "متن را وارد کنید";
+            break;
+          case "number":
+            valueInput.type = "number";
+            valueInput.placeholder = "عدد را وارد کنید";
+            break;
+          case "boolean":
+            valueInput.type = "text";
+            valueInput.placeholder = "true یا false";
+            break;
+          case "null":
+            valueInput.type = "text";
+            valueInput.value = "null";
+            valueInput.disabled = true;
+            break;
+          case "object":
+            valueInput.type = "text";
+            valueInput.placeholder = "{}";
+            break;
+          case "array":
+            valueInput.type = "text";
+            valueInput.placeholder = "[]";
+            break;
+        }
+      }
+
+      // Delete JSON value
+      function deleteJsonValue(wrapper) {
+        if (
+          confirm("آیا مطمئن هستید که می‌خواهید این ردیف را کاملاً حذف کنید؟")
+        ) {
+          try {
+            // First, try to find and remove from actual JSON data
+            const valueElement = wrapper.querySelector(
+              ".string, .number, .boolean, .null"
+            );
+            if (!valueElement) return;
+
+            // Find the JSON path and remove from actual data
+            const jsonPath = findJsonPath(wrapper);
+            let removedFromData = false;
+
+            if (jsonPath && jsonData) {
+              removedFromData = removeFromJsonData(jsonData, jsonPath);
+
+              if (removedFromData) {
+                // Update the input field
+                const inputEl = document.getElementById("inputJson");
+                if (inputEl) {
+                  inputEl.value = JSON.stringify(jsonData, null, 2);
+                  saveJsonToStorage(inputEl.value);
+                }
+
+                // Refresh the enhanced view to reflect changes
+                updateEnhancedView();
+
+                showNotification("ردیف با موفقیت از JSON حذف شد 🗑️");
+                return;
+              }
+            }
+
+            // If couldn't remove from data, fall back to DOM removal
+            const jsonItemWrapper =
+              wrapper.closest(".json-item-wrapper") || wrapper;
+            let currentElement = jsonItemWrapper;
+
+            // Find the line container or parent that contains the whole key-value pair
+            let lineContainer = currentElement.parentElement;
+
+            // Try to find the broader context (the entire line including punctuation)
+            while (
+              lineContainer &&
+              !lineContainer.classList.contains("renderjson")
+            ) {
+              const textContent = lineContainer.textContent;
+
+              // Look for patterns that indicate this contains a complete key-value pair
+              if (
+                textContent.includes(":") &&
+                (textContent.includes(",") ||
+                  textContent.includes("}") ||
+                  textContent.includes("]"))
+              ) {
+                break;
+              }
+
+              lineContainer = lineContainer.parentElement;
+            }
+
+            // If we found a suitable container, remove it entirely
+            if (lineContainer && lineContainer !== document.body) {
+              lineContainer.remove();
+              showNotification("ردیف کامل حذف شد! (فقط بصری) ⚠️");
+            } else {
+              // Fallback: more aggressive cleanup approach
+              let elementsToRemove = [jsonItemWrapper];
+              let current = jsonItemWrapper.previousSibling;
+
+              // Collect all related text nodes and elements going backwards
+              while (current) {
+                const isRelated =
+                  (current.nodeType === Node.TEXT_NODE &&
+                    /[{,\s]*"[^"]*"\s*:\s*$/.test(current.textContent)) || // Key pattern
+                  (current.classList && current.classList.contains("key")) ||
+                  (current.nodeType === Node.TEXT_NODE &&
+                    /^\s*[,:]\s*$/.test(current.textContent)); // Punctuation only
+
+                if (isRelated) {
+                  elementsToRemove.unshift(current);
+                  current = current.previousSibling;
+                } else {
+                  break;
+                }
+              }
+
+              // Also collect forward elements (commas, etc.)
+              current = jsonItemWrapper.nextSibling;
+              while (current) {
+                const isRelated =
+                  current.nodeType === Node.TEXT_NODE &&
+                  /^\s*[,\s]*\s*$/.test(current.textContent); // Trailing comma or whitespace
+
+                if (isRelated) {
+                  elementsToRemove.push(current);
+                  current = current.nextSibling;
+                } else {
+                  break;
+                }
+              }
+
+              // Remove all collected elements
+              elementsToRemove.forEach((element) => {
+                if (element && element.parentNode) {
+                  element.remove();
+                }
+              });
+
+              showNotification("ردیف حذف شد (فقط بصری) ⚠️");
+            }
+          } catch (error) {
+            console.error("Error deleting JSON value:", error);
+            showNotification("خطا در حذف ردیف ❌");
+          }
+        }
+      }
+
+      // Improved JSON path finding with better key detection
+      function findJsonPath(wrapper) {
+        const path = [];
+        let current = wrapper;
+        let attempts = 0;
+        const maxAttempts = 10; // Prevent infinite loops
+
+        while (current && current !== document.body && attempts < maxAttempts) {
+          attempts++;
+
+          // Try multiple strategies to find the key
+          let keyText = null;
+
+          // Strategy 1: Look for .key class in nearby elements
+          const keyElements = [
+            current.querySelector(".key"),
+            current.previousElementSibling?.querySelector?.(".key"),
+            current.parentElement?.querySelector?.(".key"),
+          ].filter(Boolean);
+
+          for (const keyElement of keyElements) {
+            const text = keyElement.textContent.replace(/['":\s]/g, "");
+            if (text && text.length > 0) {
+              keyText = text;
+              break;
+            }
+          }
+
+          // Strategy 2: Look in text content for key patterns
+          if (!keyText) {
+            const contextText = current.parentElement?.textContent || "";
+            const keyMatch = contextText.match(/"([^"]+)"\s*:/);
+            if (keyMatch) {
+              keyText = keyMatch[1];
+            }
+          }
+
+          // Strategy 3: Check siblings for key patterns
+          if (!keyText) {
+            let sibling = current.previousSibling;
+            let siblingAttempts = 0;
+
+            while (sibling && siblingAttempts < 5) {
+              siblingAttempts++;
+
+              if (sibling.textContent) {
+                const siblingText = sibling.textContent;
+
+                // Look for quoted key followed by colon
+                if (
+                  siblingText.match(/^"[^"]*"$/) &&
+                  sibling.nextSibling?.textContent?.includes(":")
+                ) {
+                  keyText = siblingText.replace(/['"]/g, "");
+                  break;
+                }
+
+                // Look for key: pattern
+                const keyMatch = siblingText.match(/"([^"]+)"\s*:?\s*$/);
+                if (keyMatch) {
+                  keyText = keyMatch[1];
+                  break;
+                }
+              }
+
+              sibling = sibling.previousSibling;
+            }
+          }
+
+          // Add key to path if found
+          if (keyText && !path.includes(keyText)) {
+            path.unshift(keyText);
+          }
+
+          // Check for array index in parent context
+          const parentText = current.parentElement?.textContent || "";
+          const arrayIndexMatch = parentText.match(/\[\s*(\d+)\s*\]/);
+          if (arrayIndexMatch) {
+            const index = parseInt(arrayIndexMatch[1]);
+            if (!path.includes(index)) {
+              path.unshift(index);
+            }
+          }
+
+          current = current.parentElement;
+
+          // Stop if we reach the main JSON container
+          if (
+            current?.classList?.contains("enhanced-json-viewer") ||
+            current?.classList?.contains("renderjson")
+          ) {
+            break;
+          }
+        }
+
+        console.log("Found JSON path:", path);
+        return path.length > 0 ? path : null;
+      }
+
+      // Remove from JSON data using path
+      function removeFromJsonData(data, path) {
+        if (!path || path.length === 0) return false;
+
+        try {
+          let current = data;
+
+          // Navigate to parent of target
+          for (let i = 0; i < path.length - 1; i++) {
+            const key = path[i];
+            if (current[key] !== undefined) {
+              current = current[key];
+            } else {
+              console.warn("Path not found at key:", key);
+              return false;
+            }
+          }
+
+          // Remove the final key
+          const finalKey = path[path.length - 1];
+          if (Array.isArray(current) && typeof finalKey === "number") {
+            current.splice(finalKey, 1);
+            return true;
+          } else if (
+            typeof current === "object" &&
+            current !== null &&
+            finalKey in current
+          ) {
+            delete current[finalKey];
+            return true;
+          }
+
+          return false;
+        } catch (error) {
+          console.error("Error removing from JSON data:", error);
+          return false;
+        }
+      }
+
+      // Clean up orphaned punctuation and formatting
+      function cleanupOrphanedPunctuation(container) {
+        if (!container) return;
+
+        // Find and remove orphaned commas, colons, and excessive whitespace
+        const childNodes = Array.from(container.childNodes);
+
+        childNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent;
+
+            // Remove nodes that are only punctuation or whitespace
+            if (/^\s*[,:]\s*$/.test(text)) {
+              node.remove();
+            }
+            // Clean up excessive whitespace
+            else if (/^\s+$/.test(text) && text.length > 2) {
+              node.textContent = " "; // Replace with single space
+            }
+          }
+        });
+
+        // Remove duplicate commas
+        let lastWasComma = false;
+        Array.from(container.childNodes).forEach((node) => {
+          if (
+            node.nodeType === Node.TEXT_NODE &&
+            node.textContent.includes(",")
+          ) {
+            if (lastWasComma) {
+              node.remove();
+            } else {
+              lastWasComma = true;
+            }
+          } else if (
+            node.nodeType !== Node.TEXT_NODE ||
+            node.textContent.trim() !== ""
+          ) {
+            lastWasComma = false;
+          }
+        });
+      }
+
+      // Reconstruct JSON from current view (simplified approach)
+      function reconstructJsonFromView() {
+        try {
+          // This is a simplified reconstruction
+          // In practice, for a fully functional JSON editor, we would need
+          // to maintain a proper data structure and path tracking
+
+          // For now, we'll show a message to the user
+          const notification = document.createElement("div");
+          notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid #ffc107;
+            color: #ffc107;
+            padding: 12px 16px;
+            border-radius: 6px;
+            z-index: 10000;
+            font-family: "Vazirmatn", sans-serif;
+            direction: rtl;
+            max-width: 320px;
+            font-size: 13px;
+            line-height: 1.4;
+          `;
+          notification.innerHTML = `
+            <div style="font-weight: 600; margin-bottom: 4px;">💡 نکته مهم:</div>
+            <div>تغییرات فقط بصری هستند. برای اعمال دائمی تغییرات، JSON اصلی را در پنل سمت راست ویرایش کنید.</div>
+          `;
+          document.body.appendChild(notification);
+
+          setTimeout(() => {
+            notification.remove();
+          }, 5000);
+        } catch (error) {
+          console.error("Error reconstructing JSON:", error);
+        }
+      }
+
+      // Save JSON edit
+      function saveJsonEdit() {
+        const overlay = document.getElementById("jsonEditOverlay");
+
+        if (editModalData.action === "edit") {
+          const newValue = document.getElementById("editValue").value;
+
+          // Update the visual element
+          if (editModalData.type === "string") {
+            editModalData.element.textContent = `"${newValue}"`;
+          } else {
+            editModalData.element.textContent = newValue;
+          }
+
+          showNotification("مقدار ویرایش شد! ✏️");
+        } else if (editModalData.action === "add") {
+          const key = document.getElementById("addKey").value;
+          const type = document.getElementById("addType").value;
+          const value = document.getElementById("addValue").value;
+
+          if (key) {
+            showNotification(`مقدار جدید "${key}" اضافه شد! ➕`);
+          }
+        }
+
+        overlay.style.display = "none";
+        editModalData = null;
+
+        // Refresh the view
+        if (currentView === "enhanced") {
+          updateEnhancedView();
+        }
+      }
+
+      // Cancel JSON edit
+      function cancelJsonEdit() {
+        const overlay = document.getElementById("jsonEditOverlay");
+        overlay.style.display = "none";
+        editModalData = null;
+      }
+
+      // Close modal when clicking overlay
+      document
+        .getElementById("jsonEditOverlay")
+        .addEventListener("click", (e) => {
+          if (e.target.id === "jsonEditOverlay") {
+            cancelJsonEdit();
+          }
+        });
+
+      // Keyboard shortcuts for modal
+      document.addEventListener("keydown", (e) => {
+        if (
+          document.getElementById("jsonEditOverlay").style.display === "flex"
+        ) {
+          if (e.key === "Escape") {
+            cancelJsonEdit();
+          } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+            saveJsonEdit();
+          }
+        }
+      });
+
       // Update tree view
       function updateTreeView() {
         const viewer = document.getElementById("jsonViewer");
         if (!viewer || !jsonData) return;
         viewer.innerHTML = renderJsonTree(jsonData, searchTerm);
       }
-
-      // Render JSON as interactive tree
       function renderJsonTree(obj, search = "", level = 0, path = "") {
         if (obj === null)
           return `<span class="json-null" onclick="showValueActions(this, 'null', '${path}')">null</span>`;
@@ -1060,21 +2360,42 @@
         currentView = view;
         const textBtn = document.getElementById("textViewBtn");
         const treeBtn = document.getElementById("treeViewBtn");
+        const enhancedBtn = document.getElementById("enhancedViewBtn");
         const outputJson = document.getElementById("outputJson");
         const jsonViewer = document.getElementById("jsonViewer");
+        const enhancedJsonViewer =
+          document.getElementById("enhancedJsonViewer");
 
-        if (!textBtn || !treeBtn || !outputJson || !jsonViewer) return;
+        if (
+          !textBtn ||
+          !treeBtn ||
+          !enhancedBtn ||
+          !outputJson ||
+          !jsonViewer ||
+          !enhancedJsonViewer
+        )
+          return;
+
+        // Reset all buttons
+        textBtn.classList.remove("active");
+        treeBtn.classList.remove("active");
+        enhancedBtn.classList.remove("active");
+
+        // Hide all viewers
+        outputJson.style.display = "none";
+        jsonViewer.style.display = "none";
+        enhancedJsonViewer.style.display = "none";
 
         if (view === "text") {
           textBtn.classList.add("active");
-          treeBtn.classList.remove("active");
           outputJson.style.display = "block";
-          jsonViewer.style.display = "none";
           updateTextView();
+        } else if (view === "enhanced") {
+          enhancedBtn.classList.add("active");
+          enhancedJsonViewer.style.display = "block";
+          updateEnhancedView();
         } else {
           treeBtn.classList.add("active");
-          textBtn.classList.remove("active");
-          outputJson.style.display = "none";
           jsonViewer.style.display = "block";
           updateTreeView();
         }
@@ -1089,6 +2410,8 @@
         if (jsonData) {
           if (currentView === "text") {
             updateTextView();
+          } else if (currentView === "enhanced") {
+            updateEnhancedView();
           } else {
             updateTreeView();
           }
@@ -1296,6 +2619,7 @@
           // Update the display
           updateTreeView();
           updateTextView();
+          updateEnhancedViewAfterEdit();
 
           showNotification("مقدار ویرایش شد! ✏️");
         };
@@ -1376,12 +2700,16 @@
         if (jsonData) {
           const output = document.getElementById("outputJson");
           if (output) {
-            const formattedJson = js_beautify(JSON.stringify(jsonData), {
-              indent_size: 2,
-              space_in_empty_paren: true,
-            });
+            const formattedJson = beautifyJson(jsonData);
             output.value = formattedJson;
           }
+        }
+      }
+
+      // Update enhanced view after editing
+      function updateEnhancedViewAfterEdit() {
+        if (jsonData && currentView === "enhanced") {
+          updateEnhancedView();
         }
       }
 
@@ -1435,11 +2763,16 @@
       function clearOutput() {
         const outputJson = document.getElementById("outputJson");
         const jsonViewer = document.getElementById("jsonViewer");
+        const enhancedJsonViewer =
+          document.getElementById("enhancedJsonViewer");
         const outputStatus = document.getElementById("outputStatus");
         const jsonInfo = document.getElementById("jsonInfo");
 
         if (outputJson) outputJson.value = "";
         if (jsonViewer) jsonViewer.innerHTML = "";
+        if (enhancedJsonViewer) {
+          enhancedJsonViewer.innerHTML = "";
+        }
         if (outputStatus) {
           outputStatus.textContent = "آماده نمایش...";
           outputStatus.className = "status-info";
@@ -1581,6 +2914,44 @@
           }
         }
 
+        // Test JSON Viewer Libraries availability
+        function testJsonViewerLibraries() {
+          console.log("🔍 Testing JSON Viewer libraries availability...");
+
+          let availableLibs = [];
+
+          try {
+            // Check renderjson
+            if (typeof renderjson !== "undefined") {
+              console.log("✅ renderjson is available");
+              availableLibs.push("renderjson");
+            } else {
+              console.warn("⚠️ renderjson is not available");
+            }
+
+            // Check JSONViewer (alenaksu)
+            if (typeof JSONViewer !== "undefined") {
+              console.log("✅ JSONViewer is available");
+              availableLibs.push("JSONViewer");
+            } else {
+              console.warn("⚠️ JSONViewer is not available");
+            }
+
+            if (availableLibs.length > 0) {
+              console.log(
+                `✅ Available libraries: ${availableLibs.join(", ")}`
+              );
+              return true;
+            } else {
+              console.error("❌ No JSON viewer libraries found");
+              return false;
+            }
+          } catch (error) {
+            console.error("❌ Error checking JSON viewer libraries:", error);
+            return false;
+          }
+        }
+
         // Test immediately and retry if needed
         if (!testJsBeautify()) {
           console.log("🔄 Retrying js-beautify test in 500ms...");
@@ -1591,6 +2962,32 @@
             }
           }, 500);
         }
+
+        // Test JSON viewer libraries
+        setTimeout(() => {
+          if (!testJsonViewerLibraries()) {
+            console.log("🔄 Retrying JSON viewer test in 500ms...");
+            setTimeout(() => {
+              if (!testJsonViewerLibraries()) {
+                console.log("🔄 Final JSON viewer retry in 1000ms...");
+                setTimeout(() => {
+                  if (!testJsonViewerLibraries()) {
+                    // Fallback to tree view as default
+                    console.log("⚠️ Falling back to tree view as default");
+                    currentView = "tree";
+                    const enhancedBtn =
+                      document.getElementById("enhancedViewBtn");
+                    const treeBtn = document.getElementById("treeViewBtn");
+                    if (enhancedBtn && treeBtn) {
+                      enhancedBtn.classList.remove("active");
+                      treeBtn.classList.add("active");
+                    }
+                  }
+                }, 1000);
+              }
+            }, 500);
+          }
+        }, 100);
 
         // Load saved JSON from localStorage
         const inputEl = document.getElementById("inputJson");
@@ -1604,6 +3001,34 @@
             // Process existing content if any
             processJson();
           }
+
+          // Set default view based on library availability
+          setTimeout(() => {
+            const jsonViewerAvailable = testJsonViewerLibraries();
+            if (!jsonViewerAvailable) {
+              console.log(
+                "⚠️ JSON viewer libraries not available, switching to tree view"
+              );
+              currentView = "tree";
+              const enhancedBtn = document.getElementById("enhancedViewBtn");
+              const treeBtn = document.getElementById("treeViewBtn");
+              if (enhancedBtn && treeBtn) {
+                enhancedBtn.classList.remove("active");
+                treeBtn.classList.add("active");
+                // Also disable the enhanced button
+                enhancedBtn.style.opacity = "0.5";
+                enhancedBtn.title = "کتابخانه‌های JSON viewer در دسترس نیست";
+              }
+              // Show tree view elements
+              const enhancedJsonViewer =
+                document.getElementById("enhancedJsonViewer");
+              const jsonViewer = document.getElementById("jsonViewer");
+              if (enhancedJsonViewer && jsonViewer) {
+                enhancedJsonViewer.style.display = "none";
+                jsonViewer.style.display = "block";
+              }
+            }
+          }, 500);
         }
       });
     </script>
