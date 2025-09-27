@@ -10,26 +10,29 @@
 
 ---
 
-## 🚀 **COMING SOON - Exciting New Features!**
+## 🚀 **Latest Updates - Revolutionary Features!**
 
-### � **Personal CheatSheets Hub** ✨ **NEW in v1.8.0**
+### 📚 **Advanced CheatSheets Management System** ✨ **NEW in v1.9.0**
 
-The most advanced cheat sheets system for developers:
+The most sophisticated cheat sheets system for developers with complete Laravel backend integration:
 
-- **� Personal Account System** - Create, manage your own cheat sheets collection
-- **📝 Custom CheatSheets** - Create personalized reference materials
-- **� Smart Filtering** - Find exactly what you need instantly
-- **� Cloud Sync** - Access your cheat sheets from any device
-- **🌐 Public Library** - Browse community-shared cheat sheets
-- **⚡ Quick Copy** - One-click code copying with syntax highlighting
-- **🏷️ Category Organization** - Organize by language, framework, or topic
-- **� Privacy Controls** - Choose public or private visibility
+- **🔧 Complete CRUD Operations** - Create, read, update, delete cheat sheets and items
+- **📝 Item Management System** - Add, edit, organize items within cheat sheets
+- **💻 Code Examples Support** - Syntax-highlighted code blocks
+- **🔒 Advanced Access Control** - Public/private visibility with owner permissions
+- **� Modern UI/UX** - Modal dialogs, toast notifications, responsive design
+- **⚡ Real-time Sync** - Instant updates with Laravel backend API
+- **🏷️ Smart Organization** - Categories, search, filtering, and ordering
+- **👥 Community Sharing** - Browse and contribute to public cheat sheets
 
-### 📝 **Persian ToDo Manager**
+### � **Personal Account System** ✨ **Enhanced in v1.8.0**
 
-> 🔜 **Coming in v1.9.0**
+Robust authentication and user management:
 
-**💡 Stay tuned!** These features are in active development and will revolutionize your Persian development workflow.
+- **🛡️ JWT Token Authentication** - Secure login with bearer token system
+- **👤 User Profile Management** - Complete account control
+- **📊 Personal Dashboard** - Track your cheat sheets and activity
+- **☁️ Cloud Synchronization** - Access from any device, anywhere
 
 ---
 
@@ -363,6 +366,34 @@ ext install shahkochaki.vscode-persian-copilot
 ## Screenshots
 
 ![Persian Copilot Chat RTL](https://raw.githubusercontent.com/shahkochaki/vscode-persian-copilot/main/screenshots/rtl-demo.png)
+
+---
+
+## 🤝 Contributors & Special Thanks
+
+We extend our heartfelt gratitude to everyone who has contributed to making this extension better:
+
+### 🌟 Community Contributors
+
+- **[@danyal031](https://github.com/danyal031)** - Thank you for forking and showing interest in the project! Your support means a lot to the Persian developer community.
+
+### 💡 How to Contribute
+
+We welcome contributions from the community! Here are ways you can help:
+
+- **🐛 Bug Reports**: Found an issue? [Report it here](https://github.com/shahkochaki/VSCode-Persian-Copilot/issues)
+- **💡 Feature Requests**: Have an idea? [Share it with us](https://github.com/shahkochaki/VSCode-Persian-Copilot/discussions)
+- **🔧 Code Contributions**: Fork the repo and submit pull requests
+- **📖 Documentation**: Help improve our documentation
+- **⭐ Star the Repository**: Show your support by starring the project
+
+### 🙏 Acknowledgments
+
+Special thanks to:
+- The Persian/Farsi developer community for feedback and support
+- All users who have downloaded and used the extension
+- Contributors who have submitted issues and suggestions
+- The VS Code team for providing excellent extension APIs
 
 ---
 

@@ -2,23 +2,47 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.9.1] - 2025-09-27
+
+### 📖 Documentation & Community
+
+- **📚 Enhanced README**: Comprehensive documentation update
+  - Updated CheatSheets section with latest v1.9.0 features
+  - Added detailed feature descriptions and technical specifications
+  - Improved visual hierarchy and readability
+
+- **🤝 Community Recognition**: Contributors acknowledgment
+  - Special thanks to [@danyal031](https://github.com/danyal031) for forking the project
+  - Added comprehensive contributors section
+  - Guidelines for community contributions
+  - Recognition of Persian developer community support
+
+- **🎯 Feature Highlights**: Better presentation of key features
+  - Advanced CheatSheets Management System
+  - Complete Laravel backend integration
+  - Item management with CRUD operations
+  - Modern UI/UX improvements
+
 ## [1.9.0] - 2025-09-27
 
 ### 🚀 Major Enhancement: Advanced CheatSheets Management System
 
 - **🔧 Complete Laravel Backend Integration**: Full integration with Laravel CheatSheet Controller
+
   - Updated API endpoints to match Laravel controller routes (`/cheat-sheets`)
   - Proper HTTP methods mapping (GET, POST, PUT, DELETE)
   - Enhanced authentication with Bearer token support
   - Improved error handling and response processing
 
 - **📝 Advanced Item Management**: Full CRUD operations for cheat sheet items
+
   - Add, edit, and delete items within cheat sheets
   - Support for code examples with syntax highlighting
   - Item ordering and categorization system
   - Rich text content support for descriptions
 
 - **🎨 Enhanced User Interface**: Improved UI/UX for better user experience
+
   - New modal dialogs for item management
   - Owner-specific action buttons (edit/delete)
   - Better visual feedback with toast notifications
@@ -26,6 +50,7 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
   - Enhanced owner information display
 
 - **🔒 Improved Access Control**: Better permission handling
+
   - Precise owner detection for cheat sheets and items
   - Guest user limitations with clear messaging
   - Protected operations with authentication checks
