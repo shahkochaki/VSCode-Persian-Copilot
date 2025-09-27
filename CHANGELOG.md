@@ -7,11 +7,13 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ### 📖 Documentation & Community
 
 - **📚 Enhanced README**: Comprehensive documentation update
+
   - Updated CheatSheets section with latest v1.9.0 features
   - Added detailed feature descriptions and technical specifications
   - Improved visual hierarchy and readability
 
 - **🤝 Community Recognition**: Contributors acknowledgment
+
   - Special thanks to [@danyal031](https://github.com/danyal031) for forking the project
   - Added comprehensive contributors section
   - Guidelines for community contributions

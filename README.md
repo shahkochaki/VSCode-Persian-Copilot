@@ -390,6 +390,7 @@ We welcome contributions from the community! Here are ways you can help:
 ### 🙏 Acknowledgments
 
 Special thanks to:
+
 - The Persian/Farsi developer community for feedback and support
 - All users who have downloaded and used the extension
 - Contributors who have submitted issues and suggestions
