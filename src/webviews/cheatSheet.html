@@ -273,6 +273,57 @@
         background: var(--vscode-button-hoverBackground);
       }
 
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+      }
+
+      .auth-button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.2s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .auth-button.primary {
+        background: var(--vscode-button-background);
+        color: var(--vscode-button-foreground);
+      }
+
+      .auth-button.primary:hover {
+        background: var(--vscode-button-hoverBackground);
+      }
+
+      .item-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        padding-top: 8px;
+        border-top: 1px solid var(--vscode-panel-border);
+      }
+
+      .item-actions button {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      .detail-actions {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
       .error-message {
         color: #f14c4c;
         font-size: 0.9rem;
@@ -528,6 +579,13 @@
       .detail-description {
         color: var(--vscode-descriptionForeground);
         font-size: 1.1rem;
+        margin-bottom: 8px;
+      }
+
+      .detail-owner {
+        color: var(--vscode-descriptionForeground);
+        font-size: 0.9rem;
+        font-style: italic;
       }
 
       .items-container {
@@ -645,12 +703,8 @@
           <div class="info-message">
             <span>💡</span>
             <span
-              >برای ایجاد و مدیریت چیت شیت‌های شخصی، ابتدا وارد حساب کاربری خود
-              شوید (از صفحه Hub)</span
+              >فقط کاربران لاگین شده می‌توانند چیت شیت‌های شخصی ایجاد کنند</span
             >
-            <button id="goToLoginBtn" class="login-guide-button">
-              رفتن به صفحه اصلی (Hub)
-            </button>
           </div>
         </div>
         <div id="userSection" class="user-section" style="display: none">
@@ -767,6 +821,60 @@
           </form>
         </div>
       </div>
+
+      <!-- Create/Edit Item Modal -->
+      <div id="itemModal" class="modal">
+        <div class="modal-content" style="max-width: 700px">
+          <div class="modal-header">
+            <h2 id="itemModalTitle">افزودن آیتم جدید</h2>
+          </div>
+          <form id="itemForm">
+            <div class="form-group">
+              <label for="itemTitle">عنوان آیتم:</label>
+              <input type="text" id="itemTitle" required />
+            </div>
+            <div class="form-group">
+              <label for="itemContent">توضیحات:</label>
+              <textarea id="itemContent" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="itemCodeExample">مثال کد:</label>
+              <textarea
+                id="itemCodeExample"
+                rows="6"
+                style="
+                  font-family: 'Courier New', monospace;
+                  direction: ltr;
+                  text-align: left;
+                "
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="itemCategory">دسته‌بندی آیتم:</label>
+              <input type="text" id="itemCategory" />
+            </div>
+            <div class="form-group">
+              <label for="itemOrderIndex">ترتیب نمایش:</label>
+              <input type="number" id="itemOrderIndex" min="0" step="1" />
+            </div>
+            <div
+              id="itemError"
+              class="error-message"
+              style="display: none"
+            ></div>
+            <div class="modal-actions">
+              <button type="submit" class="btn-primary">ذخیره</button>
+              <button
+                type="button"
+                class="btn-secondary"
+                onclick="closeModal('itemModal')"
+              >
+                انصراف
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -784,14 +892,6 @@
         vscode.postMessage({
           command: "getUserData",
         });
-      }
-
-      function updateUserInterface(userData) {
-        currentUser = userData;
-        console.log("CheatSheet: Received user data:", userData);
-
-        updateAuthUI();
-        loadCheatSheets();
       }
 
       // Handle messages from extension
@@ -907,6 +1007,58 @@
 
           return await this.getCheatSheets({ owner: "me" });
         }
+
+        // Methods for managing items within cheat sheets
+        async getCheatSheetItems(cheatSheetId) {
+          // Since Laravel controller doesn't have dedicated items endpoint,
+          // we'll get the full cheat sheet and extract items
+          const result = await this.getCheatSheet(cheatSheetId);
+          if (result.success && result.data && result.data.items) {
+            return {
+              success: true,
+              data: result.data.items,
+            };
+          }
+          return { success: false, data: [] };
+        }
+
+        async addItem(cheatSheetId, itemData) {
+          if (!this.isAuthenticated()) {
+            throw new Error("برای افزودن آیتم باید وارد شوید");
+          }
+
+          return await this.makeRequest(`/cheat-sheets/${cheatSheetId}/items`, {
+            method: "POST",
+            body: JSON.stringify(itemData),
+          });
+        }
+
+        async updateItem(cheatSheetId, itemId, updateData) {
+          if (!this.isAuthenticated()) {
+            throw new Error("برای ویرایش آیتم باید وارد شوید");
+          }
+
+          return await this.makeRequest(
+            `/cheat-sheets/${cheatSheetId}/items/${itemId}`,
+            {
+              method: "PUT",
+              body: JSON.stringify(updateData),
+            }
+          );
+        }
+
+        async deleteItem(cheatSheetId, itemId) {
+          if (!this.isAuthenticated()) {
+            throw new Error("برای حذف آیتم باید وارد شوید");
+          }
+
+          return await this.makeRequest(
+            `/cheat-sheets/${cheatSheetId}/items/${itemId}`,
+            {
+              method: "DELETE",
+            }
+          );
+        }
       }
 
       // Application Code
@@ -927,16 +1079,7 @@
       });
 
       function setupEventListeners() {
-        // Authentication buttons - redirect to hub for login
-        document
-          .getElementById("goToLoginBtn")
-          ?.addEventListener("click", () => {
-            vscode.postMessage({
-              command: "openTool",
-              tool: "hub",
-            });
-          });
-
+        // Create new cheat sheet button
         document
           .getElementById("createNewBtn")
           .addEventListener("click", () => openModal("cheatSheetModal"));
@@ -963,11 +1106,20 @@
         document
           .getElementById("cheatSheetForm")
           .addEventListener("submit", handleCheatSheetSubmit);
+        document
+          .getElementById("itemForm")
+          .addEventListener("submit", handleItemSubmit);
       }
 
       function updateUserInterface(userData) {
         currentUser = userData;
         console.log("CheatSheet: Received user data:", userData);
+
+        if (userData && userData.token) {
+          console.log("CheatSheet: User is logged in, updating interface");
+        } else {
+          console.log("CheatSheet: User not logged in, showing guest view");
+        }
 
         updateAuthUI();
         loadCheatSheets();
@@ -1138,7 +1290,9 @@
             cheatSheetService.isAuthenticated() &&
             currentUser &&
             currentUser.user &&
-            cheatSheet.user_id === currentUser.user.id;
+            (cheatSheet.user_id === currentUser.user.id ||
+              (currentUser.user.data &&
+                cheatSheet.user_id === currentUser.user.data.id));
 
           const ownerBadge = cheatSheet.is_public
             ? '<span class="badge public">عمومی</span>'
@@ -1186,14 +1340,50 @@
 
         document.getElementById("detailTitle").textContent = cheatSheet.title;
         document.getElementById("detailDescription").textContent =
-          cheatSheet.description;
+          cheatSheet.description || "توضیحاتی برای این چیت شیت ثبت نشده است.";
+
+        // Display owner information
+        const ownerInfo = cheatSheet.user
+          ? `توسط: ${cheatSheet.user.name} | ${
+              cheatSheet.is_public ? "عمومی" : "شخصی"
+            }`
+          : cheatSheet.is_public
+          ? "چیت شیت عمومی"
+          : "چیت شیت شخصی";
+        document.getElementById("detailOwner").textContent = ownerInfo;
+
+        // Check if current user is the owner
+        const isOwner =
+          cheatSheetService.isAuthenticated() &&
+          currentUser &&
+          currentUser.user &&
+          (cheatSheet.user_id === currentUser.user.id ||
+            (currentUser.user.data &&
+              cheatSheet.user_id === currentUser.user.data.id));
+
+        // Store current cheat sheet for item operations
+        window.currentCheatSheet = cheatSheet;
 
         const itemsContainer = document.getElementById("itemsContainer");
         itemsContainer.innerHTML = "";
 
+        // Add item management buttons for owners
+        if (isOwner) {
+          const addItemButton = document.createElement("div");
+          addItemButton.className = "detail-actions";
+          addItemButton.style.cssText =
+            "margin-bottom: 20px; text-align: center;";
+          addItemButton.innerHTML = `
+            <button class="auth-button primary" onclick="openAddItemModal(${cheatSheet.id})">
+              ➕ افزودن آیتم جدید
+            </button>
+          `;
+          itemsContainer.appendChild(addItemButton);
+        }
+
         if (cheatSheet.items && cheatSheet.items.length > 0) {
           cheatSheet.items
-            .sort((a, b) => a.order_index - b.order_index)
+            .sort((a, b) => (a.order_index || 0) - (b.order_index || 0))
             .forEach((item) => {
               const itemCard = document.createElement("div");
               itemCard.className = "item-card";
@@ -1202,36 +1392,52 @@
               if (item.code_example) {
                 const safeCode = escapeHtml(item.code_example);
                 codeHtml = `
-                                <div class="code-block">
-                                    <pre>${safeCode}</pre>
-                                </div>
-                            `;
+                  <div class="code-block">
+                    <pre>${safeCode}</pre>
+                  </div>
+                `;
+              }
+
+              // Item actions for owner
+              let itemActions = "";
+              if (isOwner) {
+                itemActions = `
+                  <div class="item-actions" style="display: flex; gap: 8px; margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--vscode-panel-border);">
+                    <button class="btn-secondary" onclick="editItem(${cheatSheet.id}, ${item.id})" style="padding: 4px 8px; font-size: 0.8rem; border: none; border-radius: 3px; cursor: pointer;">✏️ ویرایش</button>
+                    <button class="btn-danger" onclick="deleteItem(${cheatSheet.id}, ${item.id})" style="padding: 4px 8px; font-size: 0.8rem; border: none; border-radius: 3px; cursor: pointer; background: #dc3545; color: white;">🗑️ حذف</button>
+                  </div>
+                `;
               }
 
               itemCard.innerHTML = `
-                            <button class="copy-btn" onclick="copyItemContent(event, '${escapeHtml(
-                              item.title
-                            )}', '${escapeHtml(item.content)}', '${
+                <button class="copy-btn" onclick="copyItemContent(event, '${escapeHtml(
+                  item.title
+                )}', '${escapeHtml(item.content || "")}', '${
                 item.code_example ? escapeHtml(item.code_example) : ""
               }')" title="کپی محتوای آیتم">📋</button>
-                            <div class="item-title">${escapeHtml(
-                              item.title
-                            )}</div>
-                            <div class="item-content">${escapeHtml(
-                              item.content
-                            )}</div>
-                            ${codeHtml}
-                        `;
+                <div class="item-title">${escapeHtml(item.title)}</div>
+                <div class="item-content">${escapeHtml(
+                  item.content || ""
+                )}</div>
+                ${codeHtml}
+                ${itemActions}
+              `;
 
               itemsContainer.appendChild(itemCard);
             });
         } else {
-          itemsContainer.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📄</div>
-                        <div>هیچ آیتمی برای این چیت شیت موجود نیست.</div>
-                    </div>
-                `;
+          const emptyState = document.createElement("div");
+          emptyState.className = "empty-state";
+          emptyState.innerHTML = `
+            <div class="empty-state-icon">📄</div>
+            <div>هیچ آیتمی برای این چیت شیت موجود نیست.</div>
+            ${
+              isOwner
+                ? `<button class="auth-button primary" onclick="openAddItemModal(${cheatSheet.id})" style="margin-top: 15px;">افزودن اولین آیتم</button>`
+                : ""
+            }
+          `;
+          itemsContainer.appendChild(emptyState);
         }
       }
 
@@ -1303,6 +1509,27 @@
 
       // Modal functions
       function openModal(modalId) {
+        // Check if user is authenticated for cheat sheet modal
+        if (
+          modalId === "cheatSheetModal" &&
+          !cheatSheetService.isAuthenticated()
+        ) {
+          showMessage(
+            "برای ایجاد چیت شیت شخصی باید وارد حساب کاربری شوید",
+            "error"
+          );
+          return;
+        }
+
+        // Check if user is authenticated for item modal
+        if (modalId === "itemModal" && !cheatSheetService.isAuthenticated()) {
+          showMessage(
+            "برای مدیریت آیتم‌ها باید وارد حساب کاربری شوید",
+            "error"
+          );
+          return;
+        }
+
         document.getElementById(modalId).style.display = "block";
 
         // Clear form errors
@@ -1314,6 +1541,11 @@
           document.getElementById("cheatSheetForm").reset();
           document.getElementById("cheatSheetModalTitle").textContent =
             "ایجاد چیت شیت جدید";
+        }
+
+        // Reset item form (handled in openAddItemModal for creation)
+        if (modalId === "itemModal" && !window.currentItemOperation) {
+          document.getElementById("itemForm").reset();
         }
       }
 
@@ -1523,6 +1755,156 @@
           });
         }
       });
+
+      // Item Management Functions
+
+      function openAddItemModal(cheatSheetId) {
+        document.getElementById("itemModalTitle").textContent =
+          "افزودن آیتم جدید";
+        document.getElementById("itemForm").reset();
+
+        // Set default order index
+        const currentItems = window.currentCheatSheet?.items || [];
+        const maxOrder =
+          currentItems.length > 0
+            ? Math.max(...currentItems.map((item) => item.order_index || 0))
+            : -1;
+        document.getElementById("itemOrderIndex").value = maxOrder + 1;
+
+        openModal("itemModal");
+
+        // Store current operation
+        window.currentItemOperation = {
+          type: "create",
+          cheatSheetId: cheatSheetId,
+        };
+      }
+
+      async function editItem(cheatSheetId, itemId) {
+        try {
+          // Find the item in current cheat sheet data
+          const item = window.currentCheatSheet?.items?.find(
+            (item) => item.id === itemId
+          );
+
+          if (!item) {
+            showMessage("آیتم مورد نظر یافت نشد", "error");
+            return;
+          }
+
+          // Populate form with item data
+          document.getElementById("itemTitle").value = item.title;
+          document.getElementById("itemContent").value = item.content || "";
+          document.getElementById("itemCodeExample").value =
+            item.code_example || "";
+          document.getElementById("itemCategory").value = item.category || "";
+          document.getElementById("itemOrderIndex").value =
+            item.order_index || 0;
+
+          document.getElementById("itemModalTitle").textContent = "ویرایش آیتم";
+
+          openModal("itemModal");
+
+          // Store current operation
+          window.currentItemOperation = {
+            type: "edit",
+            cheatSheetId: cheatSheetId,
+            itemId: itemId,
+          };
+        } catch (error) {
+          showMessage("خطا در دریافت اطلاعات آیتم: " + error.message, "error");
+        }
+      }
+
+      async function deleteItem(cheatSheetId, itemId) {
+        if (!confirm("آیا از حذف این آیتم اطمینان دارید؟")) {
+          return;
+        }
+
+        try {
+          const result = await cheatSheetService.deleteItem(
+            cheatSheetId,
+            itemId
+          );
+
+          if (result.success) {
+            showMessage("آیتم با موفقیت حذف شد", "success");
+
+            // Reload the cheat sheet detail
+            const updatedSheet = await cheatSheetService.getCheatSheet(
+              cheatSheetId
+            );
+            if (updatedSheet.success) {
+              showCheatSheetDetail(updatedSheet.data);
+            }
+          } else {
+            showMessage("خطا در حذف آیتم: " + result.message, "error");
+          }
+        } catch (error) {
+          showMessage("خطا در حذف آیتم: " + error.message, "error");
+        }
+      }
+
+      async function handleItemSubmit(e) {
+        e.preventDefault();
+
+        const title = document.getElementById("itemTitle").value;
+        const content = document.getElementById("itemContent").value;
+        const codeExample = document.getElementById("itemCodeExample").value;
+        const category = document.getElementById("itemCategory").value;
+        const orderIndex =
+          parseInt(document.getElementById("itemOrderIndex").value) || 0;
+        const errorDiv = document.getElementById("itemError");
+
+        try {
+          const itemData = {
+            title,
+            content,
+            code_example: codeExample,
+            category,
+            order_index: orderIndex,
+          };
+
+          const operation = window.currentItemOperation;
+          let result;
+
+          if (operation.type === "create") {
+            result = await cheatSheetService.addItem(
+              operation.cheatSheetId,
+              itemData
+            );
+          } else if (operation.type === "edit") {
+            result = await cheatSheetService.updateItem(
+              operation.cheatSheetId,
+              operation.itemId,
+              itemData
+            );
+          }
+
+          if (result.success) {
+            closeModal("itemModal");
+            const message =
+              operation.type === "create"
+                ? "آیتم با موفقیت اضافه شد!"
+                : "آیتم با موفقیت بروزرسانی شد!";
+            showMessage(message, "success");
+
+            // Reload the cheat sheet detail
+            const updatedSheet = await cheatSheetService.getCheatSheet(
+              operation.cheatSheetId
+            );
+            if (updatedSheet.success) {
+              showCheatSheetDetail(updatedSheet.data);
+            }
+          } else {
+            errorDiv.textContent = result.message;
+            errorDiv.style.display = "block";
+          }
+        } catch (error) {
+          errorDiv.textContent = "خطا در عملیات آیتم: " + error.message;
+          errorDiv.style.display = "block";
+        }
+      }
     </script>
   </body>
 </html>

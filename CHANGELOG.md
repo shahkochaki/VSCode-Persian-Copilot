@@ -2,6 +2,53 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.9.0] - 2025-09-27
+
+### 🚀 Major Enhancement: Advanced CheatSheets Management System
+
+- **🔧 Complete Laravel Backend Integration**: Full integration with Laravel CheatSheet Controller
+  - Updated API endpoints to match Laravel controller routes (`/cheat-sheets`)
+  - Proper HTTP methods mapping (GET, POST, PUT, DELETE)
+  - Enhanced authentication with Bearer token support
+  - Improved error handling and response processing
+
+- **📝 Advanced Item Management**: Full CRUD operations for cheat sheet items
+  - Add, edit, and delete items within cheat sheets
+  - Support for code examples with syntax highlighting
+  - Item ordering and categorization system
+  - Rich text content support for descriptions
+
+- **🎨 Enhanced User Interface**: Improved UI/UX for better user experience
+  - New modal dialogs for item management
+  - Owner-specific action buttons (edit/delete)
+  - Better visual feedback with toast notifications
+  - Responsive design for mobile and desktop
+  - Enhanced owner information display
+
+- **🔒 Improved Access Control**: Better permission handling
+  - Precise owner detection for cheat sheets and items
+  - Guest user limitations with clear messaging
+  - Protected operations with authentication checks
+  - Public vs private cheat sheet visibility controls
+
+- **⚡ Performance & Reliability**: System optimizations
+  - Better API error handling and retry mechanisms
+  - Optimized data loading and caching
+  - Improved search and filter functionality
+  - Enhanced keyboard navigation and shortcuts
+
+## [1.8.5] - 2025-09-25
+
+### ✨ Improvements
+
+- **📚 CheatSheets Simplified Experience**: Streamlined CheatSheets functionality
+  - Removed all login page redirections for cleaner UX
+  - Simple information message for guest users
+  - Authentication handled seamlessly in background
+  - Users can view public cheat sheets without login
+  - Login-required features show appropriate feedback messages
+  - Matches hub.html authentication pattern exactly
+
 ## [1.8.4] - 2025-09-24
 
 ### 🔧 Bug Fixes
