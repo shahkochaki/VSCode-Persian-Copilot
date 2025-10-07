@@ -1,8 +1,8 @@
 import * as assert from "assert";
 
-// You can import and use all API from the 'vscode' module
+// You can import and use all API  from the 'vscode' module
+// testing framework
 // as well as import your extension to test it
-//testing note: the extension must be activated before running these tests
 import * as vscode from "vscode";
 // import * as myExtension from '../../extension';
 
