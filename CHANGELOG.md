@@ -15,11 +15,13 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 ### ✨ CheatSheet Enhancements
 
 - **🔐 Authentication Fixes**:
+
   - Fixed ownership detection using correct `user.uuid` field
   - "Add Item" button now properly displays for cheat sheet owners
   - Improved user data structure handling
 
 - **📊 Smart Display**:
+
   - Personal cheat sheets now display automatically on initial load
   - Enhanced filter behavior:
     - "All": Shows public + user's private cheat sheets
