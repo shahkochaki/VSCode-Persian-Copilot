@@ -1,201 +1,401 @@
 ﻿<!DOCTYPE html>
 <html lang="fa">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>متن ساختگی فارسی</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --vscode-foreground: var(--vscode-editor-foreground, #333);
-            --vscode-background: var(--vscode-editor-background, #ffffff);
-            --vscode-button-background: var(--vscode-button-background, #007acc);
-            --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
-            --vscode-input-background: var(--vscode-input-background, #ffffff);
-            --vscode-input-border: var(--vscode-input-border, #ccc);
-            --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+      :root {
+        --vscode-foreground: var(--vscode-editor-foreground, #333);
+        --vscode-background: var(--vscode-editor-background, #ffffff);
+        --vscode-button-background: var(--vscode-button-background, #007acc);
+        --vscode-button-foreground: var(--vscode-button-foreground, #ffffff);
+        --vscode-input-background: var(--vscode-input-background, #ffffff);
+        --vscode-input-border: var(--vscode-input-border, #ccc);
+        --vscode-panel-background: var(--vscode-panel-background, #f8f8f8);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Vazirmatn", "Segoe UI", Tahoma, Arial, sans-serif;
+        padding: 24px;
+        background: var(--vscode-background);
+        color: var(--vscode-foreground);
+        direction: rtl;
+      }
+
+      h2 {
+        color: var(--vscode-button-background);
+        margin-bottom: 24px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      .row {
+        margin-bottom: 20px;
+        background: var(--vscode-panel-background);
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--vscode-input-border);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--vscode-foreground);
+      }
+
+      input,
+      select {
+        padding: 10px;
+        font-size: 16px;
+        font-family: "Vazirmatn", sans-serif;
+        background: var(--vscode-input-background);
+        color: var(--vscode-foreground);
+        border: 1px solid var(--vscode-input-border);
+        border-radius: 4px;
+        margin-left: 10px;
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: var(--vscode-button-background);
+        box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        background: var(--vscode-button-background);
+        color: var(--vscode-button-foreground);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: "Vazirmatn", sans-serif;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      button:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .result {
+        margin-top: 20px;
+        font-weight: bold;
+        color: var(--vscode-foreground);
+      }
+
+      textarea {
+        width: 100%;
+        height: 200px;
+        direction: rtl;
+        text-align: right;
+        padding: 15px;
+        font-family: "Vazirmatn", sans-serif;
+        background: var(--vscode-input-background);
+        color: var(--vscode-foreground);
+        border: 1px solid var(--vscode-input-border);
+        border-radius: 6px;
+        line-height: 1.6;
+        resize: vertical;
+      }
+
+      textarea:focus {
+        outline: none;
+        border-color: var(--vscode-button-background);
+        box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+      }
+
+      /* Paste notice banner */
+      .paste-notice {
+        background: rgba(0, 122, 204, 0.1);
+        border: 1px solid var(--vscode-button-background);
+        border-radius: 6px;
+        padding: 8px 12px;
+        margin: 0 0 16px 0;
+        font-size: 0.85em;
+        text-align: right;
+        direction: rtl;
+        color: var(--vscode-button-background);
+        opacity: 0.9;
+      }
+
+      /* Premium Banner Styles */
+      .premium-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .premium-banner::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          45deg,
+          rgba(255, 255, 255, 0.1) 25%,
+          transparent 25%,
+          transparent 50%,
+          rgba(255, 255, 255, 0.1) 50%,
+          rgba(255, 255, 255, 0.1) 75%,
+          transparent 75%,
+          transparent
+        );
+        background-size: 20px 20px;
+        animation: move 2s linear infinite;
+      }
+
+      @keyframes move {
+        0% {
+          background-position: 0 0;
+        }
+        100% {
+          background-position: 40px 40px;
+        }
+      }
+
+      .premium-banner h3 {
+        margin: 0 0 12px 0;
+        font-size: 1.4em;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 1;
+      }
+
+      .premium-banner p {
+        margin: 0 0 16px 0;
+        font-size: 1em;
+        opacity: 0.95;
+        line-height: 1.5;
+        position: relative;
+        z-index: 1;
+      }
+
+      .premium-banner-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+      }
+
+      .premium-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .premium-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+        border-color: rgba(255, 255, 255, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .premium-btn.primary {
+        background: #28a745;
+        border-color: #28a745;
+      }
+
+      .premium-btn.primary:hover {
+        background: #218838;
+        border-color: #218838;
+      }
+
+      .premium-icon {
+        font-size: 1.1em;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 768px) {
+        .premium-banner-buttons {
+          flex-direction: column;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        .premium-btn {
+          width: 100%;
+          text-align: center;
+          justify-content: center;
         }
 
-        body {
-            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Arial, sans-serif;
-            padding: 24px;
-            background: var(--vscode-background);
-            color: var(--vscode-foreground);
-            direction: rtl;
+        .premium-banner h3 {
+          font-size: 1.2em;
         }
 
-        h2 {
-            color: var(--vscode-button-background);
-            margin-bottom: 24px;
-            text-align: center;
-            font-weight: 600;
+        .premium-banner p {
+          font-size: 0.9em;
         }
-
-        .row {
-            margin-bottom: 20px;
-            background: var(--vscode-panel-background);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--vscode-input-border);
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--vscode-foreground);
-        }
-
-        input, select {
-            padding: 10px;
-            font-size: 16px;
-            font-family: 'Vazirmatn', sans-serif;
-            background: var(--vscode-input-background);
-            color: var(--vscode-foreground);
-            border: 1px solid var(--vscode-input-border);
-            border-radius: 4px;
-            margin-left: 10px;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--vscode-button-background);
-            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
-        }
-
-        button {
-            padding: 10px 20px;
-            margin: 5px;
-            background: var(--vscode-button-background);
-            color: var(--vscode-button-foreground);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Vazirmatn', sans-serif;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        .result {
-            margin-top: 20px;
-            font-weight: bold;
-            color: var(--vscode-foreground);
-        }
-
-        textarea {
-            width: 100%;
-            height: 200px;
-            direction: rtl;
-            text-align: right;
-            padding: 15px;
-            font-family: 'Vazirmatn', sans-serif;
-            background: var(--vscode-input-background);
-            color: var(--vscode-foreground);
-            border: 1px solid var(--vscode-input-border);
-            border-radius: 6px;
-            line-height: 1.6;
-            resize: vertical;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--vscode-button-background);
-            box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
-        }
-
-        /* Paste notice banner */
-        .paste-notice {
-            background: rgba(0, 122, 204, 0.1);
-            border: 1px solid var(--vscode-button-background);
-            border-radius: 6px;
-            padding: 8px 12px;
-            margin: 0 0 16px 0;
-            font-size: 0.85em;
-            text-align: right;
-            direction: rtl;
-            color: var(--vscode-button-background);
-            opacity: 0.9;
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h2>✍️ تولید متن ساختگی فارسی</h2>
-    
-    <div class="row">
-        <label>تعداد پاراگراف:</label>
-        <input type="number" id="count" value="1" min="1" max="10">
-        <button onclick="generate()">تولید متن فارسی</button>
-        <button onclick="copyText()" style="background:#28a745;">کپی متن</button>
-        <button onclick="clearText()" style="background:#dc3545;">پاک کردن</button>
+
+    <!-- Premium Lorem Extension Banner -->
+    <div class="premium-banner">
+      <h3>🚀 سرویس کامل Lorem متن‌های ساختگی!</h3>
+      <p>
+        برای دسترسی به بیش از <strong>50 زبان مختلف</strong> و
+        <strong>دسته‌بندی‌های متنوع</strong> متن‌های ساختگی، اکستنشن تخصصی Lorem
+        ما را دانلود کنید!
+      </p>
+      <div class="premium-banner-buttons">
+        <a
+          href="https://marketplace.visualstudio.com/items?itemName=shahkochaki.multi-language-lorem-with-categories"
+          class="premium-btn"
+          onclick="openExternal('https://marketplace.visualstudio.com/items?itemName=shahkochaki.multi-language-lorem-with-categories')"
+        >
+          <span class="premium-icon">🌍</span>
+          مشاهده در Marketplace
+        </a>
+        <a
+          href="vscode:extension/shahkochaki.multi-language-lorem-with-categories"
+          class="premium-btn primary"
+          onclick="openExternal('vscode:extension/shahkochaki.multi-language-lorem-with-categories')"
+        >
+          <span class="premium-icon">⬇️</span>
+          نصب مستقیم در VS Code
+        </a>
+      </div>
     </div>
-    
+
+    <div class="row">
+      <label>تعداد پاراگراف:</label>
+      <input type="number" id="count" value="1" min="1" max="10" />
+      <button onclick="generate()">تولید متن فارسی</button>
+      <button onclick="copyText()" style="background: #28a745">کپی متن</button>
+      <button onclick="clearText()" style="background: #dc3545">
+        پاک کردن
+      </button>
+    </div>
+
     <div class="result" id="result"></div>
     <script>
-        // Persian Lorem Ipsum sentences
-        const persianLorem = [
-            "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.",
-            "چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.",
-            "کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.",
-            "در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.",
-            "لورم ایپسوم یا طرح‌نما به متنی آزمایشی و بی‌معنی در صنعت چاپ، صفحه‌آرایی و طراحی گرافیک گفته می‌شود.",
-            "طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن صفحه و ارائه اولیه شکل ظاهری و کلی طرح سفارش گرفته شده استفاده می نماید.",
-            "تا از نظر گرافیکی نشانگر چگونگی نوع و اندازه فونت و ظاهر متن باشد. معمولا طراحان گرافیک برای صفحه‌آرایی، نخست از متن‌های آزمایشی و بی‌معنی استفاده می‌کنند.",
-            "تا صفحه طراحی یا صفحه بندی شده را به مشتری نشان دهند. این متن‌های آزمایشی بعدا با متن‌های واقعی جایگزین می‌شوند.",
-            "لورم ایپسوم از یک تکه کلاسیک ادبیات لاتین در سال ۴۵ قبل از میلاد گرفته شده است.",
-            "ریچارد مک کلینتاک، یک استاد ادبیات لاتین در کالج هامپدن-سیدنی در ویرجینیا، یکی از ابهام‌آمیزترین کلمات لاتین را از یک تکه لورم ایپسوم بررسی کرد."
-        ];
-        
-        function generate() {
-            const count = parseInt(document.getElementById('count').value) || 1;
-            let result = [];
-            
-            for (let i = 0; i < count; i++) {
-                // Generate random sentences for each paragraph (2-4 sentences)
-                const sentenceCount = Math.floor(Math.random() * 3) + 2;
-                let paragraph = [];
-                
-                for (let j = 0; j < sentenceCount; j++) {
-                    const randomIndex = Math.floor(Math.random() * persianLorem.length);
-                    paragraph.push(persianLorem[randomIndex]);
-                }
-                
-                result.push(paragraph.join(' '));
-            }
-            
-            const finalText = result.join('\n\n');
-            document.getElementById('result').innerHTML = `<div style="margin-top:10px;"><textarea readonly style="width:100%;height:200px;direction:rtl;text-align:right;padding:10px;">${finalText}</textarea></div>`;
+      // Persian Lorem Ipsum sentences
+      const persianLorem = [
+        "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.",
+        "چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد.",
+        "کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد.",
+        "در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.",
+        "لورم ایپسوم یا طرح‌نما به متنی آزمایشی و بی‌معنی در صنعت چاپ، صفحه‌آرایی و طراحی گرافیک گفته می‌شود.",
+        "طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن صفحه و ارائه اولیه شکل ظاهری و کلی طرح سفارش گرفته شده استفاده می نماید.",
+        "تا از نظر گرافیکی نشانگر چگونگی نوع و اندازه فونت و ظاهر متن باشد. معمولا طراحان گرافیک برای صفحه‌آرایی، نخست از متن‌های آزمایشی و بی‌معنی استفاده می‌کنند.",
+        "تا صفحه طراحی یا صفحه بندی شده را به مشتری نشان دهند. این متن‌های آزمایشی بعدا با متن‌های واقعی جایگزین می‌شوند.",
+        "لورم ایپسوم از یک تکه کلاسیک ادبیات لاتین در سال ۴۵ قبل از میلاد گرفته شده است.",
+        "ریچارد مک کلینتاک، یک استاد ادبیات لاتین در کالج هامپدن-سیدنی در ویرجینیا، یکی از ابهام‌آمیزترین کلمات لاتین را از یک تکه لورم ایپسوم بررسی کرد.",
+      ];
+
+      function generate() {
+        const count = parseInt(document.getElementById("count").value) || 1;
+        let result = [];
+
+        for (let i = 0; i < count; i++) {
+          // Generate random sentences for each paragraph (2-4 sentences)
+          const sentenceCount = Math.floor(Math.random() * 3) + 2;
+          let paragraph = [];
+
+          for (let j = 0; j < sentenceCount; j++) {
+            const randomIndex = Math.floor(Math.random() * persianLorem.length);
+            paragraph.push(persianLorem[randomIndex]);
+          }
+
+          result.push(paragraph.join(" "));
         }
-        
-        function copyText() {
-            const textarea = document.querySelector('#result textarea');
-            if (textarea) {
-                textarea.select();
-                navigator.clipboard.writeText(textarea.value).then(() => {
-                    alert('Text copied to clipboard!');
-                });
-            }
+
+        const finalText = result.join("\n\n");
+        document.getElementById(
+          "result"
+        ).innerHTML = `<div style="margin-top:10px;"><textarea readonly style="width:100%;height:200px;direction:rtl;text-align:right;padding:10px;">${finalText}</textarea></div>`;
+      }
+
+      function copyText() {
+        const textarea = document.querySelector("#result textarea");
+        if (textarea) {
+          textarea.select();
+          navigator.clipboard.writeText(textarea.value).then(() => {
+            alert("Text copied to clipboard!");
+          });
         }
-        
-        function clearText() {
-            document.getElementById('result').innerHTML = '';
-            document.getElementById('count').value = '1';
+      }
+
+      function clearText() {
+        document.getElementById("result").innerHTML = "";
+        document.getElementById("count").value = "1";
+      }
+
+      function openExternal(url) {
+        // Try to use VS Code API first
+        if (typeof acquireVsCodeApi !== "undefined") {
+          const vscode = acquireVsCodeApi();
+          vscode.postMessage({
+            command: "openExternal",
+            url: url,
+          });
+        } else {
+          // Fallback to window.open
+          window.open(url, "_blank");
         }
+        return false;
+      }
     </script>
 
     <!-- Copyright Footer -->
-    <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--vscode-input-border); color: var(--vscode-foreground); opacity: 0.7; font-size: 0.9em;">
-        <p>© 2025 <a href="https://helpix.app" target="_blank" style="color: var(--vscode-button-background); text-decoration: none;">Helpix.app</a> - Persian Tools Hub for VS Code</p>
+    <div
+      style="
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--vscode-input-border);
+        color: var(--vscode-foreground);
+        opacity: 0.7;
+        font-size: 0.9em;
+      "
+    >
+      <p>
+        © 2025
+        <a
+          href="https://helpix.app"
+          target="_blank"
+          style="color: var(--vscode-button-background); text-decoration: none"
+          >Helpix.app</a
+        >
+        - Persian Tools Hub for VS Code
+      </p>
     </div>
-</body>
+  </body>
 </html>
