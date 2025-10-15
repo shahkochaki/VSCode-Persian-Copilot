@@ -460,6 +460,7 @@ function displayCheatSheets(cheatSheets) {
 }
 
 function showCheatSheetDetail(cheatSheet) {
+  console.log("📋 Opening CheatSheet detail:", cheatSheet);
   document.getElementById("cheatSheetsSection").style.display = "none";
   document.getElementById("cheatSheetDetail").style.display = "block";
 
@@ -860,6 +861,7 @@ document.addEventListener("keydown", function (e) {
 // Item Management Functions
 
 function openAddItemModal(cheatSheetId) {
+  console.log("➕ Opening add item modal for cheatSheet:", cheatSheetId);
   document.getElementById("itemModalTitle").textContent = "افزودن آیتم جدید";
   document.getElementById("itemForm").reset();
 
