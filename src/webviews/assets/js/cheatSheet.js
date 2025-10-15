@@ -487,6 +487,16 @@ function showCheatSheetDetail(cheatSheet) {
       (currentUser.user.data &&
         cheatSheet.user_id === currentUser.user.data.id));
 
+  console.log("🔐 Ownership check:", {
+    isAuthenticated: cheatSheetService.isAuthenticated(),
+    hasCurrentUser: !!currentUser,
+    hasUserObject: !!(currentUser && currentUser.user),
+    cheatSheetUserId: cheatSheet.user_id,
+    currentUserId: currentUser?.user?.id,
+    currentUserDataId: currentUser?.user?.data?.id,
+    isOwner: isOwner,
+  });
+
   // Store current cheat sheet for item operations
   window.currentCheatSheet = cheatSheet;
 
