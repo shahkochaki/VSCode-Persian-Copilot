@@ -1,0 +1,311 @@
+/* Common Styles - استایل‌های مشترک برای همه webview ها */
+
+/* متغیرهای پایه */
+:root {
+  --vscode-foreground: var(--vscode-editor-foreground, #333);
+  --vscode-background: var(--vscode-editor-background, #ffffff);
+}
+
+/* استایل‌های پایه بدنه */
+body {
+  font-family: "Vazirmatn", "Tahoma", "Arial", sans-serif;
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+  line-height: 1.6;
+  padding: 20px;
+  direction: rtl;
+  margin: 0;
+}
+
+/* کانتینر اصلی */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* هدر صفحات */
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--vscode-panel-border);
+}
+
+.header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #007acc;
+  margin-bottom: 10px;
+}
+
+.header p {
+  color: var(--vscode-descriptionForeground);
+  font-size: 1.1rem;
+}
+
+/* دکمه‌ها */
+.auth-button {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.auth-button:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.auth-button.primary {
+  background: #007acc;
+  color: white;
+}
+
+.auth-button.primary:hover {
+  background: #005a9e;
+}
+
+.btn-primary {
+  background: #007acc;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #005a9e;
+}
+
+.btn-secondary {
+  background: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+}
+
+.btn-secondary:hover {
+  background: var(--vscode-button-hoverBackground);
+}
+
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+}
+
+/* پیام‌ها و نوتیفیکیشن‌ها */
+.info-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: var(--vscode-editor-inactiveSelectionBackground);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 8px;
+  padding: 15px 20px;
+  color: var(--vscode-foreground);
+}
+
+.error-message {
+  color: #f14c4c;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  text-align: center;
+}
+
+/* حالت‌های بارگذاری و خطا */
+.loading,
+.error {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 1.1rem;
+}
+
+.loading {
+  color: var(--vscode-descriptionForeground);
+}
+
+.error {
+  color: #dc3545;
+}
+
+/* مودال‌ها */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-panel-border);
+  margin: 10% auto;
+  padding: 30px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 8px;
+  direction: rtl;
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.modal-header h2 {
+  color: #007acc;
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.modal-actions button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 100px;
+}
+
+/* فرم‌ها */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--vscode-foreground);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 4px;
+  background: var(--vscode-input-background);
+  color: var(--vscode-input-foreground);
+  font-size: 1rem;
+  box-sizing: border-box;
+  font-family: "Vazirmatn", "Tahoma", "Arial", sans-serif;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #007acc;
+}
+
+/* بخش احراز هویت */
+.status-bar {
+  padding: 15px 0;
+  border-bottom: 1px solid var(--vscode-panel-border);
+  margin-bottom: 20px;
+}
+
+.guest-section {
+  text-align: center;
+}
+
+.user-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+#userWelcome {
+  color: var(--vscode-foreground);
+  font-weight: 500;
+  margin-left: 15px;
+}
+
+/* حالت خالی */
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+/* رسپانسیو */
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 1.6rem;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+}
+
+/* انیمیشن‌های مشترک */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

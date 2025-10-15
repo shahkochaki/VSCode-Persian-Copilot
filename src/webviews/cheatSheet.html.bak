@@ -15,7 +15,13 @@
   </head>
   <body>
     <div class="container">
-      <!-- User Status Bar -->
+        background-color: var(--vscode-editor-background);
+        color: var(--vscode-editor-foreground);
+        line-height: 1.6;
+        padding: 20px;
+        direction: rtl;
+        margin: 0;
+      }
 
       .container {
         max-width: 1200px;
@@ -892,12 +898,11 @@
       </div>
     </div>
 
-    <!-- JavaScript مشترک -->
-    <script src="assets/js/common.js"></script>
-    <!-- JavaScript اختصاصی -->
     <script src="assets/js/cheatSheet.js"></script>
-  </body>
-</html>
+    <!-- <script>
+      // VS Code API Integration
+      const vscode = acquireVsCodeApi();
+      let currentUser = null;
 
       // Initialize page
       window.addEventListener("load", () => {
