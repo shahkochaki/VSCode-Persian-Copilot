@@ -977,7 +977,10 @@ function openTodoWebview() {
     vscode.ViewColumn.One,
     {
       enableScripts: true,
-      localResourceRoots: [vscode.Uri.file(path.join(__dirname, "webviews"))],
+      localResourceRoots: [
+        vscode.Uri.file(path.join(__dirname, "webviews")),
+        vscode.Uri.file(path.join(__dirname, "webviews", "assets")),
+      ],
     }
   );
 
