@@ -1,8 +1,8 @@
 {
   "name": "vscode-persian-copilot",
   "displayName": "VSCode Persian Copilot — RTL & Persian Tools Hub",
-  "description": "Professional RTL support and a complete Persian Tools Hub for VS Code: calendar, number tools, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, JSON parser, cheat sheets, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
-  "version": "1.10.0",
+  "description": "Professional RTL support and a complete Persian Tools Hub for VS Code: TODO manager, calendar, number tools, Arabic-to-Persian, lorem, money/number-to-words, IP lookup, JSON parser, cheat sheets, and more. Modern Farsi experience for Copilot Chat, markdown, and beyond.",
+  "version": "1.11.0",
   "publisher": "shahkochaki",
   "repository": {
     "type": "git",
@@ -24,7 +24,10 @@
     "right-to-left",
     "copilot",
     "chat",
-    "iran"
+    "iran",
+    "todo",
+    "task-manager",
+    "productivity"
   ],
   "engines": {
     "vscode": "^1.102.0"

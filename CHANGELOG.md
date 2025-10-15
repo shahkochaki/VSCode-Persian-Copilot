@@ -2,6 +2,36 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.11.0] - 2025-10-15
+
+### 🆕 Major New Features
+
+- **📝 TODO Manager**: Complete task management system with authentication
+  - Add, edit, complete, and delete TODO items
+  - Priority levels (High, Medium, Low) with visual indicators
+  - Task statistics and completion tracking
+  - Advanced filtering by status and priority
+  - Modern Persian RTL-optimized interface
+  - Full API integration with backend services
+  - Authentication required for secure access
+
+### 🏗️ Technical Improvements
+
+- **📁 Modular File Structure**:
+  - Separated TODO styles into `assets/css/todo.css`
+  - Separated TODO logic into `assets/js/todo.js`
+  - Clean HTML structure with external asset references
+- **🔧 Enhanced Build Process**:
+  - Added services compilation to esbuild pipeline
+  - Improved asset URI handling for webviews
+  - Better error handling and module resolution
+
+### 🛠️ Bug Fixes
+
+- Fixed CSS and JavaScript loading issues in webviews
+- Resolved "Cannot find module" errors for service files
+- Enhanced webview resource loading with proper localResourceRoots
+
 ## [1.10.0] - 2025-10-15
 
 ### ♻️ Code Architecture Refactoring
