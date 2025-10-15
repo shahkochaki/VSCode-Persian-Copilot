@@ -424,12 +424,26 @@ function openSimpleWebview(type: string, title: string, htmlFile: string) {
     type,
     title,
     vscode.ViewColumn.One,
-    { enableScripts: true }
+    {
+      enableScripts: true,
+      localResourceRoots: [vscode.Uri.file(path.join(__dirname, "webviews"))],
+    }
   );
   const htmlPath = path.join(__dirname, "webviews", htmlFile);
   let html = "";
   try {
     html = fs.readFileSync(htmlPath, "utf8");
+
+    // Convert relative paths to webview URIs
+    const webviewsPath = path.join(__dirname, "webviews");
+    html = html.replace(/href="assets\/(css\/[^"]+)"/g, (match, p1) => {
+      const assetPath = vscode.Uri.file(path.join(webviewsPath, "assets", p1));
+      return `href="${panel.webview.asWebviewUri(assetPath)}"`;
+    });
+    html = html.replace(/src="assets\/(js\/[^"]+)"/g, (match, p1) => {
+      const assetPath = vscode.Uri.file(path.join(webviewsPath, "assets", p1));
+      return `src="${panel.webview.asWebviewUri(assetPath)}"`;
+    });
   } catch (e) {
     html = `<h2>Could not load ${title}.</h2>`;
   }
@@ -458,6 +472,13 @@ function openSimpleWebview(type: string, title: string, htmlFile: string) {
         break;
       case "openExternal":
         vscode.env.openExternal(vscode.Uri.parse(message.url));
+        break;
+      case "getUserData":
+        // Send current user data to webview
+        panel.webview.postMessage({
+          command: "setUserData",
+          data: currentUser,
+        });
         break;
     }
   });

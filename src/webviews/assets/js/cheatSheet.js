@@ -1,5 +1,5 @@
-// VS Code API Integration
-const vscode = acquireVsCodeApi();
+// VS Code API Integration (loaded from common.js)
+// const vscode is already defined in common.js
 let currentUser = null;
 
 // Initialize page
@@ -17,9 +17,11 @@ function requestUserData() {
 // Handle messages from extension
 window.addEventListener("message", (event) => {
   const message = event.data;
+  console.log("CheatSheet: Received message:", message);
 
   switch (message.command) {
     case "setUserData":
+      console.log("CheatSheet: Received user data:", message.data);
       updateUserInterface(message.data);
       break;
   }

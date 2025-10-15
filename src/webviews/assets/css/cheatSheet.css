@@ -17,6 +17,7 @@
 }
 
 .search-container input {
+  font-family: inherit;
   flex: 1;
   padding: 10px 15px;
   border: 1px solid var(--vscode-input-border);
@@ -32,6 +33,7 @@
 }
 
 .search-container button {
+  font-family: inherit;
   background: #007acc;
   color: white;
   border: none;
