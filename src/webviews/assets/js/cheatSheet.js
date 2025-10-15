@@ -329,11 +329,14 @@ async function loadCheatSheets() {
     let response;
 
     if (currentFilter === "my" && cheatSheetService.isAuthenticated()) {
+      // فقط چیت شیت‌های شخصی
       response = await cheatSheetService.getMyCheatSheets();
     } else if (currentFilter === "public") {
-      // For public only, we'll handle this in the service
+      // فقط چیت شیت‌های عمومی
+      params.public = "true";
       response = await cheatSheetService.getCheatSheets(params);
     } else {
+      // همه چیت شیت‌ها (عمومی + شخصی کاربر لاگین شده)
       response = await cheatSheetService.getCheatSheets(params);
     }
 

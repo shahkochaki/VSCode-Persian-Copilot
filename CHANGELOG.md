@@ -2,6 +2,42 @@
 
 All notable changes to the "vscode-persian-copilot" extension will be documented in this file.
 
+## [1.10.0] - 2025-10-15
+
+### ♻️ Code Architecture Refactoring
+
+- **🏗️ Modular Structure**: Complete separation of concerns
+  - Created `assets/css/` and `assets/js/` directories
+  - Separated common styles (`common.css`) from feature-specific styles (`cheatSheet.css`)
+  - Separated common utilities (`common.js`) from feature logic (`cheatSheet.js`)
+  - Reduced HTML file size from 1946 to 220 lines (88% reduction)
+
+### ✨ CheatSheet Enhancements
+
+- **🔐 Authentication Fixes**:
+  - Fixed ownership detection using correct `user.uuid` field
+  - "Add Item" button now properly displays for cheat sheet owners
+  - Improved user data structure handling
+
+- **📊 Smart Display**:
+  - Personal cheat sheets now display automatically on initial load
+  - Enhanced filter behavior:
+    - "All": Shows public + user's private cheat sheets
+    - "Public": Shows only public cheat sheets
+    - "My Cheat Sheets": Shows only user's private cheat sheets
+
+- **🎨 UI Improvements**:
+  - Added scrollable modals with `max-height: 90vh`
+  - Better handling of large forms and content
+  - Improved modal positioning
+
+### 🔧 Technical Improvements
+
+- Proper `webview.asWebviewUri()` usage for external resources
+- Fixed variable conflicts in JavaScript modules
+- Enhanced message passing between extension and webview
+- Better code organization and maintainability
+
 ## [1.9.1] - 2025-09-27
 
 ### 📖 Documentation & Community
