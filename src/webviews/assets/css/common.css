@@ -6,6 +6,12 @@
   --vscode-background: var(--vscode-editor-background, #ffffff);
 }
 
+input,
+select,
+button {
+  font-family: inherit;
+}
+
 /* استایل‌های پایه بدنه */
 body {
   font-family: "Vazirmatn", "Tahoma", "Arial", sans-serif;
