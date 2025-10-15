@@ -50,6 +50,40 @@ async function main() {
 				console.log(`Copied ${file} to dist/webviews/`);
 			}
 		});
+		
+		// Copy assets folder
+		const assetsSource = path.join(webviewsSource, 'assets');
+		const assetsTarget = path.join(webviewsTarget, 'assets');
+		
+		if (fs.existsSync(assetsSource)) {
+			// Create assets directories
+			if (!fs.existsSync(assetsTarget)) {
+				fs.mkdirSync(assetsTarget, { recursive: true });
+			}
+			
+			// Function to copy directory recursively
+			function copyDir(src, dest) {
+				if (!fs.existsSync(dest)) {
+					fs.mkdirSync(dest, { recursive: true });
+				}
+				
+				const entries = fs.readdirSync(src, { withFileTypes: true });
+				
+				for (const entry of entries) {
+					const srcPath = path.join(src, entry.name);
+					const destPath = path.join(dest, entry.name);
+					
+					if (entry.isDirectory()) {
+						copyDir(srcPath, destPath);
+					} else {
+						fs.copyFileSync(srcPath, destPath);
+						console.log(`Copied ${path.relative('src/webviews', srcPath)} to dist/webviews/`);
+					}
+				}
+			}
+			
+			copyDir(assetsSource, assetsTarget);
+		}
 	}
 	
 	// Copy favicon.ico to dist
