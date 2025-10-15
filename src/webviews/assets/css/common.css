@@ -156,15 +156,18 @@ body {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 1000;
+  overflow-y: auto;
 }
 
 .modal-content {
   background-color: var(--vscode-editor-background);
   border: 1px solid var(--vscode-panel-border);
-  margin: 10% auto;
+  margin: 5% auto;
   padding: 30px;
   width: 90%;
   max-width: 400px;
+  max-height: 90vh;
+  overflow-y: auto;
   border-radius: 8px;
   direction: rtl;
 }

@@ -232,6 +232,27 @@ function setupEventListeners() {
 function updateUserInterface(userData) {
   currentUser = userData;
   console.log("CheatSheet: Received user data:", userData);
+  console.log("🔍 Full userData object:", JSON.stringify(userData, null, 2));
+  console.log("🔍 User data structure:", {
+    full: userData,
+    token: userData?.token,
+    user: userData?.user,
+    "user.id": userData?.user?.id,
+    "user.data": userData?.user?.data,
+    "user.data.id": userData?.user?.data?.id,
+    id: userData?.id,
+  });
+  
+  // بررسی تمام کلیدهای userData
+  if (userData) {
+    console.log("🔑 All keys in userData:", Object.keys(userData));
+    if (userData.user) {
+      console.log("🔑 All keys in userData.user:", Object.keys(userData.user));
+      if (userData.user.data) {
+        console.log("🔑 All keys in userData.user.data:", Object.keys(userData.user.data));
+      }
+    }
+  }
 
   if (userData && userData.token) {
     console.log("CheatSheet: User is logged in, updating interface");
@@ -411,13 +432,16 @@ function displayCheatSheets(cheatSheets) {
     card.onclick = () => showCheatSheetDetail(cheatSheet);
 
     const itemCount = cheatSheet.items ? cheatSheet.items.length : 0;
+
+    // Try multiple paths for user ID
+    const userId =
+      currentUser?.user?.uuid || currentUser?.user?.id || currentUser?.id;
+
     const isOwner =
       cheatSheetService.isAuthenticated() &&
       currentUser &&
-      currentUser.user &&
-      (cheatSheet.user_id === currentUser.user.id ||
-        (currentUser.user.data &&
-          cheatSheet.user_id === currentUser.user.data.id));
+      userId &&
+      cheatSheet.user_id === userId;
 
     const ownerBadge = cheatSheet.is_public
       ? '<span class="badge public">عمومی</span>'
@@ -479,21 +503,21 @@ function showCheatSheetDetail(cheatSheet) {
   document.getElementById("detailOwner").textContent = ownerInfo;
 
   // Check if current user is the owner
+  // Try multiple paths for user ID based on different API response structures
+  const userId =
+    currentUser?.user?.uuid || currentUser?.user?.id || currentUser?.id;
+
   const isOwner =
     cheatSheetService.isAuthenticated() &&
     currentUser &&
-    currentUser.user &&
-    (cheatSheet.user_id === currentUser.user.id ||
-      (currentUser.user.data &&
-        cheatSheet.user_id === currentUser.user.data.id));
+    userId &&
+    cheatSheet.user_id === userId;
 
   console.log("🔐 Ownership check:", {
     isAuthenticated: cheatSheetService.isAuthenticated(),
     hasCurrentUser: !!currentUser,
-    hasUserObject: !!(currentUser && currentUser.user),
     cheatSheetUserId: cheatSheet.user_id,
-    currentUserId: currentUser?.user?.id,
-    currentUserDataId: currentUser?.user?.data?.id,
+    detectedUserId: userId,
     isOwner: isOwner,
   });
 
