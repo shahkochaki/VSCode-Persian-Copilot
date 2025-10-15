@@ -242,14 +242,17 @@ function updateUserInterface(userData) {
     "user.data.id": userData?.user?.data?.id,
     id: userData?.id,
   });
-  
+
   // بررسی تمام کلیدهای userData
   if (userData) {
     console.log("🔑 All keys in userData:", Object.keys(userData));
     if (userData.user) {
       console.log("🔑 All keys in userData.user:", Object.keys(userData.user));
       if (userData.user.data) {
-        console.log("🔑 All keys in userData.user.data:", Object.keys(userData.user.data));
+        console.log(
+          "🔑 All keys in userData.user.data:",
+          Object.keys(userData.user.data)
+        );
       }
     }
   }
