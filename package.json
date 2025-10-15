@@ -110,6 +110,11 @@
           "command": "vscode-persian-copilot.cheatSheet",
           "when": "true",
           "group": "navigation@10"
+        },
+        {
+          "command": "vscode-persian-copilot.todo",
+          "when": "true",
+          "group": "navigation@11"
         }
       ],
       "view/title": [
@@ -162,6 +167,11 @@
           "command": "vscode-persian-copilot.cheatSheet",
           "when": "view == persian-tools-hub",
           "group": "navigation@10"
+        },
+        {
+          "command": "vscode-persian-copilot.todo",
+          "when": "view == persian-tools-hub",
+          "group": "navigation@11"
         }
       ]
     },
@@ -247,6 +257,12 @@
         "icon": "$(book)"
       },
       {
+        "command": "vscode-persian-copilot.todo",
+        "title": "📝 Todo Manager",
+        "category": "Persian Copilot",
+        "icon": "$(checklist)"
+      },
+      {
         "command": "vscode-persian-copilot.login",
         "title": "🔐 ورود به حساب کاربری",
         "category": "Persian Copilot",
@@ -310,6 +326,11 @@
           "type": "boolean",
           "default": true,
           "description": "Enable Cheat Sheets tool (فعال‌سازی ابزار چیت شیت‌ها)"
+        },
+        "persian-copilot.enableTodo": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable TODO Manager (فعال‌سازی مدیریت TODO - نیاز به لاگین)"
         }
       }
     }

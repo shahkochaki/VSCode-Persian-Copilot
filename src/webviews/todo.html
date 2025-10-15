@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fa">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مدیریت TODO</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/todo.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>📝 مدیریت TODO</h1>
+      <p>سازماندهی و مدیریت کارهای روزانه</p>
+    </div>
+
+    <!-- Authentication Section (shown when not logged in) -->
+    <div id="authSection" class="auth-section">
+      <h2>🔐 احراز هویت لازم است</h2>
+      <p>برای استفاده از سرویس TODO باید ابتدا وارد حساب کاربری خود شوید</p>
+      <button class="login-btn" onclick="openLogin()">
+        ورود به حساب کاربری
+      </button>
+    </div>
+
+    <!-- TODO Management Section (shown when logged in) -->
+    <div id="todoSection" class="todo-section hidden">
+      <!-- Add New TODO -->
+      <div class="todo-controls">
+        <h3 style="margin-bottom: 15px">✨ افزودن TODO جدید</h3>
+        <div class="input-group">
+          <input
+            type="text"
+            id="todoTitle"
+            placeholder="عنوان TODO..."
+            maxlength="100"
+          />
+          <textarea
+            id="todoDescription"
+            placeholder="توضیحات (اختیاری)..."
+            maxlength="500"
+          ></textarea>
+          <select id="todoPriority">
+            <option value="low">کم</option>
+            <option value="medium" selected>متوسط</option>
+            <option value="high">زیاد</option>
+          </select>
+          <button class="add-btn" onclick="addTodo()" id="addBtn">
+            افزودن
+          </button>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalTodos">0</div>
+          <div class="stat-label">کل TODOها</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="completedTodos">0</div>
+          <div class="stat-label">انجام شده</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pendingTodos">0</div>
+          <div class="stat-label">در انتظار</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="completionRate">0%</div>
+          <div class="stat-label">درصد تکمیل</div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div style="margin-bottom: 20px; text-align: center">
+        <button class="action-btn" onclick="filterTodos('all')" id="filterAll">
+          همه
+        </button>
+        <button
+          class="action-btn"
+          onclick="filterTodos('pending')"
+          id="filterPending"
+        >
+          در انتظار
+        </button>
+        <button
+          class="action-btn"
+          onclick="filterTodos('completed')"
+          id="filterCompleted"
+        >
+          انجام شده
+        </button>
+        <button
+          class="action-btn"
+          onclick="filterTodos('high')"
+          id="filterHigh"
+        >
+          اولویت بالا
+        </button>
+      </div>
+
+      <!-- TODO List -->
+      <div id="todoList" class="todo-list">
+        <div class="loading">در حال بارگذاری TODOها...</div>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messageContainer"></div>
+
+    <script src="assets/js/todo.js"></script>
+  </body>
+</html>

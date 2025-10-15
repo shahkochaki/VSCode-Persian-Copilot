@@ -45,6 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
     ipDetails: config.get("enableIpDetails", true),
     jsonParser: config.get("enableJsonParser", true),
     cheatSheet: config.get("enableCheatSheet", true),
+    todo: config.get("enableTodo", true),
   };
   const showToolsHubIcon = config.get("showToolsHubIcon", true);
   const autoApply = config.get("autoApply", true);
@@ -169,6 +170,9 @@ export function activate(context: vscode.ExtensionContext) {
                     "cheatSheet.html"
                   );
                   break;
+                case "todo":
+                  openTodoWebview();
+                  break;
                 case "login":
                   openLoginWebview(context);
                   break;
@@ -287,6 +291,15 @@ export function activate(context: vscode.ExtensionContext) {
       }
     );
     context.subscriptions.push(disposableCheatSheet);
+  }
+  if (enableTools.todo) {
+    const disposableTodo = vscode.commands.registerCommand(
+      "vscode-persian-copilot.todo",
+      () => {
+        openTodoWebview();
+      }
+    );
+    context.subscriptions.push(disposableTodo);
   }
 
   // Register always-available commands (CSS/RTL)
@@ -542,6 +555,9 @@ function openToolsHubWebview() {
             break;
           case "cheatSheet":
             openSimpleWebview("cheatSheet", "Cheat Sheets", "cheatSheet.html");
+            break;
+          case "todo":
+            openTodoWebview();
             break;
           case "jsonParser":
             openSimpleWebview("jsonParser", "JSON Parser", "jsonParser.html");
@@ -951,6 +967,189 @@ function getCurrentUser(): UserData | null {
 // Helper function to check if user is logged in
 function isUserLoggedIn(): boolean {
   return currentUser !== null && currentUser.token !== undefined;
+}
+
+// TODO Webview
+function openTodoWebview() {
+  const panel = vscode.window.createWebviewPanel(
+    "todoManager",
+    "📝 TODO Manager",
+    vscode.ViewColumn.One,
+    {
+      enableScripts: true,
+      localResourceRoots: [vscode.Uri.file(path.join(__dirname, "webviews"))],
+    }
+  );
+
+  const htmlPath = path.join(__dirname, "webviews", "todo.html");
+  let html = "";
+  try {
+    html = fs.readFileSync(htmlPath, "utf8");
+
+    // Convert relative paths to webview URIs
+    const webviewsPath = path.join(__dirname, "webviews");
+    html = html.replace(/href="assets\/(css\/[^"]+)"/g, (match, p1) => {
+      const assetPath = vscode.Uri.file(path.join(webviewsPath, "assets", p1));
+      return `href="${panel.webview.asWebviewUri(assetPath)}"`;
+    });
+    html = html.replace(/src="assets\/(js\/[^"]+)"/g, (match, p1) => {
+      const assetPath = vscode.Uri.file(path.join(webviewsPath, "assets", p1));
+      return `src="${panel.webview.asWebviewUri(assetPath)}"`;
+    });
+  } catch (e) {
+    html = "<h2>Could not load TODO Manager.</h2>";
+  }
+  panel.webview.html = html;
+
+  // Create todo service instance
+  let todoService: any = null;
+
+  // Handle messages from webview
+  panel.webview.onDidReceiveMessage(async (message) => {
+    try {
+      switch (message.command) {
+        case "checkAuth":
+          const isAuthenticated = isUserLoggedIn();
+          panel.webview.postMessage({
+            command: "authStatus",
+            isAuthenticated: isAuthenticated,
+            user: isAuthenticated ? currentUser : null,
+          });
+          break;
+
+        case "openLogin":
+          // Open login webview
+          vscode.commands.executeCommand("vscode-persian-copilot.login");
+          break;
+
+        case "loadTodos":
+          if (!isUserLoggedIn()) {
+            panel.webview.postMessage({
+              command: "error",
+              message: "برای دسترسی به TODO ها باید ابتدا وارد شوید",
+            });
+            return;
+          }
+
+          try {
+            // Initialize todo service if not already done
+            if (!todoService) {
+              // Create a mock auth manager for TodoService
+              const authManager = {
+                isLoggedIn: () => isUserLoggedIn(),
+                getToken: () => currentUser?.token || null,
+              };
+
+              // Import TodoService dynamically
+              const TodoService = require(path.join(
+                __dirname,
+                "services",
+                "TodoService.js"
+              ));
+              todoService = new TodoService(authManager);
+            }
+
+            const todos = await todoService.getTodos();
+            panel.webview.postMessage({
+              command: "todosLoaded",
+              todos: todos,
+            });
+          } catch (error: any) {
+            panel.webview.postMessage({
+              command: "error",
+              message: error.message || "خطا در بارگذاری TODO ها",
+            });
+          }
+          break;
+
+        case "addTodo":
+          if (!isUserLoggedIn()) {
+            panel.webview.postMessage({
+              command: "error",
+              message: "برای افزودن TODO باید ابتدا وارد شوید",
+            });
+            return;
+          }
+
+          try {
+            const todoData = message.data;
+            const newTodo = await todoService.createTodo(todoData);
+            panel.webview.postMessage({
+              command: "todoAdded",
+              success: true,
+              todo: newTodo,
+            });
+          } catch (error: any) {
+            panel.webview.postMessage({
+              command: "todoAdded",
+              success: false,
+              message: error.message || "خطا در افزودن TODO",
+            });
+          }
+          break;
+
+        case "toggleTodo":
+          if (!isUserLoggedIn()) {
+            panel.webview.postMessage({
+              command: "error",
+              message: "برای تغییر وضعیت TODO باید ابتدا وارد شوید",
+            });
+            return;
+          }
+
+          try {
+            const { id } = message.data;
+            const updatedTodo = await todoService.toggleTodoComplete(id);
+            panel.webview.postMessage({
+              command: "todoToggled",
+              success: true,
+              todo: updatedTodo,
+            });
+          } catch (error: any) {
+            panel.webview.postMessage({
+              command: "todoToggled",
+              success: false,
+              message: error.message || "خطا در تغییر وضعیت TODO",
+            });
+          }
+          break;
+
+        case "deleteTodo":
+          if (!isUserLoggedIn()) {
+            panel.webview.postMessage({
+              command: "error",
+              message: "برای حذف TODO باید ابتدا وارد شوید",
+            });
+            return;
+          }
+
+          try {
+            const { id } = message.data;
+            await todoService.deleteTodo(id);
+            panel.webview.postMessage({
+              command: "todoDeleted",
+              success: true,
+            });
+          } catch (error: any) {
+            panel.webview.postMessage({
+              command: "todoDeleted",
+              success: false,
+              message: error.message || "خطا در حذف TODO",
+            });
+          }
+          break;
+
+        default:
+          console.log("Unknown command:", message.command);
+      }
+    } catch (error: any) {
+      console.error("Error handling message:", error);
+      panel.webview.postMessage({
+        command: "error",
+        message: "خطای غیرمنتظره رخ داد",
+      });
+    }
+  });
 }
 
 // This method is called when your extension is deactivated
