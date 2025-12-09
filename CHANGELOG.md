@@ -4,6 +4,21 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 
 ## [1.11.0] - 2025-10-15
 
+## [1.11.3] - 2025-12-09
+
+### 🐛 Bug Fix
+
+- Small fix: added layout tweak for code blocks to avoid overlap in some views:
+
+  ```css
+  .interactive-result-code-block.no-vulns {
+      right: -60px;
+  }
+  ```
+
+- Reduced verbose console logging in the CSS injection script to avoid noisy DevTools output.
+
+
 ### 🆕 Major New Features
 
 - **📝 TODO Manager**: Complete task management system with authentication
