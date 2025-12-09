@@ -809,7 +809,7 @@ function getCSSInjectionScript(): string {
 
 /* Keep code blocks and special elements LTR */
 .interactive-result-code-block.no-vulns {
-    right: -60px;
+    right: -5px;
 }
 
 /* Enhanced chat bubble support */
