@@ -807,6 +807,11 @@ function getCSSInjectionScript(): string {
     font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;
 }
 
+/* Keep code blocks and special elements LTR */
+.interactive-result-code-block.no-vulns {
+    right: -60px;
+}
+
 /* Enhanced chat bubble support */
 .chat-response-container,
 .interactive-response-container {
