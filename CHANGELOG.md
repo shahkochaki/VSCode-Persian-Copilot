@@ -12,12 +12,11 @@ All notable changes to the "vscode-persian-copilot" extension will be documented
 
   ```css
   .interactive-result-code-block.no-vulns {
-      right: -60px;
+    right: -60px;
   }
   ```
 
 - Reduced verbose console logging in the CSS injection script to avoid noisy DevTools output.
-
 
 ### 🆕 Major New Features
 
